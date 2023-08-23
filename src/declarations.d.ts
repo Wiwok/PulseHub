@@ -1,4 +1,5 @@
-declare module "*.png"
+declare module "*.png";
+
 type AlbumType = 'album' | 'single'
 
 type Track = {
@@ -125,5 +126,7 @@ interface Window {
 		searchTrack: (search: string) => Promise<Track[] | null>;
 		searchAlbum: (search: string) => Promise<Album[] | null>;
 		searchArtist: (search: string) => Promise<Artist[] | null>;
+
+		readTrack: (TrackID: string) => Promise<Buffer | Error>;
 	};
 }

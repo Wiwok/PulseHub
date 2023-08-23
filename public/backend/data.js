@@ -1,4 +1,5 @@
 const { ipcMain } = require("electron");
+const fs = require('fs');
 
 const { spottylib } = require('./spottylib');
 
@@ -62,6 +63,13 @@ async function initIpc(mainWindow) {
 		return new Promise(resolve => {
 			sl.searchArtist(search).then(resolve);
 		});
+	});
+
+	ipcMain.handle('read-track', (e, TrackID) => {
+		try {
+			return fs.readFileSync(TrackID + ".mp3");
+		}
+		catch (err) { return err }
 	});
 }
 

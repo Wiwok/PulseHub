@@ -1,7 +1,6 @@
 const path = require('path');
 
-const { app, BrowserWindow } = require('electron');
-const isDev = require('electron-is-dev');
+const { app, BrowserWindow } = require('electron')
 
 const { initIpc } = require('./backend/data');
 
@@ -12,9 +11,9 @@ function createWindow() {
 		autoHideMenuBar: true,
 		show: false,
 		webPreferences: {
-			preload: isDev
-				? path.join(app.getAppPath(), './public/preload.js')
-				: path.join(app.getAppPath(), './build/preload.js'),
+			preload: app.isPackaged
+				? path.join(app.getAppPath(), './build/preload.js')
+				: path.join(app.getAppPath(), './public/preload.js'),
 			contextIsolation: true
 		}
 	});
@@ -23,9 +22,9 @@ function createWindow() {
 	win.show();
 
 	win.loadURL(
-		isDev
-			? 'http://localhost:3000'
-			: `file://${path.join(__dirname, '../build/index.html')}`
+		app.isPackaged
+			? `file://${path.join(__dirname, '../build/index.html')}`
+			: 'http://localhost:3000'
 	);
 
 	initIpc(win);
@@ -33,10 +32,12 @@ function createWindow() {
 
 app.setPath(
 	'userData',
-	isDev
-		? path.join(app.getAppPath(), 'userdata/')
-		: path.join(process.resourcesPath, 'userdata/')
+	app.isPackaged
+		? path.join(process.resourcesPath, 'userdata/')
+		: path.join(app.getAppPath(), 'userdata/')
 );
+
+console.log(process.resourcesPath);
 
 app.whenReady().then(createWindow);
 

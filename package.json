@@ -3,6 +3,35 @@
 	"version": "1.0.0",
 	"main": "public/electron.js",
 	"homepage": "./",
+	"description": "A multipurpose, open-sourced music player",
+	"author": {
+		"name": "Wiwok",
+		"url": "https://github.com/Wiwok"
+	},
+	"authors": [
+		{
+			"name": "Wiwok",
+			"url": "https://github.com/Wiwok"
+		},
+		{
+			"name": "UnelDev",
+			"url": "https://github.com/UnelDev"
+		}
+	],
+	"build": {
+		"appId": "com.wiwok.pulsehub",
+		"productName": "Pulse Hub",
+		"files": [
+			"build/**/*",
+			"node_modules/**/*"
+		],
+		"directories": {
+			"buildResources": "public"
+		},
+		"win": {
+			"target": "nsis"
+		}
+	},
 	"dependencies": {
 		"axios": "^1.4.0",
 		"fluent-ffmpeg": "^2.1.2",
@@ -14,11 +43,11 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject",
+		"rbuild": "react-scripts build",
+		"ebuild": "electron-builder -w -c.extraMetadata.main=build/electron.js",
 		"dev": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm:electron\"",
-		"electron": "wait-on http://127.0.0.1:3000 && electron ."
+		"electron": "wait-on http://127.0.0.1:3000 && electron .",
+		"build": "npm run rbuild && npm run ebuild"
 	},
 	"browserslist": {
 		"production": [
@@ -38,7 +67,7 @@
 		"concurrently": "^8.2.1",
 		"cross-env": "^7.0.3",
 		"electron": "^26.0.0",
-		"electron-is-dev": "^2.0.0",
+		"electron-builder": "^24.6.3",
 		"react-scripts": "5.0.1",
 		"wait-on": "^7.0.1"
 	}
