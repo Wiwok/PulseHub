@@ -20,7 +20,7 @@ export default function Track({ track }: { track: Track }) {
 	return (
 		<div className="track" onMouseEnter={() => { setplayVisible("trackPlayButonVisible") }} onMouseLeave={() => { setplayVisible("trackPlayButon") }}>
 			<div className="trackInfo">
-				<img className="trackImage" src={track.album.images[2].url}></img>
+				<img className="trackImage" src={track.album.images[1].url}></img>
 				<img className={playVisible} onClick={() => {/* todo */ }} src={Play}></img>
 				<div className="trackNameArtist">
 					<div className="trackName">{track.name}</div>
@@ -34,8 +34,10 @@ export default function Track({ track }: { track: Track }) {
 					</div>
 				</div>
 			</div>
-			<div className="trackAlbum">
-				{track.album.name}
+			<div className="trackAlbumContainer">
+				<div className="trackAlbum">
+					{track.album.name}
+				</div>
 			</div>
 			<div className="trackDuration">
 				{calculTime(track.duration_ms)}

@@ -1,10 +1,7 @@
 body {
 	margin: 0;
 	font-family: sans-serif;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
+	overflow-y: hidden;
 }
 
 .App {
@@ -20,36 +17,36 @@ body {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	padding: 1vw 1vh;
+	padding: 1vh 1vw;
 	border-top: 1px solid lightgrey;
 	box-shadow: 0 0 0 gray;
 	transition-duration: 100ms;
 }
 
 .track:hover {
-	box-shadow: 0 0 10px gray;
+	box-shadow: 0 0 20px rgba(128, 128, 128, 0.479);
 }
 
 .trackImage {
 	border-radius: 4px;
-	height: 50px;
-	width: 50px;
+	height: 5vw;
+	width: 5vw;
 }
 
 .trackPlayButon {
 	border-radius: 4px;
-	height: 50px;
-	width: 50px;
-	margin-left: -50px;
+	height: 5vw;
+	width: 5vw;
+	margin-left: -5vw;
 	opacity: 0;
 	transition-duration: 100ms;
 }
 
 .trackPlayButonVisible {
 	border-radius: 4px;
-	height: 50px;
-	width: 50px;
-	margin-left: -50px;
+	height: 5vw;
+	width: 5vw;
+	margin-left: -5vw;
 	opacity: 0.8;
 	transition-duration: 100ms;
 }
@@ -57,7 +54,7 @@ body {
 .trackInfo {
 	display: flex;
 	align-items: center;
-	width: 30vw;
+	width: 35vw;
 }
 
 .trackNameArtist {
@@ -89,10 +86,14 @@ body {
 	text-decoration: underline;
 }
 
+.trackAlbumContainer {
+	width: 30vw;
+}
+
 .trackAlbum {
 	font-size: 1.2em;
-	width: 30vw;
 	cursor: pointer;
+	width: fit-content;
 }
 
 .trackAlbum:hover {
@@ -100,26 +101,26 @@ body {
 }
 
 .trackDuration {
-	width: 15vw;
+	width: 5vw;
 	display: flex;
-	justify-content: center;
+	justify-content: right;
 }
 
 .trackActionButon {
 	display: flex;
 	justify-content: space-between;
 	gap: 0.5vw;
-	width: 4vw;
+	width: 6vw;
 }
 
 .trackLike {
-	width: 33%;
+	width: 2vw;
 }
 
 .trackOption {
-	width: 33%;
+	width: 2vw;
 }
 
 .trackDownload {
-	width: 33%;
+	width: 2vw;
 }

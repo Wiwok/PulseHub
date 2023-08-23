@@ -18,9 +18,9 @@ function App() {
 		window.api.searchTrack(input).then(v => {
 			if (v) {
 				SetState(<div>
-					<Track track={v[0]} />
-					<Track track={v[1]} />
-					<Track track={v[2]} />
+					{v.map(element => {
+						return (< Track track={element} />)
+					})}
 				</div>)
 			}
 			else {
