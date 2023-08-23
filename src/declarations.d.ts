@@ -1,3 +1,4 @@
+declare module "*.png"
 type AlbumType = 'album' | 'single'
 
 type Track = {

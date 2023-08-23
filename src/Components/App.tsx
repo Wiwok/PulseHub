@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Track from "./Track";
 
 function App() {
 	const [ActivePage, SetActivePage] = useState('');
@@ -14,13 +15,13 @@ function App() {
 	function Action() {
 		SetState(<>Searching...</>);
 		const input = (document.getElementById('input') as HTMLInputElement).value;
-		window.api.searchArtist(input).then(v => {
-			if (v && v.length) {
+		window.api.searchTrack(input).then(v => {
+			if (v) {
 				SetState(<div>
-					{v[0].name}
-					<br />
-					<img src={v[0].images[1].url} />
-				</div>);
+					<Track track={v[0]} />
+					<Track track={v[1]} />
+					<Track track={v[2]} />
+				</div>)
 			}
 			else {
 				SetState(<>No result</>);
