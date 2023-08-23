@@ -1,4 +1,16 @@
 body {
 	margin: 0;
 	font-family: sans-serif;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	background-color: grey;
+}
+
+.App {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }

@@ -6,4 +6,7 @@
 /out
 
 # misc
+/userdata
+/output
 *.env
+*.mp3
