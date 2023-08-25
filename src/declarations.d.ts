@@ -1,6 +1,6 @@
 declare module "*.png";
 
-type AlbumType = 'album' | 'single'
+type AlbumType = 'album' | 'single' | 'compilation'
 
 type Track = {
 	disc_number: number;
