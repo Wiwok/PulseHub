@@ -37,8 +37,6 @@ app.setPath(
 		: path.join(app.getAppPath(), 'userdata/')
 );
 
-console.log(process.resourcesPath);
-
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {

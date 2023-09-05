@@ -8,10 +8,10 @@ const ytmusic_api = require('ytmusic-api');
 const ytm = new ytmusic_api.default();
 ytm.initialize();
 
-async function dl_track(id, filename, callback) {
+async function dl_track(id, filename) {
 	return new Promise(resolve => {
 		try {
-			fluent_ffmpeg(ytdl_core(id, { quality: 'highestaudio', filter: 'audioonly' }).on('end', () => callback(3)))
+			fluent_ffmpeg(ytdl_core(id, { quality: 'highestaudio', filter: 'audioonly' }))
 				.audioBitrate(128)
 				.save(filename)
 				.on('error', (err) => {
@@ -85,10 +85,41 @@ function getArtistList(artists) {
 	return ArtistString;
 }
 
+async function getYoutubeID(track) {
+	const duration = track.duration_ms / 1000;
+
+	let content = await ytm.searchSongs(`${track.name} ${track.artists.map(artist => artist.name).join(' ')}`);
+
+	// We only keep songs that match the duration to within 10 seconds
+	content = content.filter(song => Math.abs(song.duration - duration) < 10);
+	// We only keep officials song releases
+	content = content.filter(song => song.artists.length > 0);
+	// We only keep songs with matching artist
+	content = content.filter(song => song.artists[0].name === track.artists[0].name);
+
+	const explicitList = content.filter(song => song.isExplicit);
+	const nonExplicitList = content.filter(song => !song.isExplicit);
+	if (track.explicit) {
+		if (explicitList.length > 0) {
+			content = explicitList;
+		} else {
+			content = nonExplicitList;
+		}
+	} else {
+		if (nonExplicitList.length > 0) {
+			content = nonExplicitList;
+		} else {
+			content = explicitList;
+		}
+	}
+
+	return content.length < 1 ? null : content[0].videoId;
+}
+
 async function downloadTrack(track, outputPath, callback) {
 	try {
-		let albCover = await axios.get(track.album.images[0].url, { responseType: 'arraybuffer' });
-		let tags = {
+		const albCover = await axios.get(track.album.images[0].url, { responseType: 'arraybuffer' });
+		const tags = {
 			title: track.name,
 			artist: getArtistList(track.artists),
 			album: track.album.name,
@@ -98,10 +129,14 @@ async function downloadTrack(track, outputPath, callback) {
 				imageBuffer: Buffer.from(albCover.data, 'utf-8')
 			}
 		};
-		let filename = `${outputPath}${track.id}.mp3`;
-		let id = (await ytm.searchSongs(`${track.name} - ${track.artists[0].name}`))[0].videoId;
+		const filename = `${outputPath}${track.id}.mp3`;
+		const id = await getYoutubeID(track);
+		if (!id) {
+			callback({ id: track.id, status: 'Errored' });
+			return;
+		}
 		callback({ id: track.id, status: 'Started' });
-		let dlt = await dl_track(id, filename, callback);
+		const dlt = await dl_track(id, filename);
 		if (dlt) {
 			let tagStatus = node_id3.update(tags, filename);
 			if (tagStatus) {
@@ -115,15 +150,16 @@ async function downloadTrack(track, outputPath, callback) {
 			callback({ id: track.id, status: 'Errored' });
 		}
 	}
-	catch {
+	catch (err) {
+		console.error(`Exception: ${err}`);
 		callback({ id: track.id, status: 'Errored' });
 	}
 };
 
 async function downloadAlbum(album, outputPath, callback) {
 	try {
-		let albCover = await axios.get(album.images[0].url, { responseType: 'arraybuffer' });
-		let tags = {
+		const albCover = await axios.get(album.images[0].url, { responseType: 'arraybuffer' });
+		const tags = {
 			artist: album.artists[0].name,
 			album: album.name,
 			year: album.release_date,
@@ -151,8 +187,8 @@ class spottylib {
 	}
 
 	async auth() {
-		let re = /<script id="session" data-testid="session" type="application\/json"\>({.*})<\/script>/;
-		let response = await axios("https://open.spotify.com/search")
+		const re = /<script id="session" data-testid="session" type="application\/json"\>({.*})<\/script>/;
+		const response = await axios("https://open.spotify.com/search")
 			.then(data => data.data.match(re)[1])
 			.then(json => JSON.parse(json))
 			.catch(() => {

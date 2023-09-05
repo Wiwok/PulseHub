@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Track from "./Track";
 
 import Player from "../Player";
 
@@ -20,20 +19,32 @@ function App() {
 		SetState(<>Searching...</>);
 		const input = (document.getElementById('input') as HTMLInputElement).value;
 		window.api.searchTrack(input).then(v => {
+			// @ts-ignore
+			v = v?.filter(val => val.album.album_type != 'compilation');
+			const number = 0;
 			if (v && v.length) {
 				SetState(<div>
-					{v[0].name}
+					{v[number].name} - {v[number].artists[0].name}
 					<br />
-					<img src={v[0].album.images[1].url} />
+					<img src={v[number].album.images[1].url} />
 				</div>);
-				window.api.downloadTrack(v[0], './');
-				window.api.downloadTrackHandle((ev, value) => {
-					if (value.status == 'Finished') {
-						window.api.readTrack(v[0].id).then(test => {
-							if (!(test instanceof Error)) {
-								Audio.load(test).then(() => Audio.play());
+				window.api.readTrack(v[number].id).then(value => {
+					if (!(value instanceof Error)) {
+						Audio.load(value).then(() => Audio.play());
+					} else {
+						// @ts-ignore
+						window.api.downloadTrack(v[number], './');
+						window.api.downloadTrackHandle((ev, value) => {
+							console.log(value);
+							if (value.status == 'Finished') {
+								// @ts-ignore
+								window.api.readTrack(v[number].id).then(test => {
+									if (!(test instanceof Error)) {
+										Audio.load(test).then(() => Audio.play());
+									}
+								});
 							}
-						})
+						});
 					}
 				});
 			}
@@ -47,12 +58,18 @@ function App() {
 		Audio.togglePlay();
 	}
 
+	function GetEnter(ev: any) {
+		if (ev.key == 'Enter') {
+			Action();
+		}
+	}
+
 	return (
 		<div className="App">
 			{Page}
-			<input id='input'></input>
+			<input onKeyUp={GetEnter} id='input'></input>
 			<br />
-			<button onClick={Action}>Play</button>
+			<button onClick={Action}>Download</button>
 			<br />
 			<button onClick={Action2}>Status</button>
 			<br />
