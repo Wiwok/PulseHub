@@ -1,7 +1,7 @@
 body {
 	margin: 0;
 	font-family: sans-serif;
-	overflow-y: hidden;
+	/* overflow-y: hidden; */
 }
 
 .App {
@@ -11,6 +11,8 @@ body {
 	flex-direction: column;
 }
 
+
+/* ----------------------------track--------------------------------- */
 .track {
 	width: 98vw;
 	display: flex;

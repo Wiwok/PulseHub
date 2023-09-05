@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Play from '../Assets/Play.png';
+import download from '../Assets/download.png';
 import Player from "../Player";
 import calculTime from "../utils/calculTime";
 export default function Track({ track, Audio }: { track: Track, Audio: Player }) {
@@ -30,7 +31,7 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 				{calculTime(track.duration_ms)}
 			</div>
 			<div className="trackActionButon">
-				<div className="trackDownload" onClick={() => {
+				<img src={download} className="trackDownload" onClick={() => {
 					window.api.downloadTrack(track, './');
 					window.api.downloadTrackHandle((ev, value) => {
 						if (value.status == 'Finished') {
@@ -41,7 +42,7 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 							})
 						}
 					});
-				}}>⍌</div>
+				}}></img>
 				<div className="trackLike"> ♡ </div>
 				<div className="trackOption">•••</div>
 			</div>
