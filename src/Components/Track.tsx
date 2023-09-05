@@ -1,27 +1,14 @@
 import { useState } from "react";
 import Play from '../Assets/Play.png';
-function calculTime(ms: number): string {
-	if (ms < 60_000 || ms > 86_400_000) {
-		return (Math.round(ms / 1000).toString() + 's')
-	}
-	const seconds = Math.round(ms / 1_000);
-	const hours = Math.round(seconds / 3_600);
-	const minutes = Math.round((seconds % 3_600) / 60);
-	const remainingSeconds = seconds % 60;
-
-	const hoursStr = hours > 0 ? `${hours.toString().padStart(2, '0')}:` : '';
-	const minutesStr = minutes > 0 || hours > 0 ? `${minutes.toString().padStart(2, '0')}:` : '';
-	const secondsStr = `${remainingSeconds.toString().padStart(2, '0')}`;
-
-	return `${hoursStr}${minutesStr}${secondsStr}`;
-}
-export default function Track({ track }: { track: Track }) {
+import Player from "../Player";
+import calculTime from "../utils/calculTime";
+export default function Track({ track, Audio }: { track: Track, Audio: Player }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButon')
 	return (
 		<div className="track" onMouseEnter={() => { setplayVisible("trackPlayButonVisible") }} onMouseLeave={() => { setplayVisible("trackPlayButon") }}>
 			<div className="trackInfo">
 				<img className="trackImage" src={track.album.images[1].url}></img>
-				<img className={playVisible} onClick={() => {/* todo */ }} src={Play}></img>
+				<img className={playVisible} onClick={() => { Audio.load(track.preview_url) }} src={Play}></img>
 				<div className="trackNameArtist">
 					<div className="trackName">{track.name}</div>
 					<div className="trackArtists">
@@ -43,7 +30,18 @@ export default function Track({ track }: { track: Track }) {
 				{calculTime(track.duration_ms)}
 			</div>
 			<div className="trackActionButon">
-				<div className="trackDownload">⍌</div>
+				<div className="trackDownload" onClick={() => {
+					window.api.downloadTrack(track, './');
+					window.api.downloadTrackHandle((ev, value) => {
+						if (value.status == 'Finished') {
+							window.api.readTrack(track.id).then(test => {
+								if (!(test instanceof Error)) {
+									Audio.load(test).then(() => Audio.play());
+								}
+							})
+						}
+					});
+				}}>⍌</div>
 				<div className="trackLike"> ♡ </div>
 				<div className="trackOption">•••</div>
 			</div>
