@@ -10,6 +10,7 @@ function createWindow() {
 		height: 600,
 		autoHideMenuBar: true,
 		show: false,
+		icon: __dirname + "/favicon.ico",
 		webPreferences: {
 			preload: app.isPackaged
 				? path.join(app.getAppPath(), './build/preload.js')
