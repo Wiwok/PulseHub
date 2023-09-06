@@ -1,8 +1,11 @@
 import { useState } from "react";
+
+import Download from '../Assets/Download.png';
 import Play from '../Assets/Play.png';
-import download from '../Assets/download.png';
+
 import Player from "../Player";
-import calculTime from "../utils/calculTime";
+import toReadableDuration from "../Utils/Time";
+
 export default function Track({ track, Audio }: { track: Track, Audio: Player }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButon')
 	return (
@@ -28,10 +31,10 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 				</div>
 			</div>
 			<div className="trackDuration">
-				{calculTime(track.duration_ms)}
+				{toReadableDuration(track.duration_ms)}
 			</div>
 			<div className="trackActionButon">
-				<img src={download} className="trackDownload" onClick={() => {
+				<img src={Download} className="trackDownload" onClick={() => {
 					window.api.downloadTrack(track, './');
 					window.api.downloadTrackHandle((ev, value) => {
 						if (value.status == 'Finished') {
