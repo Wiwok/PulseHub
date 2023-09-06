@@ -8,7 +8,8 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	flex-direction: column;
+	flex-direction: row;
+	background-color: black;
 }
 
 
@@ -125,4 +126,44 @@ body {
 
 .trackDownload {
 	width: 2vw;
+}
+
+/* ----------------------------SideBar--------------------------------- */
+.sideBar {
+	width: 20vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.sideMenu {
+	background-color: #D9D9D9;
+	width: 18vw;
+	height: 38vh;
+	margin: 2vh 2vw;
+	border-radius: 20px;
+}
+
+.sideMenuIcon {
+	height: 3vh;
+}
+
+.sideMenuButton {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	background-color: grey;
+	margin: 0.5vw;
+	padding: 0.3vw;
+	border-radius: calc(20px - 0.5vw);
+	transition-duration: 100ms;
+}
+
+.sideMenuButton:hover {
+	background-color: lightyellow;
+}
+
+.sideMenuText {
+	font-size: 1.4em;
 }
