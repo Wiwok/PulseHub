@@ -124,5 +124,6 @@ body {
 }
 
 .trackDownload {
-	width: 2vw;
+	width: 20px;
+	cursor: pointer;
 }
