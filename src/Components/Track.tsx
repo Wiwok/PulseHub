@@ -18,9 +18,9 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 					<div className="trackArtists">
 						{track.artists.map((element, i) => {
 							if (i != track.artists.length - 1)
-								return (<div className="trackArtistContainer"><div className="trackArtist"> {element.name}</div>,</div>);
+								return (<div key={i} className="trackArtistContainer"><div className="trackArtist"> {element.name}</div>,</div>);
 							else
-								return (<div className="trackArtistContainer"><div className="trackArtist">{element.name}</div></div>);
+								return (<div key={i} className="trackArtistContainer"><div className="trackArtist">{element.name}</div></div>);
 						})}
 					</div>
 				</div>
