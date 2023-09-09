@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Player from "../Player";
 import Track from "./Track";
+import SideBar from "./SideBar";
 
 const Audio = new Player();
 
@@ -23,8 +24,10 @@ function App() {
 			// @ts-ignore
 			v = v?.filter(val => val.album.album_type != 'compilation');
 			if (v && v.length) {
+				console.log(v);
 				SetState(<div>
 					{v.map((track, i) => {
+
 						return (<Track Audio={Audio} track={track} key={i} />)
 					})}
 				</div>);
@@ -47,6 +50,7 @@ function App() {
 
 	return (
 		<div className="App">
+			<SideBar Audio={Audio} />
 			{Page}
 			<input onKeyUp={GetEnter} id='input'></input>
 			<br />

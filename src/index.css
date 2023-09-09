@@ -7,9 +7,8 @@ body {
 .App {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	flex-direction: row;
-	background-color: black;
 }
 
 
@@ -128,7 +127,7 @@ body {
 	width: 2vw;
 }
 
-/* ----------------------------SideBar--------------------------------- */
+/* ----------------------------SideMenu--------------------------------- */
 .sideBar {
 	width: 20vw;
 	height: 100vh;
@@ -140,7 +139,7 @@ body {
 .sideMenu {
 	background-color: #D9D9D9;
 	width: 18vw;
-	height: 38vh;
+	height: 48vh;
 	margin: 2vh 2vw;
 	border-radius: 20px;
 }
@@ -166,4 +165,70 @@ body {
 
 .sideMenuText {
 	font-size: 1.4em;
+}
+
+/* -------------------------SideMenuplayer------------------------------ */
+
+.sidePlayer {
+	background-color: #D9D9D9;
+	width: 16vw;
+	height: 52vh;
+	margin: 0vh 2vw 2vh;
+	border-radius: 20px;
+	padding: 1vw;
+}
+
+.sidePlayerImage {
+	border-radius: calc(20px - 1vw);
+	width: 100%;
+}
+
+.sidePlayerprogress {
+	width: 100%;
+	display: flex;
+	gap: 0.3vw;
+	justify-content: center;
+}
+
+.sidePlayerProgressBar {
+	width: 100%;
+}
+
+.sidePlayerInfo {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.sidePlayerInfoTitle {
+	font-size: 1.8em;
+}
+
+.sidePlayerInfoArtist {
+	font-size: 1.2em;
+}
+
+.sidePlayerInfoRight {
+	font-size: 1.3em;
+}
+
+.sidePlayerControl {
+	display: flex;
+	gap: 0.3vw;
+	align-items: center;
+	justify-content: center;
+}
+
+.sidePlayerControlback {
+	height: 5vh;
+	rotate: 180deg;
+}
+
+.sidePlayerControlfront {
+	height: 5vh;
+}
+
+.sidePlayerControlerPlay {
+	height: 6vh;
 }

@@ -1,6 +1,8 @@
 import home from '../Assets/home.png';
 import search from '../Assets/search.png';
-function SideBar() {
+import Player from '../Player';
+import SidePlayer from './SidePlayer';
+function SideBar({ Audio }: { Audio: Player }) {
 	return (
 		<div className="sideBar">
 			<div className="sideMenu">
@@ -13,6 +15,7 @@ function SideBar() {
 					<div className="sideMenuText">search</div>
 				</div>
 			</div>
+			<SidePlayer Audio={Audio} />
 		</div>
 	);
 }
