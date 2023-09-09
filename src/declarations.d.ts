@@ -110,8 +110,8 @@ type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
 
 interface Window {
 	api: {
-		downloadTrack: (track: Track, output: string) => void;
-		downloadAlbum: (album: Album, output: string) => void;
+		downloadTrack: (track: Track) => void;
+		downloadAlbum: (album: Album) => void;
 		downloadTrackHandle: (callback: (event: any, value: { id: string, status: DownloadStatus }) => void) => void;
 		downloadAlbumHandle: (callback: (event: any, value: { id: string, status: DownloadStatus }) => void) => void;
 		downloadTrackRemoveHandle: (callback: (event: any, value: number) => void) => void;

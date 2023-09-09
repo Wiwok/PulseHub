@@ -35,12 +35,12 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 			</div>
 			<div className="trackActionButon">
 				<img src={Download} className="trackDownload" onClick={() => {
-					window.api.downloadTrack(track, './');
+					window.api.downloadTrack(track);
 					window.api.downloadTrackHandle((ev, value) => {
 						if (value.status == 'Finished') {
 							window.api.readTrack(track.id).then(test => {
 								if (!(test instanceof Error)) {
-									Audio.load(test).then(() => Audio.play());
+									Audio.load(test);
 								}
 							})
 						}
