@@ -8,6 +8,8 @@ const ytmusic_api = require('ytmusic-api');
 const ytm = new ytmusic_api.default();
 ytm.initialize();
 
+const PATH = './';
+
 async function dl_track(id, filename) {
 	return new Promise(resolve => {
 		try {
@@ -15,15 +17,18 @@ async function dl_track(id, filename) {
 				.audioBitrate(128)
 				.save(filename)
 				.on('error', (err) => {
-					console.error(`Failed to write file (${filename}): ${err}`);
-					fs.unlinkSync(filename);
+					console.error(`Failed to download file (${filename}): ${err}`);
+					if (fs.existsSync(filename)) {
+						fs.unlinkSync(filename);
+					}
 					resolve(false);
 				})
 				.on('end', () => {
 					resolve(true);
 				});
 		}
-		catch {
+		catch (err) {
+			console.error(`Error: ${err}`);
 			resolve(false);
 		}
 	});
@@ -38,13 +43,13 @@ async function get_album_playlist(playlistId) {
 	return listData.contents;
 };
 
-async function dl_album(album, oPath, tags, callback) {
+async function dl_album(album, tags, callback) {
 	const alb = await ytm.searchAlbums(`${album.artists[0].name} - ${album.name}`);
 	const yt_tracks = await get_album_playlist(alb[0].playlistId);
 	let i = 0;
 	for (let res of album.tracks.items) {
 		const YTID = yt_tracks[i].playlistVideoRenderer.videoId;
-		let filename = `${oPath}${res.id}.mp3`;
+		let filename = `${PATH}${res.id}.mp3`;
 		callback({ id: res.id, status: 'Started' });
 		try {
 			fluent_ffmpeg(ytdl_core(YTID, { quality: 'highestaudio', filter: 'audioonly' }))
@@ -116,7 +121,7 @@ async function getYoutubeID(track) {
 	return content.length < 1 ? null : content[0].videoId;
 }
 
-async function downloadTrack(track, outputPath, callback) {
+async function downloadTrack(track, callback) {
 	try {
 		const albCover = await axios.get(track.album.images[0].url, { responseType: 'arraybuffer' });
 		const tags = {
@@ -129,7 +134,7 @@ async function downloadTrack(track, outputPath, callback) {
 				imageBuffer: Buffer.from(albCover.data, 'utf-8')
 			}
 		};
-		const filename = `${outputPath}${track.id}.mp3`;
+		const filename = `${PATH}${track.id}.mp3`;
 		const id = await getYoutubeID(track);
 		if (!id) {
 			callback({ id: track.id, status: 'Errored' });
@@ -156,7 +161,7 @@ async function downloadTrack(track, outputPath, callback) {
 	}
 };
 
-async function downloadAlbum(album, outputPath, callback) {
+async function downloadAlbum(album, callback) {
 	try {
 		const albCover = await axios.get(album.images[0].url, { responseType: 'arraybuffer' });
 		const tags = {
@@ -167,7 +172,7 @@ async function downloadAlbum(album, outputPath, callback) {
 				imageBuffer: Buffer.from(albCover.data, 'utf-8')
 			}
 		};
-		await dl_album(album, outputPath, tags, callback);
+		await dl_album(album, tags, callback);
 	}
 	catch {
 		callback({ id: album.id, status: 'Errored' });

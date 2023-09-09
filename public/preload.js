@@ -1,8 +1,8 @@
 const { ipcRenderer, contextBridge } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-	downloadTrack: (track, output) => ipcRenderer.send('download-track', track, output),
-	downloadAlbum: (album, output) => ipcRenderer.send('download-album', album, output),
+	downloadTrack: (track) => ipcRenderer.send('download-track', track),
+	downloadAlbum: (album) => ipcRenderer.send('download-album', album),
 	downloadTrackHandle: (callback) => ipcRenderer.on('download-track-handle', callback),
 	downloadAlbumHandle: (callback) => ipcRenderer.on('download-album-handle', callback),
 	downloadTrackRemoveHandle: (callback) => ipcRenderer.removeListener('download-track-handle', callback),

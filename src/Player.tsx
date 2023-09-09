@@ -1,5 +1,4 @@
 type PlayerStatus = 'Idle' | 'Loaded' | 'Playing' | 'Paused';
-
 type PlayerEvents = 'Playing' | 'Paused' | 'Ended' | 'Loaded';
 
 class Player {
@@ -16,6 +15,9 @@ class Player {
 		return new Promise<void>(resolve => {
 			if (this.status == 'Playing') {
 				this.pause();
+				if (typeof this.song == 'string') {
+					window.URL.revokeObjectURL(this.song);
+				}
 			}
 			this.AudioElement.addEventListener('loadeddata', () => {
 				this.status = 'Loaded';
@@ -48,8 +50,10 @@ class Player {
 	play() {
 		return new Promise<Boolean>(resolve => {
 			if (this.status == 'Loaded' || this.status == 'Paused') {
-				this.status = 'Playing';
-				this.AudioElement.play().then(() => resolve(true));
+				this.AudioElement.play().then(() => {
+					this.status = 'Playing';
+					resolve(true)
+				});
 			} else {
 				resolve(false);
 			}

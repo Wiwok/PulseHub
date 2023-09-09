@@ -1,4 +1,4 @@
-export default function calculTime(ms: number): string {
+export default function toReadableDuration(ms: number) {
 	if (ms < 60_000 || ms > 86_400_000) {
 		return (Math.round(ms / 1000).toString() + 's')
 	}
