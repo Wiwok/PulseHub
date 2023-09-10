@@ -8,7 +8,8 @@ const ytmusic_api = require('ytmusic-api');
 const ytm = new ytmusic_api.default();
 ytm.initialize();
 
-const PATH = './';
+const PATH = './datas/track/';
+fs.mkdirSync(PATH, { recursive: true });
 
 async function dl_track(id, filename) {
 	return new Promise(resolve => {
