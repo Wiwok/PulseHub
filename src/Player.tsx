@@ -3,36 +3,41 @@ type PlayerEvents = 'Playing' | 'Paused' | 'Ended' | 'Loaded';
 
 class Player {
 	song: string | null;
+	track: Track | null;
 	AudioElement: HTMLAudioElement;
 	status: PlayerStatus;
 	constructor() {
 		this.song = null;
+		this.track = null;
 		this.AudioElement = new Audio();
 		this.status = 'Idle';
 	}
 
-	load(track: string | Buffer) {
+	load(source: string | Buffer, track?: Track) {
+		function DeconstructSong(el: Player) {
+			el.AudioElement.src = '';
+			el.AudioElement.load();
+			el.status = 'Idle';
+			el.song = null;
+		}
+
 		return new Promise<void>(resolve => {
 			if (this.status == 'Playing') {
 				this.pause();
-				if (typeof this.song == 'string') {
-					window.URL.revokeObjectURL(this.song);
-				}
+				DeconstructSong(this);
+			}
+			if (track) {
+				this.track = track;
 			}
 			this.AudioElement.addEventListener('loadeddata', () => {
 				this.status = 'Loaded';
 				this.play();
 				resolve();
 			});
-			this.AudioElement.addEventListener('ended', () => {
-				this.AudioElement.src = '';
-				this.AudioElement.load();
-				this.status = 'Idle';
-				this.song = null;
-			});
+			this.AudioElement.addEventListener('ended', () => DeconstructSong(this));
 
-			if (typeof track == 'object') {
-				const blob = new Blob([track], { type: "audio/mp3" });
+			if (typeof source == 'object') {
+				const blob = new Blob([source], { type: "audio/mp3" });
 				const url = window.URL.createObjectURL(blob);
 				this.AudioElement.src = url;
 				this.song = url;
@@ -40,8 +45,8 @@ class Player {
 					window.URL.revokeObjectURL(url);
 				});
 			} else {
-				this.song = track;
-				this.AudioElement.src = track;
+				this.song = source;
+				this.AudioElement.src = source;
 			}
 			this.AudioElement.load();
 		});

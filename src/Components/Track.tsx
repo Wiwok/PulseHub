@@ -12,7 +12,7 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 		<div className="track" onMouseEnter={() => { setplayVisible("trackPlayButonVisible") }} onMouseLeave={() => { setplayVisible("trackPlayButon") }}>
 			<div className="trackInfo">
 				<img className="trackImage" src={track.album.images[1].url}></img>
-				<img className={playVisible} onClick={() => { Audio.load(track.preview_url) }} src={Play}></img>
+				<img className={playVisible} onClick={() => { Audio.load(track.preview_url, track) }} src={Play}></img>
 				<div className="trackNameArtist">
 					<div className="trackName">{track.name}</div>
 					<div className="trackArtists">
@@ -40,7 +40,7 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 						if (value.status == 'Finished') {
 							window.api.readTrack(track.id).then(test => {
 								if (!(test instanceof Error)) {
-									Audio.load(test);
+									Audio.load(test, track);
 								}
 							})
 						}

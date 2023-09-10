@@ -1,15 +1,16 @@
 export default function toReadableDuration(ms: number) {
-	if (ms < 60_000 || ms > 86_400_000) {
-		return (Math.round(ms / 1000).toString() + 's')
+	if (isNaN(ms)) {
+		return `--:--`;
 	}
-	const seconds = Math.round(ms / 1_000);
-	const hours = Math.round(seconds / 3_600);
-	const minutes = Math.round((seconds % 3_600) / 60);
-	const remainingSeconds = seconds % 60;
+	const seconds = parseInt((ms / 1_000).toFixed(0));
+	const minutes = parseInt((seconds / 60).toFixed(0));
+	const hours = parseInt((minutes / 60).toFixed(0));
 
-	const hoursStr = hours > 0 ? `${hours.toString().padStart(2, '0')}:` : '';
-	const minutesStr = minutes > 0 || hours > 0 ? `${minutes.toString().padStart(2, '0')}:` : '';
-	const secondsStr = `${remainingSeconds.toString().padStart(2, '0')}`;
-
-	return `${hoursStr}${minutesStr}${secondsStr}`;
+	if (minutes > 0) {
+		if (hours > 0) {
+			return `${hours}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
+		}
+		return `${minutes % 60}:${(seconds % 60).toString().padStart(2, '0')}`;
+	}
+	return `0:${(seconds % 60).toString().padStart(2, '0')}`;
 }

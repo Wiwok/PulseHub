@@ -24,10 +24,8 @@ function App() {
 			// @ts-ignore
 			v = v?.filter(val => val.album.album_type != 'compilation');
 			if (v && v.length) {
-				console.log(v);
-				SetState(<div>
+				SetState(<div className="SearchResults">
 					{v.map((track, i) => {
-
 						return (<Track Audio={Audio} track={track} key={i} />)
 					})}
 				</div>);
