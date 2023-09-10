@@ -80,9 +80,9 @@ export default function SidePlayer({ Audio }: { Audio: Player }) {
 				<div className="sidePlayerInfoRight">•••</div>
 			</div>
 			<div className="sidePlayerControl">
-				<img src={Back} alt="back" className="sidePlayerControlback" />
+				<img src={Back} alt="back" className="sidePlayerControlBack" />
 				<img src={Playing} alt="play/pause" className="sidePlayerControlerPlay" onClick={() => Audio.togglePlay()} />
-				<img src={Back} alt="front" className="sidePlayerControlfront" />
+				<img src={Back} alt="front" className="sidePlayerControlFront" />
 			</div>
 		</div>
 	);

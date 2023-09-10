@@ -36,10 +36,6 @@ function App() {
 		});
 	}
 
-	function Action2() {
-		Audio.togglePlay();
-	}
-
 	function GetEnter(ev: any) {
 		if (ev.key == 'Enter') {
 			Action();
@@ -48,12 +44,10 @@ function App() {
 
 	return (
 		<div className="App">
+			<div className='SideBarPlaceHolder'></div>
 			<SideBar Audio={Audio} />
 			{Page}
 			<input onKeyUp={GetEnter} id='input'></input>
-			<br />
-			<button onClick={Action2}>play / pause</button>
-			<br />
 			{State}
 		</div>
 	);

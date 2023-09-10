@@ -1,20 +1,19 @@
 body {
 	margin: 0;
 	font-family: sans-serif;
-	/* overflow-y: hidden; */
 }
 
 .App {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 	flex-direction: row;
+	width: 100vw;
 }
 
-
-/* ----------------------------track--------------------------------- */
+/* ----------------------------Track--------------------------------- */
 .track {
-	width: 98vw;
+	max-width: 98vw;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -130,11 +129,17 @@ body {
 
 /* ----------------------------SideMenu--------------------------------- */
 .sideBar {
+	position: fixed;
 	width: 20vw;
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+
+.SideBarPlaceHolder {
+	width: 20vw;
+	height: 100vh;
 }
 
 .sideMenu {
@@ -158,6 +163,7 @@ body {
 	padding: 0.3vw;
 	border-radius: calc(20px - 0.5vw);
 	transition-duration: 100ms;
+	cursor: pointer;
 }
 
 .sideMenuButton:hover {
@@ -221,15 +227,24 @@ body {
 	justify-content: center;
 }
 
-.sidePlayerControlback {
+.sidePlayerControlBack {
 	height: 5vh;
 	rotate: 180deg;
+	cursor: pointer;
 }
 
-.sidePlayerControlfront {
+.sidePlayerControlFront {
 	height: 5vh;
+	cursor: pointer;
 }
 
 .sidePlayerControlerPlay {
 	height: 6vh;
+	cursor: pointer;
+}
+
+/* ----------------------------Track--------------------------------- */
+.SearchResults {
+	display: flex;
+	flex-direction: column;
 }

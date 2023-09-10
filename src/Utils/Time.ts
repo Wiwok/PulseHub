@@ -1,4 +1,5 @@
 export default function toReadableDuration(ms: number) {
+	console.log(ms);
 	if (isNaN(ms)) {
 		return `--:--`;
 	}
