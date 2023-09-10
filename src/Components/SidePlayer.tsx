@@ -6,13 +6,9 @@ import Pause from '../Assets/Pause.png'
 import Disk from '../Assets/Disk.png'
 
 import Player from "../Player";
-import toReadableDuration from "../Utils/Time";
+import { toReadableArtists, toReadableDuration } from "../Utils/Cleaner";
 
 function ProgressBar({ progressBarRef, rangeValue, setRangeValue, onClickDown, onClickUp, max }) {
-	function onChange(ev) {
-		setRangeValue(ev.target.value);
-	}
-
 	return (
 		<input
 			type="range"
@@ -22,7 +18,7 @@ function ProgressBar({ progressBarRef, rangeValue, setRangeValue, onClickDown, o
 			value={rangeValue}
 			onMouseDown={onClickDown}
 			onMouseUp={onClickUp}
-			onChange={onChange}
+			onChange={ev => setRangeValue(ev.target.value)}
 		/>
 	);
 }
@@ -37,6 +33,7 @@ export default function SidePlayer({ Audio }: { Audio: Player }) {
 	Audio.on('Paused', () => setPlaying(Play));
 	Audio.on('Playing', () => setPlaying(Pause));
 	Audio.on('Loaded', () => setTrack(Audio.track));
+	Audio.on('Ended', () => setTrack(null));
 
 
 	function onClickDown() {
@@ -59,31 +56,36 @@ export default function SidePlayer({ Audio }: { Audio: Player }) {
 	}, [setRangeValue]);
 
 	return (
-		<div className='sidePlayer'>
-			<img className="sidePlayerImage" src={Track?.album.images[1].url ?? Disk} />
-			<div className="sidePlayerprogress">
-				{toReadableDuration(rangeValue)}
-				<ProgressBar
-					setRangeValue={setRangeValue}
-					rangeValue={isNaN(rangeValue) ? 0 : rangeValue}
-					onClickUp={onClickUp}
-					onClickDown={onClickDown}
-					progressBarRef={progressBarRef}
-					max={30} />
-				{toReadableDuration(parseInt(Audio.AudioElement.duration.toFixed(0)))}
-			</div>
-			<div className="sidePlayerInfo">
-				<div className="sidePlayerInfoLeft">
-					<div className="sidePlayerInfoTitle">{Track?.name}</div>
-					<div className="sidePlayerInfoArtist">{Track?.artists[0].name ?? 'Unknown artist'}</div>
-				</div>
-				<div className="sidePlayerInfoRight">•••</div>
-			</div>
-			<div className="sidePlayerControl">
-				<img src={Back} alt="back" className="sidePlayerControlBack" />
-				<img src={Playing} alt="play/pause" className="sidePlayerControlerPlay" onClick={() => Audio.togglePlay()} />
-				<img src={Back} alt="front" className="sidePlayerControlFront" />
-			</div>
-		</div>
+		<>
+			{
+				Track != null ?
+					<div className='sidePlayer'>
+						<img className="sidePlayerImage" src={Track?.album.images[1].url ?? Disk} />
+						<div className="sidePlayerprogress">
+							{toReadableDuration(rangeValue)}
+							<ProgressBar
+								setRangeValue={setRangeValue}
+								rangeValue={isNaN(rangeValue) ? 0 : rangeValue}
+								onClickUp={onClickUp}
+								onClickDown={onClickDown}
+								progressBarRef={progressBarRef}
+								max={Audio.AudioElement.duration.toFixed(0)} />
+							{toReadableDuration(parseInt(Audio.AudioElement.duration.toFixed(0)))}
+						</div>
+						<div className="sidePlayerInfo">
+							<div className="sidePlayerInfoLeft">
+								<div className="sidePlayerInfoTitle">{Track?.name}</div>
+								<div className="sidePlayerInfoArtist">{Track?.artists?.length ? toReadableArtists(Track.artists) : 'Unknown artist'}</div>
+							</div>
+							<div className="sidePlayerInfoRight">•••</div>
+						</div>
+						<div className="sidePlayerControl">
+							<img src={Back} alt="Back" className="sidePlayerControlBack" />
+							<img src={Playing} alt="Play/Pause" className="sidePlayerControlerPlay" onClick={() => Audio.togglePlay()} />
+							<img src={Back} alt="Skip" className="sidePlayerControlSkip" />
+						</div>
+					</div> : <></>
+			}
+		</>
 	);
 }

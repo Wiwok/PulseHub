@@ -4,21 +4,29 @@ import Download from '../Assets/Download.png';
 import Play from '../Assets/Play.png';
 
 import Player from "../Player";
-import toReadableDuration from "../Utils/Time";
+import { toReadableDuration } from "../Utils/Cleaner";
 
-export default function Track({ track, Audio }: { track: Track, Audio: Player }) {
-	const [playVisible, setplayVisible] = useState('trackPlayButon')
+function Track({ track, Audio }: { track: Track, Audio: Player }) {
+	const [playVisible, setplayVisible] = useState('trackPlayButton')
 	return (
-		<div className="track" onMouseEnter={() => { setplayVisible("trackPlayButonVisible") }} onMouseLeave={() => { setplayVisible("trackPlayButon") }}>
+		<div className="track" onMouseEnter={() => { setplayVisible("trackPlayButtonVisible") }} onMouseLeave={() => { setplayVisible("trackPlayButton") }}>
 			<div className="trackInfo">
 				<img className="trackImage" src={track.album.images[1].url}></img>
-				<img className={playVisible} onClick={() => { Audio.load(track.preview_url, track) }} src={Play}></img>
+				<img className={playVisible} onClick={() => {
+					window.api.readTrack(track.id).then(Buffer => {
+						if (!(Buffer instanceof Error)) {
+							Audio.load(Buffer, track);
+						} else {
+							Audio.load(track.preview_url, track);
+						}
+					})
+				}} src={Play}></img>
 				<div className="trackNameArtist">
 					<div className="trackName">{track.name}</div>
 					<div className="trackArtists">
 						{track.artists.map((element, i) => {
 							if (i != track.artists.length - 1)
-								return (<div key={i} className="trackArtistContainer"><div className="trackArtist"> {element.name}</div>,</div>);
+								return (<div key={i} className="trackArtistContainer"><div className="trackArtist">{element.name}</div>,</div>);
 							else
 								return (<div key={i} className="trackArtistContainer"><div className="trackArtist">{element.name}</div></div>);
 						})}
@@ -31,9 +39,9 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 				</div>
 			</div>
 			<div className="trackDuration">
-				{toReadableDuration(track.duration_ms)}
+				{toReadableDuration(track.duration_ms / 1000)}
 			</div>
-			<div className="trackActionButon">
+			<div className="trackActionButton">
 				<img src={Download} className="trackDownload" onClick={() => {
 					window.api.downloadTrack(track);
 					window.api.downloadTrackHandle((ev, value) => {
@@ -45,10 +53,12 @@ export default function Track({ track, Audio }: { track: Track, Audio: Player })
 							})
 						}
 					});
-				}}></img>
+				}} />
 				<div className="trackLike"> ♡ </div>
 				<div className="trackOption">•••</div>
 			</div>
 		</div >
 	)
 }
+
+export default Track;
