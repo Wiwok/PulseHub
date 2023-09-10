@@ -1,6 +1,7 @@
 declare module "*.png";
 
 type AlbumType = 'album' | 'single' | 'compilation'
+type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
 
 type Track = {
 	disc_number: number;
@@ -105,8 +106,6 @@ type Artist = {
 	name: string;
 	popularity: number;
 };
-
-type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
 
 interface Window {
 	api: {
