@@ -8,6 +8,7 @@ dist/
 
 # misc
 /userdata
+/datas
 /output
 *.env
 *.mp3
