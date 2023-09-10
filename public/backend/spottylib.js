@@ -191,6 +191,21 @@ class spottylib {
 		this.downloadAlbum = downloadAlbum;
 	}
 
+	myCatcher(err) {
+		if (err?.response?.status) {
+			console.log('Auth issue. Trying re-authenticate...');
+			this.auth().then(v => {
+				if (v) {
+					console.log('Authentication successed');
+				} else {
+					console.err('Authentication failed');
+				}
+			});
+		} else {
+			console.error(err);
+		}
+	}
+
 	async auth() {
 		const re = /<script id="session" data-testid="session" type="application\/json"\>({.*})<\/script>/;
 		const response = await axios("https://open.spotify.com/search")
@@ -218,7 +233,7 @@ class spottylib {
 			}
 		})
 			.then(data => data.data)
-			.catch(() => null);
+			.catch(this.myCatcher.bind(this));
 	}
 
 	async getAlbum(id) {
@@ -230,7 +245,7 @@ class spottylib {
 			}
 		})
 			.then(data => data.data)
-			.catch(() => null);
+			.catch(this.myCatcher.bind(this));
 	}
 
 	async getArtist(id) {
@@ -242,7 +257,7 @@ class spottylib {
 			}
 		})
 			.then(data => data.data)
-			.catch(() => null);
+			.catch(this.myCatcher.bind(this));
 	}
 
 	async searchTrack(search) {
@@ -254,7 +269,7 @@ class spottylib {
 			}
 		})
 			.then(data => data.data.tracks.items)
-			.catch(() => null);
+			.catch(this.myCatcher.bind(this));
 	}
 
 	async searchAlbum(search) {
@@ -266,7 +281,7 @@ class spottylib {
 			}
 		})
 			.then(data => data.data.albums.items)
-			.catch(() => null);
+			.catch(this.myCatcher.bind(this));
 	}
 
 	async searchArtist(search) {
@@ -278,7 +293,7 @@ class spottylib {
 			}
 		})
 			.then(data => data.data.artists.items)
-			.catch(() => null);
+			.catch(this.myCatcher.bind(this));
 	}
 }
 
