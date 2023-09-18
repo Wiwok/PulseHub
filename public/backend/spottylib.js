@@ -182,29 +182,14 @@ async function downloadAlbum(album, callback) {
 
 class spottylib {
 	accessToken;
-	clientId;
+	options;
 	downloadTrack;
 	downloadAlbum;
 	constructor() {
 		this.accessToken = null;
-		this.clientId = null;
+		this.options = null;
 		this.downloadTrack = downloadTrack;
 		this.downloadAlbum = downloadAlbum;
-	}
-
-	myCatcher(err) {
-		if (err?.response?.status) {
-			console.log('Auth issue. Trying re-authenticate...');
-			this.auth().then(v => {
-				if (v) {
-					console.log('Authentication successed');
-				} else {
-					console.err('Authentication failed');
-				}
-			});
-		} else {
-			console.error(err);
-		}
 	}
 
 	async auth() {
@@ -213,88 +198,164 @@ class spottylib {
 			.then(data => data.data.match(re)[1])
 			.then(json => JSON.parse(json))
 			.catch(() => {
+				this.accessToken = null;
+				this.options = null;
 				return false;
 			});
 
 		if (!response) {
+			this.accessToken = null;
+			this.options = null;
 			return false;
 		}
 
 		this.accessToken = response.accessToken;
-		this.clientId = response.clientId;
+		this.options = {
+			headers: {
+				Authorization: `Bearer ${this.accessToken}`,
+				Accept: 'application/json',
+				'Content-Type': 'application/json;charset=UTF-8'
+			}
+		};
 		return true;
 	}
 
 	async getTrack(id) {
-		return await axios('https://api.spotify.com/v1/tracks/' + id, {
-			headers: {
-				Authorization: `Bearer ${this.accessToken}`,
-				Accept: 'application/json',
-				'Content-Type': 'application/json;charset=UTF-8'
-			}
-		})
-			.then(data => data.data)
-			.catch(this.myCatcher.bind(this));
+		const URL = 'https://api.spotify.com/v1/tracks/' + id;
+
+		const callback = (data) => data.data;
+
+		return await axios(URL, this.options)
+			.then(callback)
+			.catch(async err => {
+				if (err?.response?.status) {
+					console.log('Auth issue. Trying re-authenticate...');
+					const v = await this.auth()
+					if (v) {
+						console.log('Authentication successed');
+						return await axios(URL, this.options).then(callback);
+					} else {
+						console.err('Authentication failed');
+					}
+				} else {
+					console.error(err);
+				}
+			});
 	}
 
 	async getAlbum(id) {
-		return await axios('https://api.spotify.com/v1/albums/' + id, {
-			headers: {
-				Authorization: `Bearer ${this.accessToken}`,
-				Accept: 'application/json',
-				'Content-Type': 'application/json;charset=UTF-8'
-			}
-		})
-			.then(data => data.data)
-			.catch(this.myCatcher.bind(this));
+		const URL = 'https://api.spotify.com/v1/albums/' + id;
+
+		const callback = (data) => data.data;
+
+		return await axios(URL, this.options)
+			.then(callback)
+			.catch(async err => {
+				if (err?.response?.status) {
+					console.log('Auth issue. Trying re-authenticate...');
+					const v = await this.auth()
+					if (v) {
+						console.log('Authentication successed');
+						return await axios(URL, this.options).then(callback);
+					} else {
+						console.err('Authentication failed');
+					}
+				} else {
+					console.error(err);
+				}
+			});
 	}
 
 	async getArtist(id) {
-		return await axios('https://api.spotify.com/v1/artists/' + id, {
-			headers: {
-				Authorization: `Bearer ${this.accessToken}`,
-				Accept: 'application/json',
-				'Content-Type': 'application/json;charset=UTF-8'
-			}
-		})
-			.then(data => data.data)
-			.catch(this.myCatcher.bind(this));
+		const URL = 'https://api.spotify.com/v1/artists/' + id;
+
+		const callback = (data) => data.data;
+
+		return await axios(URL, this.options)
+			.then(callback)
+			.catch(async err => {
+				if (err?.response?.status) {
+					console.log('Auth issue. Trying re-authenticate...');
+					const v = await this.auth()
+					if (v) {
+						console.log('Authentication successed');
+						return await axios(URL, this.options).then(callback);
+					} else {
+						console.err('Authentication failed');
+					}
+				} else {
+					console.error(err);
+				}
+			});
 	}
 
 	async searchTrack(search) {
-		return await axios('https://api.spotify.com/v1/search?q=' + search + '&type=track', {
-			headers: {
-				Authorization: `Bearer ${this.accessToken}`,
-				Accept: 'application/json',
-				'Content-Type': 'application/json;charset=UTF-8'
-			}
-		})
-			.then(data => data.data.tracks.items)
-			.catch(this.myCatcher.bind(this));
+		const URL = 'https://api.spotify.com/v1/search?q=' + search + '&type=track';
+
+		const callback = (data) => data.data.tracks.items;
+
+		return await axios(URL, this.options)
+			.then(callback)
+			.catch(async err => {
+				if (err?.response?.status) {
+					console.log('Auth issue. Trying re-authenticate...');
+					const v = await this.auth()
+					if (v) {
+						console.log('Authentication successed');
+						return await axios(URL, this.options).then(callback);
+					} else {
+						console.err('Authentication failed');
+					}
+				} else {
+					console.error(err);
+				}
+			});
 	}
 
 	async searchAlbum(search) {
-		return await axios('https://api.spotify.com/v1/search?q=' + search + '&type=album', {
-			headers: {
-				Authorization: `Bearer ${this.accessToken}`,
-				Accept: 'application/json',
-				'Content-Type': 'application/json;charset=UTF-8'
-			}
-		})
-			.then(data => data.data.albums.items)
-			.catch(this.myCatcher.bind(this));
+		const URL = 'https://api.spotify.com/v1/search?q=' + search + '&type=album';
+
+		const callback = (data) => data.data.albums.items;
+
+		return await axios(URL, this.options)
+			.then(callback)
+			.catch(async err => {
+				if (err?.response?.status) {
+					console.log('Auth issue. Trying re-authenticate...');
+					const v = await this.auth()
+					if (v) {
+						console.log('Authentication successed');
+						return await axios(URL, this.options).then(callback);
+					} else {
+						console.err('Authentication failed');
+					}
+				} else {
+					console.error(err);
+				}
+			});
 	}
 
 	async searchArtist(search) {
-		return await axios('https://api.spotify.com/v1/search?q=' + search + '&type=artist', {
-			headers: {
-				Authorization: `Bearer ${this.accessToken}`,
-				Accept: 'application/json',
-				'Content-Type': 'application/json;charset=UTF-8'
-			}
-		})
-			.then(data => data.data.artists.items)
-			.catch(this.myCatcher.bind(this));
+		const URL = 'https://api.spotify.com/v1/search?q=' + search + '&type=artist';
+
+		const callback = (data) => data.data.artists.items;
+
+		return await axios(URL, this.options)
+			.then(callback)
+			.catch(async err => {
+				if (err?.response?.status) {
+					console.log('Auth issue. Trying re-authenticate...');
+					const v = await this.auth()
+					if (v) {
+						console.log('Authentication successed');
+						return await axios(URL, this.options).then(callback);
+					} else {
+						console.err('Authentication failed');
+					}
+				} else {
+					console.error(err);
+				}
+			});
 	}
 }
 
