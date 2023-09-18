@@ -25,6 +25,7 @@ function removeTrackDatas(TrackID) {
 async function dl_track(id, filename) {
 	return new Promise(resolve => {
 		try {
+			if (fs.existsSync(filename)) resolve(true);
 			fluent_ffmpeg(ytdl_core(id, { quality: 'highestaudio', filter: 'audioonly' }))
 				.audioBitrate(128)
 				.save(filename)
