@@ -10,11 +10,15 @@ function Search({ Audio, downloadManager }) {
 	});
 
 	function Action() {
-		setContent(<>Searching...</>);
-		const input = encodeURIComponent((document.getElementById('input') as HTMLInputElement).value);
+		const value = (document.getElementById('input') as HTMLInputElement).value;
+		if (value == '') {
+			setContent(<></>);
+			return;
+		}
+		const input = encodeURIComponent(value);
 		window.api.searchTrack(input).then(v => {
 			if (typeof v == 'undefined') {
-				setContent(<>An error occurred</>);
+				setContent(<div className="SearchingMessage">An error occurred</div>);
 			} else if (v && v.length) {
 				setContent(
 					<div className="SearchResults">
@@ -28,15 +32,30 @@ function Search({ Audio, downloadManager }) {
 						})}
 					</div>);
 			} else {
-				setContent(<>No result</>);
+				setContent(<div className="SearchingMessage">No result</div>);
 			}
 		});
+	}
+
+	function input() {
+		const oldValue = (document.getElementById('input') as HTMLInputElement).value;
+		setTimeout(() => {
+			const value = (document.getElementById('input') as HTMLInputElement).value;
+			if (oldValue == value) {
+				Action();
+			}
+		}, 500);
 	}
 
 	return (
 		<div className="searchPage">
 			<div className="searchBox">
-				<input className="searchInput" onKeyUp={(ev) => { if (ev.key == 'Enter') Action() }} id='input' placeholder="Search"></input>
+				<input className="searchInput" onInput={input} onKeyUp={ev => {
+					if (ev.key == 'Enter') {
+						setContent(<div className="SearchingMessage">Searching...</div>);
+						Action();
+					}
+				}} id='input' placeholder="Search"></input>
 				<img src={SearchImg} onClick={Action} alt="Search" className="searchButton"></img>
 			</div>
 			{Content}

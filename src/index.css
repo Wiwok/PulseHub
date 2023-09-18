@@ -256,6 +256,8 @@ body {
 	border-radius: 20px;
 	background-color: #D9D9D9;
 	width: 76vw;
+	display: flex;
+	flex-direction: column;
 }
 
 .SearchResults {
@@ -295,4 +297,10 @@ body {
 
 .SearchResultsDescriptionAlbum {
 	margin-left: 8vh;
+}
+
+.SearchingMessage {
+	text-align: center;
+	font-size: 4vh;
+	margin: auto 0;
 }
