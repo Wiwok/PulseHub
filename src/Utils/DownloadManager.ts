@@ -1,14 +1,13 @@
 class DownloadManager {
-	private handlers = new Array<DownloadHandler>;
-	private onceHandlers = new Array<DownloadHandler>;
+	private handlers = new Array<DownloadHandler>();
+	private onceHandlers = new Array<DownloadHandler>();
 
 	constructor() {
 		window.api.downloadTrackClearHandle();
-		window.api.downloadTrackHandle((ev, value) => this.catchDownload.bind(this, ev, value));
+		window.api.downloadTrackHandle((ev, value) => this.catchDownload.bind(this, ev, value)());
 	}
 
 	private catchDownload(ev: any, value: { id: string; status: DownloadStatus }) {
-		console.log(ev);
 		this.handlers.forEach(v => {
 			if (v.id == value.id && value.status == v.event) {
 				v.callback();

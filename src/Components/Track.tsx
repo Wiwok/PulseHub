@@ -49,17 +49,16 @@ function Track({ track, Audio, downloadManager }: { track: Track, Audio: Player,
 						console.log('Started !');
 					});
 					window.api.downloadTrack(track);
-					downloadManager.on('Finished', track.id, () => {
-						downloadManager.off(track.id);
+					downloadManager.once('Finished', track.id, () => {
 						console.log('Finished !');
-						window.api.readTrack(track.id).then(test => {
-							if (!(test instanceof Error)) {
-								Audio.load(test, track);
+						window.api.readTrack(track.id).then(buffer => {
+							if (!(buffer instanceof Error)) {
+								Audio.load(buffer, track);
 							}
 						});
 					});
 				}} />
-				<div className="trackLike"> ♡ </div>
+				<div className="trackLike">♡</div>
 				<div className="trackOption">•••</div>
 			</div>
 		</div >
