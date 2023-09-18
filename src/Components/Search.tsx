@@ -10,7 +10,7 @@ function Search({ Audio }) {
 
 	function Action() {
 		setContent(<>Searching...</>);
-		const input = (document.getElementById('input') as HTMLInputElement).value;
+		const input = encodeURIComponent((document.getElementById('input') as HTMLInputElement).value);
 		window.api.searchTrack(input).then(v => {
 			// @ts-ignore
 			v = v?.filter(val => val.album.album_type != 'compilation');
