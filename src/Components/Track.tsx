@@ -10,19 +10,21 @@ import DownloadManager from "../Utils/DownloadManager";
 function Track({ track, Audio, downloadManager }: { track: Track, Audio: Player, downloadManager: DownloadManager | undefined }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
 
+	function PlayTrack() {
+		window.api.readTrack(track.id).then(Buffer => {
+			if (!(Buffer instanceof Error)) {
+				Audio.load(Buffer, track);
+			} else {
+				Audio.load(track.preview_url, track);
+			}
+		});
+	}
+
 	return (
-		<div className="track" onMouseEnter={() => setplayVisible("trackPlayButtonVisible")} onMouseLeave={() => setplayVisible("trackPlayButton")}>
+		<div className="track" onMouseEnter={() => setplayVisible("trackPlayButtonVisible")} onMouseLeave={() => setplayVisible("trackPlayButton")} onDoubleClick={PlayTrack} >
 			<div className="trackInfo">
 				<img className="trackImage" src={track.album.images[1].url}></img>
-				<img className={playVisible} onClick={() => {
-					window.api.readTrack(track.id).then(Buffer => {
-						if (!(Buffer instanceof Error)) {
-							Audio.load(Buffer, track);
-						} else {
-							Audio.load(track.preview_url, track);
-						}
-					})
-				}} src={Play}></img>
+				<img className={playVisible} onClick={PlayTrack} src={Play}></img>
 				<div className="trackNameArtist">
 					<div className="trackName">{track.name}</div>
 					<div className="trackArtists">
