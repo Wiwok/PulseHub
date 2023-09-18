@@ -8,8 +8,7 @@ const ytmusic_api = require('ytmusic-api');
 const ytm = new ytmusic_api.default();
 ytm.initialize();
 
-const PATH = './datas/track/';
-fs.mkdirSync(PATH, { recursive: true });
+const PATH = './datas';
 
 async function dl_track(id, filename) {
 	return new Promise(resolve => {
@@ -50,7 +49,7 @@ async function dl_album(album, tags, callback) {
 	let i = 0;
 	for (let res of album.tracks.items) {
 		const YTID = yt_tracks[i].playlistVideoRenderer.videoId;
-		let filename = `${PATH}${res.id}.mp3`;
+		let filename = `${PATH}/tracks/${res.id}.mp3`;
 		callback({ id: res.id, status: 'Started' });
 		try {
 			fluent_ffmpeg(ytdl_core(YTID, { quality: 'highestaudio', filter: 'audioonly' }))
@@ -135,7 +134,7 @@ async function downloadTrack(track, callback) {
 				imageBuffer: Buffer.from(albCover.data, 'utf-8')
 			}
 		};
-		const filename = `${PATH}${track.id}.mp3`;
+		const filename = `${PATH}/tracks/${track.id}.mp3`;
 		const id = await getYoutubeID(track);
 		if (!id) {
 			callback({ id: track.id, status: 'Errored' });

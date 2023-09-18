@@ -3,6 +3,10 @@ const fs = require('fs');
 
 const { spottylib } = require('./spottylib');
 
+const PATH = './datas';
+fs.mkdirSync(PATH, { recursive: true });
+fs.mkdirSync(PATH + '/tracks', { recursive: true });
+
 async function initIpc(mainWindow) {
 	const sl = new spottylib();
 
@@ -64,7 +68,7 @@ async function initIpc(mainWindow) {
 
 	ipcMain.handle('read-track', (e, TrackID) => {
 		try {
-			return fs.readFileSync(TrackID + ".mp3");
+			return fs.readFileSync(PATH + '/tracks/' + TrackID + ".mp3");
 		}
 		catch (err) { return err }
 	});
