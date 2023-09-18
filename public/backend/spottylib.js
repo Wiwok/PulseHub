@@ -182,13 +182,11 @@ async function downloadAlbum(album, callback) {
 
 class spottylib {
 	accessToken;
-	clientId;
 	options;
 	downloadTrack;
 	downloadAlbum;
 	constructor() {
 		this.accessToken = null;
-		this.clientId = null;
 		this.options = null;
 		this.downloadTrack = downloadTrack;
 		this.downloadAlbum = downloadAlbum;
@@ -200,15 +198,18 @@ class spottylib {
 			.then(data => data.data.match(re)[1])
 			.then(json => JSON.parse(json))
 			.catch(() => {
+				this.accessToken = null;
+				this.options = null;
 				return false;
 			});
 
 		if (!response) {
+			this.accessToken = null;
+			this.options = null;
 			return false;
 		}
 
 		this.accessToken = response.accessToken;
-		this.clientId = response.clientId;
 		this.options = {
 			headers: {
 				Authorization: `Bearer ${this.accessToken}`,
