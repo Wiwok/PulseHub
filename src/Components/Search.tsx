@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Track from "./Track";
 import SearchImg from "../Assets/Search.png"
 function Search({ Audio }) {
 	const [Content, setContent] = useState(<></>);
+	useEffect(() => {
+		document.getElementById('input')?.focus();
+	});
 
 	function Action() {
 		setContent(<>Searching...</>);
