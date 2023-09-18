@@ -13,7 +13,9 @@ function Search({ Audio, downloadManager }) {
 		setContent(<>Searching...</>);
 		const input = (document.getElementById('input') as HTMLInputElement).value;
 		window.api.searchTrack(input).then(v => {
-			if (v && v.length) {
+			if (typeof v == 'undefined') {
+				setContent(<>An error occurred</>);
+			} else if (v && v.length) {
 				setContent(
 					<div className="SearchResults">
 						<div className="SearchResultsDescription">
