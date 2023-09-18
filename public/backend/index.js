@@ -15,22 +15,19 @@ async function initIpc(mainWindow) {
 	});
 
 	ipcMain.handle('is-auth', () => {
-		if (sl.accessToken != null) {
-			return true;
-		}
-		return false;
+		return sl.accessToken != null;
 	});
 
 	ipcMain.on('download-track', async (e, track) => {
 		function callback(value) {
-			mainWindow.webContents.send('download-track-handle', value)
+			mainWindow.webContents.send('download-track-handle', value);
 		}
 		sl.downloadTrack(track, callback);
 	});
 
 	ipcMain.on('download-album', async (e, album) => {
 		function callback(value) {
-			mainWindow.webContents.send('download-album-handle', value)
+			mainWindow.webContents.send('download-album-handle', value);
 		}
 		sl.downloadAlbum(album, callback);
 	});

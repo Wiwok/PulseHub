@@ -2,7 +2,7 @@ const path = require('path');
 
 const { app, BrowserWindow } = require('electron')
 
-const { initIpc } = require('./backend/data');
+const { initIpc } = require('./backend/index');
 
 function createWindow() {
 	const win = new BrowserWindow({
