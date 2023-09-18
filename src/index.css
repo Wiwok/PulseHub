@@ -6,21 +6,20 @@ body {
 
 .App {
 	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
+	justify-content: center;
 	flex-direction: row;
 	width: 100vw;
 }
 
 /* ----------------------------Track--------------------------------- */
 .track {
-	max-width: 98vw;
+	max-width: 98%;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
 	padding: 1vh 1vw;
-	border-top: 1px solid lightgrey;
+	border-top: 2px solid lightgrey;
 	box-shadow: 0 0 0 gray;
 	transition-duration: 100ms;
 }
@@ -105,7 +104,7 @@ body {
 .trackDuration {
 	width: 5vw;
 	display: flex;
-	justify-content: right;
+	justify-content: center;
 }
 
 .trackActionButton {
@@ -113,24 +112,28 @@ body {
 	justify-content: space-between;
 	gap: 0.5vw;
 	width: 6vw;
+	text-align: center;
 }
 
 .trackLike {
 	width: 2vw;
+	cursor: pointer;
 }
 
 .trackOption {
 	width: 2vw;
-}
-
-.trackDownload {
-	width: 20px;
 	cursor: pointer;
 }
 
-/* ----------------------------SideMenu--------------------------------- */
+.trackDownload {
+	width: 1em;
+	cursor: pointer;
+}
+
+/* ----------------------------Side bar--------------------------------- */
 .sideBar {
 	position: fixed;
+	left: 0px;
 	width: 20vw;
 	height: 100vh;
 	display: flex;
@@ -139,7 +142,7 @@ body {
 }
 
 .SideBarPlaceHolder {
-	width: 20vw;
+	width: 18vw;
 	height: 100vh;
 }
 
@@ -244,8 +247,48 @@ body {
 	cursor: pointer;
 }
 
-/* ----------------------------Track--------------------------------- */
+/* ----------------------------Search page---------------------------- */
+
+.searchPage {
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+	padding: 1vh 1vw;
+	border-radius: 20px;
+	background-color: #D9D9D9;
+	width: 76vw;
+}
+
 .SearchResults {
 	display: flex;
 	flex-direction: column;
+}
+
+.searchInput {
+	width: 100%;
+	border-radius: 10px;
+	border: none;
+	height: 2em;
+	font-size: 1.3em;
+	padding-left: 0.5em;
+}
+
+.searchButton {
+	height: 2em;
+}
+
+.searchBox {
+	display: flex;
+	gap: 0.5vw;
+	align-items: center;
+}
+
+.SearchResultsDescription {
+	display: flex;
+	justify-content: space-between;
+	margin-left: 1vw;
+	margin-right: 8vw;
+}
+
+.SearchResultsDescriptionAlbum {
+	margin-left: 8vh;
 }
