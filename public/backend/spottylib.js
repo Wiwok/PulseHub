@@ -39,9 +39,9 @@ async function dl_track(id, filename) {
 				.on('end', () => {
 					resolve(true);
 				});
-		}
-		catch (err) {
+		} catch (err) {
 			console.error(`Error: ${err}`);
+			if (fs.existsSync(filename)) fs.unlinkSync(filename);
 			resolve(false);
 		}
 	});
@@ -65,31 +65,34 @@ async function dl_album(album, tags, callback) {
 		let filename = `${PATH}tracks/${res.id}.mp3`;
 		callback({ id: res.id, status: 'Started' });
 		try {
-			fluent_ffmpeg(ytdl_core(YTID, { quality: 'highestaudio', filter: 'audioonly' }))
-				.audioBitrate(128)
-				.save(filename)
-				.on('error', () => {
-					tags.title = res.name;
-					tags.trackNumber = res.track_number;
-					callback({ id: res.id, status: 'Errored' });
-					fs.unlinkSync(filename);
-				})
-				.on('end', () => {
-					tags.title = res.name;
-					tags.trackNumber = res.track_number;
-					if (node_id3.update(tags, filename)) {
-						callback({ id: res.id, status: 'Finished' });
-					} else {
+			if (!fs.existsSync(filename))
+				fluent_ffmpeg(ytdl_core(YTID, { quality: 'highestaudio', filter: 'audioonly' }))
+					.audioBitrate(128)
+					.save(filename)
+					.on('error', () => {
+						tags.title = res.name;
+						tags.trackNumber = res.track_number;
 						callback({ id: res.id, status: 'Errored' });
-					}
-					i++;
-					if (i == album.tracks.items.length) {
-						callback({ id: album.id, status: 'Ended' });
-					}
-				});
-		}
-		catch {
-			callback({ id: res.id, status: 'Errored' });
+						if (fs.existsSync(filename)) fs.unlinkSync(filename);
+					})
+					.on('end', () => {
+						tags.title = res.name;
+						tags.trackNumber = res.track_number;
+						if (node_id3.update(tags, filename)) {
+							callback({ id: res.id, status: 'Finished' });
+						} else {
+							if (fs.existsSync(filename)) fs.unlinkSync(filename);
+							callback({ id: res.id, status: 'Errored' });
+						}
+						i++;
+						if (i == album.tracks.items.length) {
+							callback({ id: album.id, status: 'Ended' });
+						}
+					});
+		} catch (err) {
+			console.error(`Exception: ${err}`);
+			if (fs.existsSync(filename)) fs.unlinkSync(filename);
+			callback({ id: track.id, status: 'Errored' });
 		}
 	}
 }
@@ -135,6 +138,7 @@ async function getYoutubeID(track) {
 }
 
 async function downloadTrack(track, callback) {
+	const filename = `${PATH}tracks/${track.id}.mp3`;
 	try {
 		const albCover = await axios.get(track.album.images[0].url, { responseType: 'arraybuffer' });
 		const tags = {
@@ -147,9 +151,9 @@ async function downloadTrack(track, callback) {
 				imageBuffer: Buffer.from(albCover.data, 'utf-8')
 			}
 		};
-		const filename = `${PATH}tracks/${track.id}.mp3`;
 		const id = await getYoutubeID(track);
 		if (!id) {
+			if (fs.existsSync(filename)) fs.unlinkSync(filename);
 			callback({ id: track.id, status: 'Errored' });
 			return;
 		}
@@ -162,17 +166,17 @@ async function downloadTrack(track, callback) {
 				callback({ id: track.id, status: 'Finished' });
 			}
 			else {
-				if (fs.existsSync(`${PATH}/tracks/${track.id}.mp3`)) fs.rmSync(`${PATH}/tracks/${track.id}.mp3`);
+				if (fs.existsSync(filename)) fs.unlinkSync(filename);
 				callback({ id: track.id, status: 'Errored' });
 			}
 		}
 		else {
-			if (fs.existsSync(`${PATH}/tracks/${track.id}.mp3`)) fs.rmSync(`${PATH}/tracks/${track.id}.mp3`);
+			if (fs.existsSync(filename)) fs.unlinkSync(filename);
 			callback({ id: track.id, status: 'Errored' });
 		}
-	}
-	catch (err) {
+	} catch (err) {
 		console.error(`Exception: ${err}`);
+		if (fs.existsSync(filename)) fs.unlinkSync(filename);
 		callback({ id: track.id, status: 'Errored' });
 	}
 };
@@ -189,9 +193,9 @@ async function downloadAlbum(album, callback) {
 			}
 		};
 		await dl_album(album, tags, callback);
-	}
-	catch {
-		callback({ id: album.id, status: 'Errored' });
+	} catch (err) {
+		console.error(`Exception: ${err}`);
+		callback({ id: track.id, status: 'Errored' });
 	}
 };
 
@@ -375,7 +379,7 @@ class spottylib {
 
 	removeTrack(TrackID) {
 		if (fs.existsSync(PATH + 'tracks/' + TrackID + '.mp3')) {
-			fs.rmSync(PATH + 'tracks/' + TrackID + '.mp3');
+			fs.unlinkSync(PATH + 'tracks/' + TrackID + '.mp3');
 		}
 		removeTrackDatas(TrackID);
 	}
