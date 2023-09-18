@@ -7,7 +7,7 @@ import Player from "../Player";
 import { toReadableDuration } from "../Utils/Cleaner";
 import DownloadManager from "../Utils/DownloadManager";
 
-function Track({ track, Audio, downloadManager }: { track: Track, Audio: Player, downloadManager: DownloadManager }) {
+function Track({ track, Audio, downloadManager }: { track: Track, Audio: Player, downloadManager: DownloadManager | undefined }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
 
 	return (
@@ -44,20 +44,24 @@ function Track({ track, Audio, downloadManager }: { track: Track, Audio: Player,
 				{toReadableDuration(track.duration_ms / 1000)}
 			</div>
 			<div className="trackActionButton">
-				<img src={Download} className="trackDownload" onClick={() => {
-					downloadManager.once('Started', track.id, () => {
-						console.log('Started !');
-					});
-					window.api.downloadTrack(track);
-					downloadManager.once('Finished', track.id, () => {
-						console.log('Finished !');
-						window.api.readTrack(track.id).then(buffer => {
-							if (!(buffer instanceof Error)) {
-								Audio.load(buffer, track);
-							}
+				{typeof downloadManager != 'undefined' ?
+					<img src={Download} className="trackDownload" onClick={() => {
+						downloadManager.once('Started', track.id, () => {
+							console.log('Started !');
 						});
-					});
-				}} />
+						window.api.downloadTrack(track);
+						downloadManager.once('Finished', track.id, () => {
+							console.log('Finished !');
+							window.api.readTrack(track.id).then(buffer => {
+								if (!(buffer instanceof Error)) {
+									Audio.load(buffer, track);
+								}
+							});
+						});
+					}} />
+					:
+					<></>
+				}
 				<div className="trackLike">♡</div>
 				<div className="trackOption">•••</div>
 			</div>

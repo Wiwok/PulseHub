@@ -128,5 +128,7 @@ interface Window {
 		searchArtist: (search: string) => Promise<Artist[] | null>;
 
 		readTrack: (TrackID: string) => Promise<Buffer | Error>;
+		getLocalTracks: () => Promise<Array<Track>>;
+		removeTrack: (TrackID: string) => void;
 	};
 }

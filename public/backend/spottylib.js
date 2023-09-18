@@ -8,7 +8,19 @@ const ytmusic_api = require('ytmusic-api');
 const ytm = new ytmusic_api.default();
 ytm.initialize();
 
-const PATH = './datas';
+const PATH = './datas/';
+
+function addTrackDatas(track) {
+	const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
+	datas.push(track);
+	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
+}
+
+function removeTrackDatas(TrackID) {
+	const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
+	datas = datas.filter(value => value.id != TrackID);
+	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
+}
 
 async function dl_track(id, filename) {
 	return new Promise(resolve => {
@@ -49,7 +61,7 @@ async function dl_album(album, tags, callback) {
 	let i = 0;
 	for (let res of album.tracks.items) {
 		const YTID = yt_tracks[i].playlistVideoRenderer.videoId;
-		let filename = `${PATH}/tracks/${res.id}.mp3`;
+		let filename = `${PATH}tracks/${res.id}.mp3`;
 		callback({ id: res.id, status: 'Started' });
 		try {
 			fluent_ffmpeg(ytdl_core(YTID, { quality: 'highestaudio', filter: 'audioonly' }))
@@ -134,7 +146,7 @@ async function downloadTrack(track, callback) {
 				imageBuffer: Buffer.from(albCover.data, 'utf-8')
 			}
 		};
-		const filename = `${PATH}/tracks/${track.id}.mp3`;
+		const filename = `${PATH}tracks/${track.id}.mp3`;
 		const id = await getYoutubeID(track);
 		if (!id) {
 			callback({ id: track.id, status: 'Errored' });
@@ -145,13 +157,16 @@ async function downloadTrack(track, callback) {
 		if (dlt) {
 			let tagStatus = node_id3.update(tags, filename);
 			if (tagStatus) {
+				addTrackDatas(track);
 				callback({ id: track.id, status: 'Finished' });
 			}
 			else {
+				if (fs.existsSync(`${PATH}/tracks/${track.id}.mp3`)) fs.rmSync(`${PATH}/tracks/${track.id}.mp3`);
 				callback({ id: track.id, status: 'Errored' });
 			}
 		}
 		else {
+			if (fs.existsSync(`${PATH}/tracks/${track.id}.mp3`)) fs.rmSync(`${PATH}/tracks/${track.id}.mp3`);
 			callback({ id: track.id, status: 'Errored' });
 		}
 	}
@@ -355,6 +370,13 @@ class spottylib {
 					console.error(err);
 				}
 			});
+	}
+
+	removeTrack(TrackID) {
+		if (fs.existsSync(PATH + 'tracks/' + TrackID + '.mp3')) {
+			fs.rmSync(PATH + 'tracks/' + TrackID + '.mp3');
+		}
+		removeTrackDatas(TrackID);
 	}
 }
 

@@ -3,9 +3,12 @@ const fs = require('fs');
 
 const { spottylib } = require('./spottylib');
 
-const PATH = './datas';
+const PATH = './datas/';
 fs.mkdirSync(PATH, { recursive: true });
-fs.mkdirSync(PATH + '/tracks', { recursive: true });
+fs.mkdirSync(PATH + 'tracks', { recursive: true });
+if (!fs.existsSync(PATH + 'tracks.json')) {
+	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify([]));
+}
 
 async function initIpc(mainWindow) {
 	const sl = new spottylib();
@@ -68,9 +71,20 @@ async function initIpc(mainWindow) {
 
 	ipcMain.handle('read-track', (e, TrackID) => {
 		try {
-			return fs.readFileSync(PATH + '/tracks/' + TrackID + ".mp3");
+			return fs.readFileSync(PATH + 'tracks/' + TrackID + ".mp3");
 		}
 		catch (err) { return err }
+	});
+
+	ipcMain.handle('get-local-tracks', () => {
+		return JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
+	});
+
+	ipcMain.handle('remove-track', (TrackID) => {
+		return new Promise(resolve => {
+			sl.removeTrack(TrackID);
+			resolve();
+		})
 	});
 }
 

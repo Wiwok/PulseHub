@@ -5,6 +5,7 @@ import Search from "./Search";
 import SideBar from "./SideBar";
 
 import DownloadManager from "../Utils/DownloadManager";
+import Library from "./Library";
 
 const Audio = new Player();
 const downloadManager = new DownloadManager();
@@ -20,7 +21,14 @@ function App() {
 		case 'Search':
 			Page = <Search downloadManager={downloadManager} Audio={Audio} />;
 			break;
+		case 'Library':
+			Page = <Library Audio={Audio} />;
+			break;
+		default:
+			Page = <>Oops... Page not found...</>;
 	}
+
+	window.api.getLocalTracks().then(console.log);
 
 	return (
 		<div className="App">
