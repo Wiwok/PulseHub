@@ -48,12 +48,8 @@ function Track({ track, Audio, downloadManager }: { track: Track, Audio: Player,
 			<div className="trackActionButton">
 				{typeof downloadManager != 'undefined' ?
 					<img src={Download} className="trackDownload" onClick={() => {
-						downloadManager.once('Started', track.id, () => {
-							console.log('Started !');
-						});
 						window.api.downloadTrack(track);
 						downloadManager.once('Finished', track.id, () => {
-							console.log('Finished !');
 							window.api.readTrack(track.id).then(buffer => {
 								if (!(buffer instanceof Error)) {
 									Audio.load(buffer, track);

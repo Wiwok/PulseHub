@@ -14,7 +14,7 @@ async function initIpc(mainWindow) {
 	const sl = new spottylib();
 
 	if (!await sl.auth()) {
-		console.log('Spotify authentification failed');
+		console.error('Spotify authentification failed');
 	}
 
 	ipcMain.handle('re-auth', async () => {

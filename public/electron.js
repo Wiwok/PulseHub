@@ -53,5 +53,5 @@ app.on('activate', () => {
 });
 
 process.on('uncaughtException', error => {
-	console.log(`Exception: ${error}`);
+	console.error(`Exception: ${error}`);
 });

@@ -28,8 +28,6 @@ function App() {
 			Page = <>Oops... Page not found...</>;
 	}
 
-	window.api.getLocalTracks().then(console.log);
-
 	return (
 		<div className="App">
 			<div className='SideBarPlaceHolder'></div>
