@@ -239,6 +239,21 @@ class spottylib {
 		return true;
 	}
 
+	async catcher(URL, options, callback) {
+		if (err?.response?.status) {
+			console.log('Auth issue. Trying re-authenticate...');
+			const v = await this.auth()
+			if (v) {
+				console.log('Authentication successed');
+				return await axios(URL, options).then(callback);
+			} else {
+				console.error('Authentication failed');
+			}
+		} else {
+			console.error('Exception: ' + err);
+		}
+	}
+
 	async getTrack(id) {
 		const URL = 'https://api.spotify.com/v1/tracks/' + id;
 
@@ -246,20 +261,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(async err => {
-				if (err?.response?.status) {
-					console.log('Auth issue. Trying re-authenticate...');
-					const v = await this.auth()
-					if (v) {
-						console.log('Authentication successed');
-						return await axios(URL, this.options).then(callback);
-					} else {
-						console.err('Authentication failed');
-					}
-				} else {
-					console.error(err);
-				}
-			});
+			.catch(() => catcher(URL, this.options, callback));
 	}
 
 	async getAlbum(id) {
@@ -269,20 +271,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(async err => {
-				if (err?.response?.status) {
-					console.log('Auth issue. Trying re-authenticate...');
-					const v = await this.auth()
-					if (v) {
-						console.log('Authentication successed');
-						return await axios(URL, this.options).then(callback);
-					} else {
-						console.err('Authentication failed');
-					}
-				} else {
-					console.error(err);
-				}
-			});
+			.catch(() => catcher(URL, this.options, callback));
 	}
 
 	async getArtist(id) {
@@ -292,20 +281,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(async err => {
-				if (err?.response?.status) {
-					console.log('Auth issue. Trying re-authenticate...');
-					const v = await this.auth()
-					if (v) {
-						console.log('Authentication successed');
-						return await axios(URL, this.options).then(callback);
-					} else {
-						console.err('Authentication failed');
-					}
-				} else {
-					console.error(err);
-				}
-			});
+			.catch(() => catcher(URL, this.options, callback));
 	}
 
 	async searchTrack(search) {
@@ -315,20 +291,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(async err => {
-				if (err?.response?.status) {
-					console.log('Auth issue. Trying re-authenticate...');
-					const v = await this.auth()
-					if (v) {
-						console.log('Authentication successed');
-						return await axios(URL, this.options).then(callback);
-					} else {
-						console.err('Authentication failed');
-					}
-				} else {
-					console.error(err);
-				}
-			});
+			.catch(() => catcher(URL, this.options, callback));
 	}
 
 	async searchAlbum(search) {
@@ -338,20 +301,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(async err => {
-				if (err?.response?.status) {
-					console.log('Auth issue. Trying re-authenticate...');
-					const v = await this.auth()
-					if (v) {
-						console.log('Authentication successed');
-						return await axios(URL, this.options).then(callback);
-					} else {
-						console.err('Authentication failed');
-					}
-				} else {
-					console.error(err);
-				}
-			});
+			.catch(() => catcher(URL, this.options, callback));
 	}
 
 	async searchArtist(search) {
@@ -361,20 +311,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(async err => {
-				if (err?.response?.status) {
-					console.log('Auth issue. Trying re-authenticate...');
-					const v = await this.auth()
-					if (v) {
-						console.log('Authentication successed');
-						return await axios(URL, this.options).then(callback);
-					} else {
-						console.err('Authentication failed');
-					}
-				} else {
-					console.error(err);
-				}
-			});
+			.catch(() => catcher(URL, this.options, callback));
 	}
 
 	removeTrack(TrackID) {
