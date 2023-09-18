@@ -5,8 +5,8 @@ contextBridge.exposeInMainWorld('api', {
 	downloadAlbum: (album) => ipcRenderer.send('download-album', album),
 	downloadTrackHandle: (callback) => ipcRenderer.on('download-track-handle', callback),
 	downloadAlbumHandle: (callback) => ipcRenderer.on('download-album-handle', callback),
-	downloadTrackRemoveHandle: (callback) => ipcRenderer.removeListener('download-track-handle', callback),
-	downloadAlbumRemoveHandle: (callback) => ipcRenderer.removeListener('download-album-handle', callback),
+	downloadTrackClearHandle: () => ipcRenderer.removeAllListeners('download-track-handle'),
+	downloadAlbumClearHandle: () => ipcRenderer.removeAllListeners('download-album-handle'),
 
 	getTrack: (TrackID) => ipcRenderer.invoke('get-track', TrackID),
 	getAlbum: (AlbumID) => ipcRenderer.invoke('get-album', AlbumID),

@@ -2,6 +2,7 @@ declare module "*.png";
 
 type AlbumType = 'album' | 'single' | 'compilation'
 type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
+type DownloadHandler = { event: DownloadStatus, id: string, callback: Function };
 
 type Track = {
 	disc_number: number;
@@ -113,8 +114,8 @@ interface Window {
 		downloadAlbum: (album: Album) => void;
 		downloadTrackHandle: (callback: (event: any, value: { id: string, status: DownloadStatus }) => void) => void;
 		downloadAlbumHandle: (callback: (event: any, value: { id: string, status: DownloadStatus }) => void) => void;
-		downloadTrackRemoveHandle: (callback: (event: any, value: number) => void) => void;
-		downloadAlbumRemoveHandle: (callback: (event: any, value: number) => void) => void;
+		downloadTrackClearHandle: () => void;
+		downloadAlbumClearHandle: () => void;
 
 		getTrack: (TrackID: string) => Promise<Track | null>;
 		getAlbum: (AlbumID: string) => Promise<Album | null>;

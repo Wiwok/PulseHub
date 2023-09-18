@@ -2,15 +2,14 @@ import { useState } from "react";
 
 import Track from "./Track";
 import SearchImg from "../Assets/Search.png"
-function Search({ Audio }) {
+
+function Search({ Audio, downloadManager }) {
 	const [Content, setContent] = useState(<></>);
 
 	function Action() {
 		setContent(<>Searching...</>);
 		const input = (document.getElementById('input') as HTMLInputElement).value;
 		window.api.searchTrack(input).then(v => {
-			// @ts-ignore
-			v = v?.filter(val => val.album.album_type != 'compilation');
 			if (v && v.length) {
 				setContent(
 					<div className="SearchResults">
@@ -20,7 +19,7 @@ function Search({ Audio }) {
 							<div>Duration</div>
 						</div>
 						{v.map((track, i) => {
-							return (<Track Audio={Audio} track={track} key={i} />)
+							return (<Track downloadManager={downloadManager} Audio={Audio} track={track} key={i} />)
 						})}
 					</div>);
 			} else {

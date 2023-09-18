@@ -5,11 +5,13 @@ import Play from '../Assets/Play.png';
 
 import Player from "../Player";
 import { toReadableDuration } from "../Utils/Cleaner";
+import DownloadManager from "../Utils/DownloadManager";
 
-function Track({ track, Audio }: { track: Track, Audio: Player }) {
-	const [playVisible, setplayVisible] = useState('trackPlayButton')
+function Track({ track, Audio, downloadManager }: { track: Track, Audio: Player, downloadManager: DownloadManager }) {
+	const [playVisible, setplayVisible] = useState('trackPlayButton');
+
 	return (
-		<div className="track" onMouseEnter={() => { setplayVisible("trackPlayButtonVisible") }} onMouseLeave={() => { setplayVisible("trackPlayButton") }}>
+		<div className="track" onMouseEnter={() => setplayVisible("trackPlayButtonVisible")} onMouseLeave={() => setplayVisible("trackPlayButton")}>
 			<div className="trackInfo">
 				<img className="trackImage" src={track.album.images[1].url}></img>
 				<img className={playVisible} onClick={() => {
@@ -43,15 +45,18 @@ function Track({ track, Audio }: { track: Track, Audio: Player }) {
 			</div>
 			<div className="trackActionButton">
 				<img src={Download} className="trackDownload" onClick={() => {
+					downloadManager.once('Started', track.id, () => {
+						console.log('Started !');
+					});
 					window.api.downloadTrack(track);
-					window.api.downloadTrackHandle((ev, value) => {
-						if (value.status == 'Finished') {
-							window.api.readTrack(track.id).then(test => {
-								if (!(test instanceof Error)) {
-									Audio.load(test, track);
-								}
-							})
-						}
+					downloadManager.on('Finished', track.id, () => {
+						downloadManager.off(track.id);
+						console.log('Finished !');
+						window.api.readTrack(track.id).then(test => {
+							if (!(test instanceof Error)) {
+								Audio.load(test, track);
+							}
+						});
 					});
 				}} />
 				<div className="trackLike"> ♡ </div>
