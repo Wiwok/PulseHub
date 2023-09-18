@@ -272,6 +272,10 @@ body {
 	padding-left: 0.5em;
 }
 
+.searchInput:focus {
+	outline: none;
+}
+
 .searchButton {
 	height: 2em;
 }

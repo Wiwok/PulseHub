@@ -36,8 +36,8 @@ function Search({ Audio, downloadManager }) {
 	return (
 		<div className="searchPage">
 			<div className="searchBox">
-				<input className="searchInput" onKeyUp={(ev) => { if (ev.key == 'Enter') Action() }} id='input' placeholder="your search"></input>
-				<img src={SearchImg} onClick={Action} alt="search" className="searchButton"></img>
+				<input className="searchInput" onKeyUp={(ev) => { if (ev.key == 'Enter') Action() }} id='input' placeholder="Search"></input>
+				<img src={SearchImg} onClick={Action} alt="Search" className="searchButton"></img>
 			</div>
 			{Content}
 		</div>
