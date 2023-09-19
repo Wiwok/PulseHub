@@ -239,7 +239,7 @@ class spottylib {
 		return true;
 	}
 
-	async catcher(URL, options, callback) {
+	async catcher(URL, options, callback, err) {
 		if (err?.response?.status) {
 			console.log('Auth issue. Trying re-authenticate...');
 			const v = await this.auth()
@@ -261,7 +261,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => this.catcher(URL, this.options, callback));
+			.catch((err) => this.catcher(URL, this.options, callback, err));
 	}
 
 	async getAlbum(id) {
@@ -271,7 +271,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => this.catcher(URL, this.options, callback));
+			.catch((err) => this.catcher(URL, this.options, callback, err));
 	}
 
 	async getArtist(id) {
@@ -281,7 +281,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => this.catcher(URL, this.options, callback));
+			.catch((err) => this.catcher(URL, this.options, callback, err));
 	}
 
 	async searchTrack(search) {
@@ -291,7 +291,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => this.catcher(URL, this.options, callback));
+			.catch((err) => this.catcher(URL, this.options, callback, err));
 	}
 
 	async searchAlbum(search) {
@@ -301,7 +301,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => this.catcher(URL, this.options, callback));
+			.catch((err) => this.catcher(URL, this.options, callback, err));
 	}
 
 	async searchArtist(search) {
@@ -311,7 +311,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => this.catcher(URL, this.options, callback));
+			.catch((err) => this.catcher(URL, this.options, callback, err));
 	}
 
 	removeTrack(TrackID) {
