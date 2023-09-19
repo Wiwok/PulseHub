@@ -29,4 +29,4 @@ function toReadableArtists(artists: any[]) {
 	return text;
 }
 
-export { toReadableDuration, toReadableArtists };
+export { toReadableArtists, toReadableDuration };

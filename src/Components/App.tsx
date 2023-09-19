@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Player from "../Player";
 import Search from "./Search";
@@ -11,30 +11,29 @@ const Audio = new Player();
 const downloadManager = new DownloadManager();
 
 function App() {
-	const [ActivePage, SetActivePage] = useState('');
-	const [downloadedTracks, setdownloadedTracks] = useState(new Array<Track>())
-	window.api.getLocalTracks().then(setdownloadedTracks);
+	const [Page, setPage] = useState('');
+	const [DownloadedTracks, setDownloadedTracks] = useState(new Array<Track>());
 
-	let Page = <></>;
-	switch (ActivePage) {
-		case '':
-			Page = <>Welcome !</>;
-			break;
-		case 'Search':
-			Page = <Search downloadManager={downloadManager} Audio={Audio} downloadedTracks={downloadedTracks} />;
-			break;
-		case 'Library':
-			Page = <Library Audio={Audio} />;
-			break;
-		default:
-			Page = <>Oops... Page not found...</>;
-	}
+	useEffect(() => {
+		window.api.getLocalTracks().then(setDownloadedTracks);
+	}, [downloadManager]);
 
 	return (
 		<div className="App">
 			<div className='SideBarPlaceHolder'></div>
-			<SideBar SetActivePage={SetActivePage} Audio={Audio} />
-			{Page}
+			<SideBar setPage={setPage} Audio={Audio} />
+			{(() => {
+				switch (Page) {
+					case '':
+						return (<>Welcome !</>);
+					case 'Search':
+						return (<Search downloadManager={downloadManager} Audio={Audio} downloadedTracks={DownloadedTracks} />);
+					case 'Library':
+						return (<Library Audio={Audio} />);
+					default:
+						return (<>Oops... Page not found...</>);
+				}
+			})()}
 		</div>
 	);
 }
