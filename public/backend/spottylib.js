@@ -261,7 +261,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => catcher(URL, this.options, callback));
+			.catch(() => this.catcher(URL, this.options, callback));
 	}
 
 	async getAlbum(id) {
@@ -271,7 +271,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => catcher(URL, this.options, callback));
+			.catch(() => this.catcher(URL, this.options, callback));
 	}
 
 	async getArtist(id) {
@@ -281,7 +281,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => catcher(URL, this.options, callback));
+			.catch(() => this.catcher(URL, this.options, callback));
 	}
 
 	async searchTrack(search) {
@@ -291,7 +291,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => catcher(URL, this.options, callback));
+			.catch(() => this.catcher(URL, this.options, callback));
 	}
 
 	async searchAlbum(search) {
@@ -301,7 +301,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => catcher(URL, this.options, callback));
+			.catch(() => this.catcher(URL, this.options, callback));
 	}
 
 	async searchArtist(search) {
@@ -311,7 +311,7 @@ class spottylib {
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch(() => catcher(URL, this.options, callback));
+			.catch(() => this.catcher(URL, this.options, callback));
 	}
 
 	removeTrack(TrackID) {
