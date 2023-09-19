@@ -60,6 +60,9 @@ function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Tra
 								}
 							});
 						});
+						downloadManager.once('Errored', track.id, () => {
+							console.log('Errored');
+						});
 					}} />
 					:
 					<></>
