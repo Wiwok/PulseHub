@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Download from '../Assets/Download.png';
 import Play from '../Assets/Play.png';
-import Sucess from '../Assets/sucess.png';
+import Success from '../Assets/sucess.png';
 
 import Player from "../Player";
 import { toReadableDuration } from "../Utils/Cleaner";
@@ -10,13 +10,7 @@ import DownloadManager from "../Utils/DownloadManager";
 
 function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Track, Audio: Player, downloadManager: DownloadManager | undefined, downloadedTracks: Array<Track> | undefined }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
-
-	let isDownload: boolean = false;
-	downloadedTracks?.forEach(element => {
-		if (!isDownload && element.name == track.name) {
-			isDownload = true;
-		}
-	});
+	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.findIndex(el => el.id == track.id) > -1 : false);
 
 	function PlayTrack() {
 		window.api.readTrack(track.id).then(Buffer => {
@@ -55,9 +49,11 @@ function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Tra
 			</div>
 			<div className="trackActionButton">
 				{typeof downloadManager != 'undefined' ?
-					<img src={isDownload ? Sucess : Download} className="trackDownload" onClick={isDownload ? () => null : () => {
+					<img src={Downloaded ? Success : Download} className="trackDownload" onClick={() => {
+						if (Downloaded) return;
 						window.api.downloadTrack(track);
 						downloadManager.once('Finished', track.id, () => {
+							setDownloaded(true);
 							window.api.readTrack(track.id).then(buffer => {
 								if (!(buffer instanceof Error)) {
 									Audio.load(buffer, track);
