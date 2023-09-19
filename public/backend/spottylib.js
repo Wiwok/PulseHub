@@ -111,12 +111,16 @@ async function getYoutubeID(track) {
 
 	let content = await ytm.searchSongs(`${track.name} ${track.artists.map(artist => artist.name).join(' ')}`);
 
+
 	// We only keep songs that match the duration to within 10 seconds
 	content = content.filter(song => Math.abs(song.duration - duration) < 10);
-	// We only keep officials song releases
-	content = content.filter(song => song.artists.length > 0);
 	// We only keep songs with matching artist
-	content = content.filter(song => song.artists[0].name === track.artists[0].name);
+	content = content.filter(song => {
+		if (song.artists.length) {
+			return song.artists[0].name == track.artists[0].name;
+		}
+		return true;
+	});
 
 	const explicitList = content.filter(song => song.isExplicit);
 	const nonExplicitList = content.filter(song => !song.isExplicit);
