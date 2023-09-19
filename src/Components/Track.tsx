@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Download from '../Assets/Download.png';
 import Play from '../Assets/Play.png';
-import Success from '../Assets/sucess.png';
+import Success from '../Assets/Success.png';
 
 import Player from "../Player";
 import { toReadableDuration } from "../Utils/Cleaner";
