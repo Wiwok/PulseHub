@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Track from "./Track";
 import SearchImg from "../Assets/Search.png"
 
-function Search({ Audio, downloadManager }) {
+function Search({ Audio, downloadManager, downloadedTracks }) {
 	const [Content, setContent] = useState(<></>);
 	useEffect(() => {
 		document.getElementById('input')?.focus();
@@ -27,9 +27,10 @@ function Search({ Audio, downloadManager }) {
 							<div className="SearchResultsDescriptionAlbum">Album</div>
 							<div>Duration</div>
 						</div>
-						{v.map((track, i) => {
-							return (<Track downloadManager={downloadManager} Audio={Audio} track={track} key={i} />)
-						})}
+						{
+							v.map((track, i) => {
+								return (<Track downloadManager={downloadManager} Audio={Audio} track={track} key={i} downloadedTracks={downloadedTracks} />)
+							})}
 					</div>);
 			} else {
 				setContent(<div className="SearchingMessage">No result</div>);

@@ -12,6 +12,8 @@ const downloadManager = new DownloadManager();
 
 function App() {
 	const [ActivePage, SetActivePage] = useState('');
+	const [downloadedTracks, setdownloadedTracks] = useState(new Array<Track>())
+	window.api.getLocalTracks().then(setdownloadedTracks);
 
 	let Page = <></>;
 	switch (ActivePage) {
@@ -19,7 +21,7 @@ function App() {
 			Page = <>Welcome !</>;
 			break;
 		case 'Search':
-			Page = <Search downloadManager={downloadManager} Audio={Audio} />;
+			Page = <Search downloadManager={downloadManager} Audio={Audio} downloadedTracks={downloadedTracks} />;
 			break;
 		case 'Library':
 			Page = <Library Audio={Audio} />;
