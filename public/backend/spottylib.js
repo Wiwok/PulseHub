@@ -111,10 +111,8 @@ async function getYoutubeID(track) {
 
 	let content = await ytm.searchSongs(`${track.name} ${track.artists.map(artist => artist.name).join(' ')}`);
 
-
 	// We only keep songs that match the duration to within 10 seconds
 	content = content.filter(song => Math.abs(song.duration - duration) < 10);
-	console.log(content);
 	// We only keep songs with matching artist
 	content = content.filter(song => {
 		if (song.artists.length) {
