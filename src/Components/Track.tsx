@@ -8,9 +8,9 @@ import Player from "../Player";
 import { toReadableDuration } from "../Utils/Cleaner";
 import DownloadManager from "../Utils/DownloadManager";
 
-function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Track, Audio: Player, downloadManager: DownloadManager | undefined, downloadedTracks: Array<Track> | undefined }) {
+function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Track, Audio: Player, downloadManager: DownloadManager | undefined, downloadedTracks: Map<string, Track> | undefined }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
-	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.findIndex(el => el.id == track.id) > -1 : false);
+	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
 	function PlayTrack() {
 		window.api.readTrack(track.id).then(Buffer => {

@@ -8,7 +8,7 @@ function Library({ Audio }: { Audio: Player }) {
 
 	useEffect(() => {
 		window.api.getLocalTracks().then((value) => {
-			if (value && value.length) {
+			if (value && value.size) {
 				setContent(
 					<div className="SearchResults">
 						<div className="SearchResultsDescription">
@@ -16,9 +16,17 @@ function Library({ Audio }: { Audio: Player }) {
 							<div className="SearchResultsDescriptionAlbum">Album</div>
 							<div>Duration</div>
 						</div>
-						{value.map((track, i) => {
+						{
+							Array.from(value.values()).map((valeur, i) => {
+								console.log(valeur);
+								return (
+									<Track downloadManager={undefined} Audio={Audio} track={valeur} key={i} downloadedTracks={undefined} />
+								);
+							})
+						}
+						{/* {value.map((track, i) => {
 							return (<Track downloadManager={undefined} Audio={Audio} track={track} key={i} downloadedTracks={undefined} />)
-						})}
+						})} */}
 					</div>
 				);
 			} else {
