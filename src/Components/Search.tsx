@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import Track from "./Track";
 import SearchImg from "../Assets/Search.png"
 
-function Search({ Audio, downloadManager, downloadedTracks }) {
+function Search({ Audio, downloadManager }) {
 	const [Content, setContent] = useState(<></>);
+	const [downloadedTracks, setDownloadedTracks] = useState(Array<Track>);
 
 	useEffect(() => {
+		window.api.getLocalTracks().then(setDownloadedTracks);
 		document.getElementById('input')?.focus();
-	});
+	}, [setDownloadedTracks]);
 
 	function Action() {
 		const value = (document.getElementById('input') as HTMLInputElement).value;

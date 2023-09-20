@@ -12,11 +12,6 @@ const downloadManager = new DownloadManager();
 
 function App() {
 	const [Page, setPage] = useState('');
-	const [DownloadedTracks, setDownloadedTracks] = useState(new Array<Track>());
-
-	useEffect(() => {
-		window.api.getLocalTracks().then(setDownloadedTracks);
-	}, [downloadManager]);
 
 	return (
 		<div className="App">
@@ -27,7 +22,7 @@ function App() {
 					case '':
 						return (<>Welcome !</>);
 					case 'Search':
-						return (<Search downloadManager={downloadManager} Audio={Audio} downloadedTracks={DownloadedTracks} />);
+						return (<Search downloadManager={downloadManager} Audio={Audio} />);
 					case 'Library':
 						return (<Library Audio={Audio} />);
 					default:
