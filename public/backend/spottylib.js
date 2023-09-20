@@ -1,4 +1,5 @@
 const axios = require('axios');
+const client = require('https');
 const fluent_ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const node_id3 = require('node-id3');
@@ -140,26 +141,58 @@ async function getYoutubeID(track) {
 	return content.length < 1 ? null : content[0].videoId;
 }
 
+async function downloadImages(album) {
+	return new Promise(resolve => {
+		album.images.forEach((image, i) => {
+			client.get(image.url, res => {
+				if (res.statusCode === 200) {
+					const filename = `${PATH}images/x${i + 1}/${album.id}.jpg`;
+					try {
+						res.pipe(fs.createWriteStream(filename, 'utf-8'));
+					} catch (err) {
+						if (fs.existsSync(filename)) fs.unlinkSync(filename);
+						console.error('Exception: ' + err);
+						resolve(false);
+					}
+				} else {
+					res.resume();
+					resolve(false);
+				}
+			});
+		});
+		resolve(true);
+	});
+}
+
+async function getAlbumImage(album) {
+	return new Promise(resolve => {
+		try {
+			const data = [];
+			axios.get(album.images[0].url, { responseType: 'arraybuffer' }).then(res => {
+				//res.on('data', chunk => data.push(Buffer.from(chunk, 'binary')));
+				//res.on('end', () => {
+				//	resolve(Buffer.concat(data));
+				//});
+				resolve(Buffer.from(res.data));
+			});
+		} catch (err) {
+			console.error('Exception: ' + err);
+			resolve();
+		}
+	});
+
+}
+
 async function downloadTrack(track, callback) {
 	const filename = `${PATH}tracks/${track.id}.mp3`;
 	try {
-		const albCover = axios.get(track.album.images[0].url, { responseType: 'arraybuffer' });
-		axios.get(track.album.images[0].url, { responseType: 'stream' })
-			.then(function (response) {
-				const fileStream = fs.createWriteStream(`${PATH}images/x1/${track.album.id}.jpeg`);
-				response.data.pipe(fileStream);
-			});
-		axios.get(track.album.images[1].url, { responseType: 'stream' })
-			.then(function (response) {
-				const fileStream = fs.createWriteStream(`${PATH}images/x2/${track.album.id}.jpeg`);
-				response.data.pipe(fileStream);
-			});
-		axios.get(track.album.images[2].url, { responseType: 'stream' })
-			.then(function (response) {
-				const fileStream = fs.createWriteStream(`${PATH}images/x3/${track.album.id}.jpeg`);
-				response.data.pipe(fileStream);
-			});
-		await albCover;
+		const images = downloadImages(track.album);
+		const albCover = getAlbumImage(track.album);
+
+		if (!(await albCover)) {
+			callback({ id: track.id, status: 'Errored' });
+			return;
+		}
 		const tags = {
 			title: track.name,
 			artist: getArtistList(track.artists),
@@ -167,12 +200,16 @@ async function downloadTrack(track, callback) {
 			year: track.album.release_date,
 			trackNumber: track.track_number,
 			image: {
-				imageBuffer: Buffer.from(albCover.data, 'utf-8')
+				imageBuffer: await albCover
 			}
 		};
 		const id = await getYoutubeID(track);
 		if (!id) {
 			if (fs.existsSync(filename)) fs.unlinkSync(filename);
+			callback({ id: track.id, status: 'Errored' });
+			return;
+		}
+		if (!(await images)) {
 			callback({ id: track.id, status: 'Errored' });
 			return;
 		}
