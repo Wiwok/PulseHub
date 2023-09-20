@@ -5,6 +5,7 @@ import SearchImg from "../Assets/Search.png"
 
 function Search({ Audio, downloadManager, downloadedTracks }) {
 	const [Content, setContent] = useState(<></>);
+
 	useEffect(() => {
 		document.getElementById('input')?.focus();
 	});
