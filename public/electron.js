@@ -22,13 +22,11 @@ function createWindow() {
 	win.maximize();
 	win.show();
 
-	win.loadURL(
+	initIpc(win).then(win.loadURL(
 		app.isPackaged
 			? `file://${path.join(__dirname, '../build/index.html')}`
 			: 'http://localhost:3000'
-	);
-
-	initIpc(win);
+	));
 }
 
 app.setPath(
