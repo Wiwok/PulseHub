@@ -146,7 +146,7 @@ async function downloadTrack(track, callback) {
 		const albCover = axios.get(track.album.images[0].url, { responseType: 'arraybuffer' });
 		axios.get(track.album.images[0].url, { responseType: 'stream' })
 			.then(function (response) {
-				const fileStream = fs.createWriteStream(`${PATH}images/x01/${track.album.id}.jpeg`);
+				const fileStream = fs.createWriteStream(`${PATH}images/x1/${track.album.id}.jpeg`);
 				response.data.pipe(fileStream);
 			});
 		axios.get(track.album.images[1].url, { responseType: 'stream' })
