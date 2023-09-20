@@ -6,6 +6,9 @@ const { spottylib } = require('./spottylib');
 const PATH = './datas/';
 fs.mkdirSync(PATH, { recursive: true });
 fs.mkdirSync(PATH + 'tracks', { recursive: true });
+fs.mkdirSync(PATH + 'images/x1/', { recursive: true });
+fs.mkdirSync(PATH + 'images/x2/', { recursive: true });
+fs.mkdirSync(PATH + 'images/x3/', { recursive: true });
 if (!fs.existsSync(PATH + 'tracks.json')) {
 	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify([]));
 }
