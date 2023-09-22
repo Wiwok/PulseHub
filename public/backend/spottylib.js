@@ -12,15 +12,27 @@ ytm.initialize();
 const PATH = './datas/';
 
 function addTrackDatas(track) {
-	const datas = new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
-	datas.set(track.id, track);
-	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(Array.from(datas.entries())));
+	try {
+		const datas = new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
+		datas.set(track.id, track);
+		fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(Array.from(datas.entries())));
+		return true;
+	} catch (err) {
+		console.error('Exception: ' + err);
+		return false;
+	}
 }
 
 function removeTrackDatas(TrackID) {
-	const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
-	datas = datas.filter(value => value.id != TrackID);
-	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
+	try {
+		const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
+		datas = datas.filter(value => value.id != TrackID);
+		fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
+		return true;
+	} catch (err) {
+		console.error('Exception: ' + err);
+		return false;
+	}
 }
 
 async function dl_track(id, filename) {
@@ -218,8 +230,10 @@ async function downloadTrack(track, callback) {
 		if (dlt) {
 			let tagStatus = node_id3.update(tags, filename);
 			if (tagStatus) {
-				addTrackDatas(track);
-				callback({ id: track.id, status: 'Finished' });
+				if (addTrackDatas(track))
+					callback({ id: track.id, status: 'Finished' });
+				else
+					callback({ id: track.id, status: 'Errored' });
 			}
 			else {
 				if (fs.existsSync(filename)) fs.unlinkSync(filename);
