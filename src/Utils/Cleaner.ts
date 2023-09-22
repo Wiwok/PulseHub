@@ -19,6 +19,9 @@ function toReadableDuration(time: number) {
 }
 
 function toReadableArtists(artists: any[]) {
+	if (!artists.length) {
+		return 'Unknown artist';
+	}
 	let text = '';
 	artists.forEach((el, i) => {
 		if (i == 0)

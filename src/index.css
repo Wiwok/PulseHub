@@ -194,7 +194,7 @@ body {
 	width: 100%;
 }
 
-.sidePlayerprogress {
+.sidePlayerProgress {
 	width: 100%;
 	display: flex;
 	gap: 0.3vw;
@@ -242,7 +242,7 @@ body {
 	cursor: pointer;
 }
 
-.sidePlayerControlerPlay {
+.sidePlayerControllerPlay {
 	height: 6vh;
 	cursor: pointer;
 }
