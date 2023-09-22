@@ -4,7 +4,7 @@ type AlbumType = 'album' | 'single' | 'compilation'
 type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
 type PlayerStatus = 'Idle' | 'Loaded' | 'Playing' | 'Paused';
 type PlayerEvents = 'Playing' | 'Paused' | 'Ended' | 'Loaded';
-type DownloadHandler = { event: DownloadStatus, id: string, callback: Function };
+type DownloadHandler = { event: DownloadStatus, callback: Function };
 
 type Track = {
 	disc_number: number;

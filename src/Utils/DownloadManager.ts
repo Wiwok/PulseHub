@@ -1,6 +1,6 @@
 class DownloadManager {
-	private handlers = new Array<DownloadHandler>();
-	private onceHandlers = new Array<DownloadHandler>();
+	private handlers = new Map<string, DownloadHandler>();
+	private onceHandlers = new Map<string, DownloadHandler>();
 
 	constructor() {
 		window.api.downloadTrackClearHandle();
@@ -8,35 +8,24 @@ class DownloadManager {
 	}
 
 	private catchDownload(ev: any, value: { id: string; status: DownloadStatus }) {
-		this.handlers.forEach(v => {
-			if (v.id == value.id && value.status == v.event) {
-				v.callback();
-			}
-		});
-		this.onceHandlers.forEach((v, i) => {
-			if (v.id == value.id) {
-				if (value.status == v.event) {
-					v.callback();
-					this.handlers.splice(i, 1);
-				}
-			}
-		});
+		this.handlers.get(value.id + value.status)?.callback();
+		this.handlers.get('*' + value.status)?.callback();
+		this.onceHandlers.get(value.id + value.status)?.callback();
+		this.onceHandlers.delete(value.id + value.status)
+		this.onceHandlers.get('*' + value.status)?.callback();
+		this.onceHandlers.delete('*' + value.status)
 	}
 
 	on(event: DownloadStatus, id: string, callback: Function) {
-		this.handlers.push({ event, id, callback });
+		this.handlers.set(id + event, { event, callback });
 	}
 
 	once(event: DownloadStatus, id: string, callback: Function) {
-		this.onceHandlers.push({ event, id, callback });
+		this.onceHandlers.set(id + event, { event, callback });
 	}
 
 	off(id: string) {
-		this.handlers = this.handlers.filter(value => {
-			if (value.id != id) {
-				return value;
-			}
-		});
+		this.handlers.delete(id);
 	}
 }
 
