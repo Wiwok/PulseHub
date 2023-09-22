@@ -81,7 +81,7 @@ async function initIpc(mainWindow) {
 		});
 
 		ipcMain.handle('get-local-tracks', () => {
-			return JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
+			return new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
 		});
 
 		ipcMain.handle('remove-track', (TrackID) => {

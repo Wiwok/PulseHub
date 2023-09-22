@@ -5,7 +5,7 @@ import SearchImg from "../Assets/Search.png"
 
 function Search({ Audio, downloadManager }) {
 	const [Content, setContent] = useState(<></>);
-	const [downloadedTracks, setDownloadedTracks] = useState(Array<Track>);
+	const [downloadedTracks, setDownloadedTracks] = useState(new Map<string, Track>());
 
 	useEffect(() => {
 		window.api.getLocalTracks().then(setDownloadedTracks);

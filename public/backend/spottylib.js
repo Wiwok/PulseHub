@@ -12,9 +12,9 @@ ytm.initialize();
 const PATH = './datas/';
 
 function addTrackDatas(track) {
-	const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
-	datas.push(track);
-	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
+	const datas = new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
+	datas.set(track.id, track);
+	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(Array.from(datas.entries())));
 }
 
 function removeTrackDatas(TrackID) {
