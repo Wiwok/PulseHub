@@ -31,10 +31,9 @@ function Search({ Audio, downloadManager }) {
 							<div className="SearchResultsDescriptionAlbum">Album</div>
 							<div>Duration</div>
 						</div>
-						{
-							v.map((track, i) => {
-								return (<Track downloadManager={downloadManager} Audio={Audio} track={track} key={i} downloadedTracks={downloadedTracks} />)
-							})}
+						{v.map((track, i) => {
+							return (<Track downloadManager={downloadManager} Audio={Audio} track={track} key={i} downloadedTracks={downloadedTracks} />);
+						})}
 					</div>);
 			} else {
 				setContent(<div className="SearchingMessage">No result</div>);
