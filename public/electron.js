@@ -32,8 +32,8 @@ function createWindow() {
 app.setPath(
 	'userData',
 	app.isPackaged
-		? path.join(process.resourcesPath, 'userdata/')
-		: path.join(app.getAppPath(), 'userdata/')
+		? path.join(process.resourcesPath, 'user/')
+		: path.join(app.getAppPath(), 'user/')
 );
 
 app.whenReady().then(createWindow);

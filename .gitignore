@@ -3,12 +3,10 @@
 
 # production
 /build
-/out
-dist/
+/dist
+/user
+/datas
 
 # misc
-/userdata
-/datas
-/output
 *.env
 *.mp3
