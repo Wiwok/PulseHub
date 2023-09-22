@@ -162,7 +162,8 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 1em;
-	background-color: grey;
+	background-color: gray;
+	color: white;
 	margin: 0.5vw;
 	padding: 0.3vw;
 	border-radius: calc(20px - 0.5vw);
@@ -171,7 +172,8 @@ body {
 }
 
 .sideMenuButton:hover {
-	background-color: lightyellow;
+	background-color: #ffaa36;
+	color: black;
 }
 
 .sideMenuText {
