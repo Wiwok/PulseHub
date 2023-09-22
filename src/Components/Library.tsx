@@ -16,9 +16,9 @@ function Library({ Audio }: { Audio: Player }) {
 							<div className="SearchResultsDescriptionAlbum">Album</div>
 							<div>Duration</div>
 						</div>
-						{Array.from(value.values()).map((valeur, i) => {
+						{Array.from(value.values()).map((v, i) => {
 							return (
-								<Track downloadManager={undefined} Audio={Audio} track={valeur} key={i} downloadedTracks={undefined} />
+								<Track downloadManager={undefined} Audio={Audio} track={v} key={i} downloadedTracks={undefined} />
 							);
 						})}
 					</div>
