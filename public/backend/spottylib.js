@@ -178,21 +178,22 @@ async function downloadImages(album) {
 
 async function getAlbumImage(album) {
 	return new Promise(resolve => {
+		const data = [];
 		try {
-			const data = [];
-			axios.get(album.images[0].url, { responseType: 'arraybuffer' }).then(res => {
-				//res.on('data', chunk => data.push(Buffer.from(chunk, 'binary')));
-				//res.on('end', () => {
-				//	resolve(Buffer.concat(data));
-				//});
-				resolve(Buffer.from(res.data));
+			client.get(album.images[0].url, (res) => {
+				res
+					.on("data", chunk => {
+						data.push(chunk);
+					})
+					.on("end", () => {
+						resolve(Buffer.concat(data));
+					});
 			});
 		} catch (err) {
 			console.error('Exception: ' + err);
 			resolve();
 		}
 	});
-
 }
 
 async function downloadTrack(track, callback) {
