@@ -25,12 +25,12 @@ function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Tra
 	return (
 		<div className="track" onMouseEnter={() => setplayVisible("trackPlayButtonVisible")} onMouseLeave={() => setplayVisible("trackPlayButton")} onDoubleClick={PlayTrack} >
 			<div className="trackInfo">
-				<img className="trackImage" src={track.album.images[1].url}></img>
+				<img className="trackImage" src={track?.album?.images[1].url}></img>
 				<img className={playVisible} onClick={PlayTrack} src={Play}></img>
 				<div className="trackNameArtist">
-					<div className="trackName">{track.name}</div>
+					<div className="trackName">{track?.name}</div>
 					<div className="trackArtists">
-						{track.artists.map((element, i) => {
+						{track?.artists?.map((element, i) => {
 							if (i != track.artists.length - 1)
 								return (<div key={i} className="trackArtistContainer"><div className="trackArtist">{element.name}</div>,</div>);
 							else
@@ -41,11 +41,11 @@ function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Tra
 			</div>
 			<div className="trackAlbumContainer">
 				<div className="trackAlbum">
-					{track.album.name}
+					{track?.album?.name}
 				</div>
 			</div>
 			<div className="trackDuration">
-				{toReadableDuration(track.duration_ms / 1000)}
+				{toReadableDuration(track?.duration_ms / 1000)}
 			</div>
 			<div className="trackActionButton">
 				{typeof downloadManager != 'undefined' ?
