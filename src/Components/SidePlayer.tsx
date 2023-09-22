@@ -8,32 +8,9 @@ import Play from '../Assets/Play.png';
 import Player from "../Player";
 import { toReadableArtists, toReadableDuration } from "../Utils/Cleaner";
 
-function ProgressBar({ progressBarRef, rangeValue, setRangeValue, onClickDown, onClickUp, max }) {
-	return (
-		<input
-			type="range"
-			min="0"
-			max={max}
-			ref={progressBarRef}
-			value={rangeValue}
-			onMouseDown={onClickDown}
-			onMouseUp={onClickUp}
-			onChange={ev => setRangeValue(ev.target.value)}
-		/>
-	);
-}
-
-function SidePlayer({ Audio }: { Audio: Player }) {
-	const [Playing, setPlaying] = useState(Play);
-	const [Track, setTrack] = useState<Track | null>(null);
-	const [rangeValue, setRangeValue] = useState(NaN);
+function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	const progressBarRef: any = useRef();
 	const progressBarClicked = useRef(false);
-
-	Audio.on('Paused', () => setPlaying(Play));
-	Audio.on('Playing', () => setPlaying(Pause));
-	Audio.on('Loaded', () => setTrack(Audio.track));
-	Audio.on('Ended', () => setTrack(null));
 
 
 	function onClickDown() {
@@ -54,6 +31,30 @@ function SidePlayer({ Audio }: { Audio: Player }) {
 		setInterval(UpdateProgressBar, 1000);
 	}, [setRangeValue]);
 
+	return (
+		<input
+			type="range"
+			min="0"
+			max={Audio.AudioElement.duration.toFixed(0)}
+			ref={progressBarRef}
+			value={rangeValue}
+			onMouseDown={onClickDown}
+			onMouseUp={onClickUp}
+			onChange={ev => setRangeValue(ev.target.value)}
+		/>
+	);
+}
+
+function SidePlayer({ Audio }: { Audio: Player }) {
+	const [Playing, setPlaying] = useState(Play);
+	const [Track, setTrack] = useState<Track | null>(null);
+	const [rangeValue, setRangeValue] = useState(NaN);
+
+	Audio.on('Paused', () => setPlaying(Play));
+	Audio.on('Playing', () => setPlaying(Pause));
+	Audio.on('Loaded', () => setTrack(Audio.track));
+	Audio.on('Ended', () => setTrack(null));
+
 	if (Track != null) {
 		return (
 			<div className='sidePlayer'>
@@ -63,10 +64,7 @@ function SidePlayer({ Audio }: { Audio: Player }) {
 					<ProgressBar
 						setRangeValue={setRangeValue}
 						rangeValue={isNaN(rangeValue) ? 0 : rangeValue}
-						onClickUp={onClickUp}
-						onClickDown={onClickDown}
-						progressBarRef={progressBarRef}
-						max={Audio.AudioElement.duration.toFixed(0)} />
+						Audio={Audio} />
 					{toReadableDuration(parseInt(Audio.AudioElement.duration.toFixed(0)))}
 				</div>
 				<div className="sidePlayerInfo">
@@ -78,7 +76,7 @@ function SidePlayer({ Audio }: { Audio: Player }) {
 				</div>
 				<div className="sidePlayerControl">
 					<img src={Back} alt="Back" className="sidePlayerControlBack" />
-					<img src={Playing} alt="Play/Pause" className="sidePlayerControllerPlay" onClick={Audio.togglePlay} />
+					<img src={Playing} alt="Play/Pause" className="sidePlayerControllerPlay" onClick={() => Audio.togglePlay.bind(Audio)()} />
 					<img src={Back} alt="Skip" className="sidePlayerControlSkip" />
 				</div>
 			</div>
