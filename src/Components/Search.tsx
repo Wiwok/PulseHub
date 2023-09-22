@@ -52,7 +52,7 @@ function Search({ Audio, downloadManager }) {
 	}
 
 	return (
-		<div className="searchPage">
+		<div className="SearchPage">
 			<div className="searchBox">
 				<input className="searchInput" onInput={input} onKeyUp={ev => {
 					if (ev.key == 'Enter') {

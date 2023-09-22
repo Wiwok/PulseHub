@@ -16,31 +16,21 @@ function Library({ Audio }: { Audio: Player }) {
 							<div className="SearchResultsDescriptionAlbum">Album</div>
 							<div>Duration</div>
 						</div>
-						{
-							Array.from(value.values()).map((valeur, i) => {
-								console.log(valeur);
-								return (
-									<Track downloadManager={undefined} Audio={Audio} track={valeur} key={i} downloadedTracks={undefined} />
-								);
-							})
-						}
-						{/* {value.map((track, i) => {
-							return (<Track downloadManager={undefined} Audio={Audio} track={track} key={i} downloadedTracks={undefined} />)
-						})} */}
+						{Array.from(value.values()).map((valeur, i) => {
+							return (
+								<Track downloadManager={undefined} Audio={Audio} track={valeur} key={i} downloadedTracks={undefined} />
+							);
+						})}
 					</div>
 				);
 			} else {
-				setContent(
-					<div className="SearchPage">
-						<div className="SearchingMessage">It's sadly empty here...</div>
-					</div>
-				);
+				setContent(<div className="SearchingMessage">It's sadly empty here...</div>);
 			}
 		})
 	}, [setContent]);
 
 	return (
-		<div>
+		<div className="SearchPage">
 			{Content}
 		</div>
 	);
