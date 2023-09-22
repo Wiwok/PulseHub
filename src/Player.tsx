@@ -1,6 +1,3 @@
-type PlayerStatus = 'Idle' | 'Loaded' | 'Playing' | 'Paused';
-type PlayerEvents = 'Playing' | 'Paused' | 'Ended' | 'Loaded';
-
 class Player {
 	song: string | null;
 	track: Track | null;
