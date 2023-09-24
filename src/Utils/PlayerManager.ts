@@ -33,10 +33,11 @@ class PlayerManager {
 	}
 
 	previewTrack() {
-		if (!this.actualPlaying || typeof this.actualPlaying == undefined) this.actualPlaying = 1;
+		if (!this.actualPlaying) this.actualPlaying = 1;
 		if (!this.playList.length) return;
-		if ((this.actualPlaying == this.playList.length) && (typeof this.handlers.get('Ended') != undefined)) {
-			(this.handlers.get('Ended') as Function)();
+		if (this.actualPlaying == this.playList.length) {
+			const handler = this.handlers.get('Ended');
+			if (handler) handler();
 		}
 		this.actualPlaying--;
 		this.play();
