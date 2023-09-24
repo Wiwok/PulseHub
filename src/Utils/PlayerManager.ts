@@ -1,17 +1,17 @@
 import Player from '../Player';
 
 class PlayerManager {
-	playList: Array<string>;
+	playList: Array<string> | null;
 	player: Player;
 	private actualPlaying: number | null;
 	private handlers: Map<PlayerManagerEvent, Function>;
 	constructor() {
 		this.actualPlaying = null;
-		this.playList = [];
+		this.playList = null;
 		this.player = new Player();
 		this.handlers = new Map();
 
-		this.player.on('Ended', this.nextTrack.bind(this));
+		this.player.on('Ended', () => this.nextTrack.bind(this)(true));
 	}
 
 	on(Event: PlayerManagerEvent, handler: Function) {
@@ -22,74 +22,87 @@ class PlayerManager {
 		this.handlers.delete(Event);
 	}
 
-	/**
-	 * @param {Track.id} source is id of downloaded track
-	 */
-	load(source: string, track?: Track) {
-		this.player.load(source, track);
-		this.playList = [];
+	load(track: Track) {
+		window.api.readTrack(track.id).then(Track => {
+			if (!(Track instanceof Error)) {
+				this.player.load(Track.Buffer, track);
+				this.playList = [track.id];
+				this.actualPlaying = 0;
+			}
+		});
 	}
 
 	play(index = this.actualPlaying ?? 0) {
-		window.api.readTrack(this.playList[index]).then(Track => {
-			if (!(Track instanceof Error)) {
-				this.player.load(Track.Buffer, Track.Track);
-			} else {
-				this.nextTrack();
+		return new Promise(resolve => {
+			if (this.playList != null) {
+				window.api.readTrack(this.playList[index]).then(Track => {
+					if (!(Track instanceof Error)) {
+						this.player.load(Track.Buffer, Track.Track).then(() => resolve(true));
+					} else {
+						resolve(false);
+					}
+				});
 			}
 		});
 	}
 
 	previewTrack() {
-		if (!this.actualPlaying) this.actualPlaying = 1;
-		if (!this.playList.length) return;
-		if (this.actualPlaying == this.playList.length) {
-			const handler = this.handlers.get('Ended');
-			if (handler) handler();
+		if (this.playList != null && this.actualPlaying != null) {
+			if (this.player.AudioElement.currentTime < 5) {
+				if (this.actualPlaying != 0) {
+					this.actualPlaying--;
+					this.play().then(success => {
+						if (!success) this.nextTrack();
+					});
+				}
+			} else {
+				this.play().then(success => {
+					if (!success) this.nextTrack();
+				});
+			}
 		}
-		this.actualPlaying--;
-		this.play();
 	}
 
-	nextTrack() {
-		if (!this.actualPlaying) this.actualPlaying = -1;
-		if (!this.playList.length) return;
-		if (this.actualPlaying == this.playList.length && typeof this.handlers.get('Ended') != undefined) {
-			(this.handlers.get('Ended') as Function)();
+	nextTrack(automated?: boolean) {
+		if (this.playList != null && this.actualPlaying != null) {
+			if (this.actualPlaying == this.playList.length - 1) {
+				if (automated) {
+					const handler = this.handlers.get('Ended');
+					if (handler) handler();
+					this.actualPlaying = null;
+					this.playList = null;
+				}
+			} else {
+				this.actualPlaying++;
+				this.play().then(success => {
+					if (!success) this.nextTrack();
+				});
+			}
 		}
-		this.actualPlaying++;
-		this.play();
 	}
 
 	/**
 	 * @param {string} trackid must be a download track
-	 * @returns {Array<string>} new playlist
 	 */
-	async addTrack(trackid: string): Promise<string[]> {
-		return new Promise(resolve => {
-			window.api.getLocalTracks().then(localtracks => {
-				if (!localtracks.has(trackid)) resolve(this.playList);
-				this.playList.push(trackid);
-				resolve(this.playList);
-			});
-		});
+	addTrack(trackid: string) {
+		if (this.playList == null) this.playList = [];
+		this.playList.push(trackid);
 	}
 
 	/**
 	 * @param {number} index return track at this index
-	 * @returns {Array<string>} new playlist
 	 */
-	removeTrak(index: number): Array<string> {
+	removeTrack(index: number) {
 		if (index == this.actualPlaying) this.nextTrack();
+		if (this.playList == null) this.playList = [];
 		this.playList.splice(index);
-		return this.playList;
 	}
 
 	/**
 	 * @returns  {Array<string>} new playlist
 	 */
-	shuffle(): Array<string> {
-		if (!this.playList.length) return [];
+	shuffle() {
+		if (this.playList == null) return [];
 
 		let currentIndex: number = this.playList.length;
 		let randomIndex: number;

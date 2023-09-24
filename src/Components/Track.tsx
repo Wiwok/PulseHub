@@ -23,11 +23,7 @@ function Track({
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
 	function PlayTrack() {
-		window.api.readTrack(track.id).then(Track => {
-			if (!(Track instanceof Error)) {
-				Audio.load(Track.Buffer, track);
-			}
-		});
+		Audio.load(track);
 	}
 
 	return (
@@ -35,7 +31,7 @@ function Track({
 			className="track"
 			onMouseEnter={() => setplayVisible('trackPlayButtonVisible')}
 			onMouseLeave={() => setplayVisible('trackPlayButton')}
-			onDoubleClick={PlayTrack}
+			onDoubleClick={() => Audio.addTrack(track.id)}
 		>
 			<div className="trackInfo">
 				<img className="trackImage" src={track?.album?.images[1].url}></img>
@@ -76,11 +72,7 @@ function Track({
 									window.api.downloadTrack(track);
 									downloadManager.once('Finished', track.id, () => {
 										setDownloaded(true);
-										window.api.readTrack(track.id).then(Track => {
-											if (!(Track instanceof Error)) {
-												Audio.load(Track.Buffer, track);
-											}
-										});
+										Audio.load(track);
 									});
 									downloadManager.once('Errored', track.id, () => {
 										console.log('Errored');

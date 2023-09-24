@@ -52,7 +52,10 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 	PlayerManager.player.on('Paused', () => setPlaying(Play));
 	PlayerManager.player.on('Playing', () => setPlaying(Pause));
 	PlayerManager.player.on('Loaded', () => setTrack(PlayerManager.player.track));
-	PlayerManager.player.on('Ended', () => setTrack(null));
+	PlayerManager.player.on('Ended', () => {
+		setTrack(null);
+		setRangeValue(0);
+	});
 
 	if (Track != null) {
 		return (
@@ -79,7 +82,7 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 						src={Back}
 						alt="Back"
 						className="sidePlayerControlBack"
-						onClick={PlayerManager.nextTrack.bind(PlayerManager)}
+						onClick={PlayerManager.previewTrack.bind(PlayerManager)}
 					/>
 					<img
 						src={Playing}
@@ -91,7 +94,7 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 						src={Back}
 						alt="Skip"
 						className="sidePlayerControlSkip"
-						onClick={PlayerManager.previewTrack.bind(PlayerManager)}
+						onClick={() => PlayerManager.nextTrack.bind(PlayerManager)(false)}
 					/>
 				</div>
 			</div>
