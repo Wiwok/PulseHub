@@ -34,7 +34,7 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 		<input
 			type="range"
 			min="0"
-			max={Audio.AudioElement.duration.toFixed(0)}
+			max={Audio.player.AudioElement.duration.toFixed(0)}
 			ref={progressBarRef}
 			value={rangeValue}
 			onMouseDown={onClickDown}
@@ -75,14 +75,14 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 					<div className="sidePlayerInfoRight">•••</div>
 				</div>
 				<div className="sidePlayerControl">
-					<img src={Back} alt="Back" className="sidePlayerControlBack" onClick={PlayerManager.nextTrack} />
+					<img src={Back} alt="Back" className="sidePlayerControlBack" onClick={PlayerManager.nextTrack.bind(PlayerManager)} />
 					<img
 						src={Playing}
 						alt="Play/Pause"
 						className="sidePlayerControllerPlay"
-						onClick={() => PlayerManager.player.togglePlay.bind(PlayerManager)()}
+						onClick={PlayerManager.player.togglePlay.bind(PlayerManager)}
 					/>
-					<img src={Back} alt="Skip" className="sidePlayerControlSkip" onClick={PlayerManager.previewTrack} />
+					<img src={Back} alt="Skip" className="sidePlayerControlSkip" onClick={PlayerManager.previewTrack.bind(PlayerManager)} />
 				</div>
 			</div>
 		);

@@ -25,9 +25,7 @@ function Track({
 	function PlayTrack() {
 		window.api.readTrack(track.id).then(Track => {
 			if (!(Track instanceof Error)) {
-				Audio.player.load(Track.Buffer, track);
-			} else {
-				Audio.player.load(track.preview_url, track);
+				Audio.load(Track.Buffer, track);
 			}
 		});
 	}
@@ -80,7 +78,7 @@ function Track({
 										setDownloaded(true);
 										window.api.readTrack(track.id).then(Track => {
 											if (!(Track instanceof Error)) {
-												Audio.player.load(Track.Buffer, track);
+												Audio.load(Track.Buffer, track);
 											}
 										});
 									});

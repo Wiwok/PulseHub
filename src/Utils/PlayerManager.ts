@@ -22,8 +22,16 @@ class PlayerManager {
 		this.handlers.delete(Event);
 	}
 
-	play() {
-		window.api.readTrack(this.playList[this.actualPlaying ?? 0]).then(Track => {
+	/**
+	 * @param {Track.id} source is id of downloaded track
+	 */
+	load(source: string, track?: Track) {
+		this.player.load(source, track);
+		this.playList = [];
+	}
+
+	play(index = this.actualPlaying ?? 0) {
+		window.api.readTrack(this.playList[index]).then((Track) => {
 			if (!(Track instanceof Error)) {
 				this.player.load(Track.Buffer, Track.Track);
 			} else {
