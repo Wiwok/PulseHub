@@ -5,8 +5,8 @@ import Disk from '../Assets/Disk.png';
 import Pause from '../Assets/Pause.png';
 import Play from '../Assets/Play.png';
 
-import Player from "../Player";
 import { toReadableArtists, toReadableDuration } from "../Utils/Cleaner";
+import PlayerManager from "../Utils/PlayerManager";
 
 function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	const progressBarRef: any = useRef();
@@ -45,15 +45,15 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	);
 }
 
-function SidePlayer({ Audio }: { Audio: Player }) {
+function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 	const [Playing, setPlaying] = useState(Play);
 	const [Track, setTrack] = useState<Track | null>(null);
 	const [rangeValue, setRangeValue] = useState(NaN);
 
-	Audio.on('Paused', () => setPlaying(Play));
-	Audio.on('Playing', () => setPlaying(Pause));
-	Audio.on('Loaded', () => setTrack(Audio.track));
-	Audio.on('Ended', () => setTrack(null));
+	PlayerManager.player.on('Paused', () => setPlaying(Play));
+	PlayerManager.player.on('Playing', () => setPlaying(Pause));
+	PlayerManager.player.on('Loaded', () => setTrack(PlayerManager.player.track));
+	PlayerManager.player.on('Ended', () => setTrack(null));
 
 	if (Track != null) {
 		return (
@@ -64,8 +64,8 @@ function SidePlayer({ Audio }: { Audio: Player }) {
 					<ProgressBar
 						setRangeValue={setRangeValue}
 						rangeValue={isNaN(rangeValue) ? 0 : rangeValue}
-						Audio={Audio} />
-					{toReadableDuration(parseInt(Audio.AudioElement.duration.toFixed(0)))}
+						Audio={PlayerManager} />
+					{toReadableDuration(parseInt(PlayerManager.player.AudioElement.duration.toFixed(0)))}
 				</div>
 				<div className="sidePlayerInfo">
 					<div className="sidePlayerInfoLeft">
@@ -75,9 +75,9 @@ function SidePlayer({ Audio }: { Audio: Player }) {
 					<div className="sidePlayerInfoRight">•••</div>
 				</div>
 				<div className="sidePlayerControl">
-					<img src={Back} alt="Back" className="sidePlayerControlBack" />
-					<img src={Playing} alt="Play/Pause" className="sidePlayerControllerPlay" onClick={() => Audio.togglePlay.bind(Audio)()} />
-					<img src={Back} alt="Skip" className="sidePlayerControlSkip" />
+					<img src={Back} alt="Back" className="sidePlayerControlBack" onClick={PlayerManager.nextTrack} />
+					<img src={Playing} alt="Play/Pause" className="sidePlayerControllerPlay" onClick={() => PlayerManager.player.togglePlay.bind(PlayerManager)()} />
+					<img src={Back} alt="Skip" className="sidePlayerControlSkip" onClick={PlayerManager.previewTrack} />
 				</div>
 			</div>
 		);
