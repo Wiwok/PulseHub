@@ -3,10 +3,10 @@ import Player from "../Player";
 class PlayerManager {
 	playList: Array<string>
 	player: Player;
-	private actualPlaying: number | undefined;
+	private actualPlaying: number | null;
 	private handlers: Map<PlayerManagerEvent, Function>;
 	constructor() {
-		this.actualPlaying = undefined;
+		this.actualPlaying = null;
 		this.playList = [];
 		this.player = new Player();
 		this.handlers = new Map();
@@ -23,9 +23,9 @@ class PlayerManager {
 	}
 
 	play() {
-		window.api.readTrack(this.playList[this.actualPlaying]).then(Buffer => {
-			if (!(Buffer instanceof Error)) {
-				this.player.load(Buffer, this.playList[(this.actualPlaying) as number]);
+		window.api.readTrack(this.playList[this.actualPlaying ?? 0]).then(Track => {
+			if (!(Track instanceof Error)) {
+				this.player.load(Track.Buffer, Track.Track);
 			} else {
 				this.nextTrack();
 			}
@@ -56,16 +56,19 @@ class PlayerManager {
 	 * @param {string} trackid must be a download track
 	 * @returns {Array<string>} new playlist
 	 */
-	addTrack(trackid: string): Array<string> {
-		if (!this.TrackMap.has(trackid)) return this.playList;
-
-		this.playList.push(trackid);
-		return this.playList;
+	async addTrack(trackid: string): Promise<string[]> {
+		return new Promise(resolve => {
+			window.api.getLocalTracks().then(localtracks => {
+				if (!localtracks.has(trackid)) resolve(this.playList);
+				this.playList.push(trackid);
+				resolve(this.playList);
+			});
+		});
 	}
 
 	/**
 	 * @param {number} index return track at this index
-	 * @returns {Array<string>} new playlist 
+	 * @returns {Array<string>} new playlist
 	 */
 	removeTrak(index: number): Array<string> {
 		if (index == this.actualPlaying) this.nextTrack();

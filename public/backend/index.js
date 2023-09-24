@@ -10,7 +10,7 @@ fs.mkdirSync(PATH + 'images/x1/', { recursive: true });
 fs.mkdirSync(PATH + 'images/x2/', { recursive: true });
 fs.mkdirSync(PATH + 'images/x3/', { recursive: true });
 if (!fs.existsSync(PATH + 'tracks.json')) {
-	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify([]));
+	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(new Map()));
 }
 
 async function initIpc(mainWindow) {
@@ -70,13 +70,21 @@ async function initIpc(mainWindow) {
 
 	ipcMain.handle('read-track', (e, TrackID) => {
 		try {
-			return fs.readFileSync(PATH + 'tracks/' + TrackID + ".mp3");
+			const tracks = new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
+			const buffer = fs.readFileSync(PATH + 'tracks/' + TrackID + '.mp3')
+			const track = tracks.get(TrackID);
+			return { Buffer: buffer, Track: track };
 		}
 		catch (err) { return err }
 	});
 
 	ipcMain.handle('get-local-tracks', () => {
-		return new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
+		try {
+			return new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
+		} catch (err) {
+			console.error('Unable to read local tracks: ' + err);
+			return new Map();
+		}
 	});
 
 	ipcMain.handle('remove-track', (TrackID) => {

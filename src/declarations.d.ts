@@ -130,7 +130,7 @@ interface Window {
 		searchAlbum: (search: string) => Promise<Album[] | null>;
 		searchArtist: (search: string) => Promise<Artist[] | null>;
 
-		readTrack: (TrackID: string) => Promise<Buffer | Error>;
+		readTrack: (TrackID: string) => Promise<{ Buffer: buffer, Track: track } | Error>;
 		getLocalTracks: () => Promise<Map<Track.id, Track>>;
 		removeTrack: (TrackID: string) => void;
 	};

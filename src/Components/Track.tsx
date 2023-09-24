@@ -13,9 +13,9 @@ function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Tra
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
 	function PlayTrack() {
-		window.api.readTrack(track.id).then(Buffer => {
-			if (!(Buffer instanceof Error)) {
-				Audio.load(Buffer, track);
+		window.api.readTrack(track.id).then(Track => {
+			if (!(Track instanceof Error)) {
+				Audio.load(Track.Buffer, track);
 			} else {
 				Audio.load(track.preview_url, track);
 			}
@@ -54,9 +54,9 @@ function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Tra
 						window.api.downloadTrack(track);
 						downloadManager.once('Finished', track.id, () => {
 							setDownloaded(true);
-							window.api.readTrack(track.id).then(buffer => {
-								if (!(buffer instanceof Error)) {
-									Audio.load(buffer, track);
+							window.api.readTrack(track.id).then(Track => {
+								if (!(Track instanceof Error)) {
+									Audio.load(Track.Buffer, track);
 								}
 							});
 						});
