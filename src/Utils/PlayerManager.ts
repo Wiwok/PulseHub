@@ -11,7 +11,7 @@ class PlayerManager {
 		this.player = new Player();
 		this.handlers = new Map();
 
-		this.player.on('Ended', this.nextTrack);
+		this.player.on('Ended', this.nextTrack.bind(this));
 	}
 
 	on(Event: PlayerManagerEvent, handler: Function) {
@@ -31,7 +31,7 @@ class PlayerManager {
 	}
 
 	play(index = this.actualPlaying ?? 0) {
-		window.api.readTrack(this.playList[index]).then((Track) => {
+		window.api.readTrack(this.playList[index]).then(Track => {
 			if (!(Track instanceof Error)) {
 				this.player.load(Track.Buffer, Track.Track);
 			} else {

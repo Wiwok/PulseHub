@@ -17,13 +17,13 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	}
 
 	function onClickUp() {
-		Audio.AudioElement.currentTime = progressBarRef?.current?.value;
+		Audio.player.AudioElement.currentTime = progressBarRef?.current?.value;
 		progressBarClicked.current = false;
 	}
 
 	function UpdateProgressBar() {
-		if (!progressBarClicked.current && Audio.status == 'Playing')
-			setRangeValue(parseInt(Audio.AudioElement.currentTime.toFixed()));
+		if (!progressBarClicked.current && Audio.player.status == 'Playing')
+			setRangeValue(parseInt(Audio.player.AudioElement.currentTime.toFixed()));
 	}
 
 	useEffect(() => {
@@ -75,14 +75,24 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 					<div className="sidePlayerInfoRight">•••</div>
 				</div>
 				<div className="sidePlayerControl">
-					<img src={Back} alt="Back" className="sidePlayerControlBack" onClick={PlayerManager.nextTrack.bind(PlayerManager)} />
+					<img
+						src={Back}
+						alt="Back"
+						className="sidePlayerControlBack"
+						onClick={PlayerManager.nextTrack.bind(PlayerManager)}
+					/>
 					<img
 						src={Playing}
 						alt="Play/Pause"
 						className="sidePlayerControllerPlay"
-						onClick={PlayerManager.player.togglePlay.bind(PlayerManager)}
+						onClick={PlayerManager.player.togglePlay.bind(PlayerManager.player)}
 					/>
-					<img src={Back} alt="Skip" className="sidePlayerControlSkip" onClick={PlayerManager.previewTrack.bind(PlayerManager)} />
+					<img
+						src={Back}
+						alt="Skip"
+						className="sidePlayerControlSkip"
+						onClick={PlayerManager.previewTrack.bind(PlayerManager)}
+					/>
 				</div>
 			</div>
 		);
