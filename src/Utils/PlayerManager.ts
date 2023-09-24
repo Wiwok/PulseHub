@@ -23,7 +23,7 @@ class PlayerManager {
 	}
 
 	play() {
-		window.api.readTrack(this.playList[this.actualPlaying ?? 0]).then((Track) => {
+		window.api.readTrack(this.playList[this.actualPlaying ?? 0]).then(Track => {
 			if (!(Track instanceof Error)) {
 				this.player.load(Track.Buffer, Track.Track);
 			} else {
@@ -58,8 +58,8 @@ class PlayerManager {
 	 * @returns {Array<string>} new playlist
 	 */
 	async addTrack(trackid: string): Promise<string[]> {
-		return new Promise((resolve) => {
-			window.api.getLocalTracks().then((localtracks) => {
+		return new Promise(resolve => {
+			window.api.getLocalTracks().then(localtracks => {
 				if (!localtracks.has(trackid)) resolve(this.playList);
 				this.playList.push(trackid);
 				resolve(this.playList);

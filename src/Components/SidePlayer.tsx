@@ -39,7 +39,7 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 			value={rangeValue}
 			onMouseDown={onClickDown}
 			onMouseUp={onClickUp}
-			onChange={(ev) => setRangeValue(ev.target.value)}
+			onChange={ev => setRangeValue(ev.target.value)}
 		/>
 	);
 }

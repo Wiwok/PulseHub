@@ -18,7 +18,7 @@ class Player {
 			el.song = null;
 		}
 
-		return new Promise<void>((resolve) => {
+		return new Promise<void>(resolve => {
 			if (this.status == 'Playing') {
 				this.pause();
 				DeconstructSong(this);
@@ -50,7 +50,7 @@ class Player {
 	}
 
 	play() {
-		return new Promise<Boolean>((resolve) => {
+		return new Promise<Boolean>(resolve => {
 			if (this.status == 'Loaded' || this.status == 'Paused') {
 				this.AudioElement.play().then(() => {
 					this.status = 'Playing';
@@ -72,7 +72,7 @@ class Player {
 	}
 
 	togglePlay() {
-		return new Promise<Boolean>((resolve) => {
+		return new Promise<Boolean>(resolve => {
 			if (this.status == 'Paused') {
 				this.play().then(resolve);
 			} else {

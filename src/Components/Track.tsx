@@ -23,7 +23,7 @@ function Track({
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
 	function PlayTrack() {
-		window.api.readTrack(track.id).then((Track) => {
+		window.api.readTrack(track.id).then(Track => {
 			if (!(Track instanceof Error)) {
 				Audio.player.load(Track.Buffer, track);
 			} else {
@@ -67,29 +67,33 @@ function Track({
 			</div>
 			<div className="trackDuration">{toReadableDuration(track?.duration_ms / 1000)}</div>
 			<div className="trackActionButton">
-				{typeof downloadManager != 'undefined' ? (
-					<img
-						src={Downloaded ? Success : Download}
-						className="trackDownload"
-						onClick={() => {
-							if (Downloaded) return;
-							window.api.downloadTrack(track);
-							downloadManager.once('Finished', track.id, () => {
-								setDownloaded(true);
-								window.api.readTrack(track.id).then((Track) => {
-									if (!(Track instanceof Error)) {
-										Audio.player.load(Track.Buffer, track);
-									}
-								});
-							});
-							downloadManager.once('Errored', track.id, () => {
-								console.log('Errored');
-							});
-						}}
-					/>
-				) : (
-					<></>
-				)}
+				{(() => {
+					if (typeof downloadManager != 'undefined') {
+						return (
+							<img
+								src={Downloaded ? Success : Download}
+								className="trackDownload"
+								onClick={() => {
+									if (Downloaded) return;
+									window.api.downloadTrack(track);
+									downloadManager.once('Finished', track.id, () => {
+										setDownloaded(true);
+										window.api.readTrack(track.id).then(Track => {
+											if (!(Track instanceof Error)) {
+												Audio.player.load(Track.Buffer, track);
+											}
+										});
+									});
+									downloadManager.once('Errored', track.id, () => {
+										console.log('Errored');
+									});
+								}}
+							/>
+						);
+					} else {
+						return <></>;
+					}
+				})()}
 				<div className="trackLike">♡</div>
 				<div className="trackOption">•••</div>
 			</div>

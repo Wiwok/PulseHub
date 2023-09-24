@@ -26,7 +26,7 @@ function addTrackDatas(track) {
 function removeTrackDatas(TrackID) {
 	try {
 		const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
-		datas = datas.filter((value) => value.id != TrackID);
+		datas = datas.filter(value => value.id != TrackID);
 		fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
 		return true;
 	} catch (err) {
@@ -36,13 +36,13 @@ function removeTrackDatas(TrackID) {
 }
 
 async function dl_track(id, filename) {
-	return new Promise((resolve) => {
+	return new Promise(resolve => {
 		try {
 			if (fs.existsSync(filename)) resolve(true);
 			fluent_ffmpeg(ytdl_core(id, { quality: 'highestaudio', filter: 'audioonly' }))
 				.audioBitrate(128)
 				.save(filename)
-				.on('error', (err) => {
+				.on('error', err => {
 					console.error(`Failed to download file (${filename}): ${err}`);
 					if (fs.existsSync(filename)) {
 						fs.unlinkSync(filename);
@@ -125,20 +125,20 @@ function getArtistList(artists) {
 async function getYoutubeID(track) {
 	const duration = track.duration_ms / 1000;
 
-	let content = await ytm.searchSongs(`${track.name} ${track.artists.map((artist) => artist.name).join(' ')}`);
+	let content = await ytm.searchSongs(`${track.name} ${track.artists.map(artist => artist.name).join(' ')}`);
 
 	// We only keep songs that match the duration to within 10 seconds
-	content = content.filter((song) => Math.abs(song.duration - duration) < 10);
+	content = content.filter(song => Math.abs(song.duration - duration) < 10);
 	// We only keep songs with matching artist
-	content = content.filter((song) => {
+	content = content.filter(song => {
 		if (song.artists.length) {
 			return song.artists[0].name == track.artists[0].name;
 		}
 		return true;
 	});
 
-	const explicitList = content.filter((song) => song.isExplicit);
-	const nonExplicitList = content.filter((song) => !song.isExplicit);
+	const explicitList = content.filter(song => song.isExplicit);
+	const nonExplicitList = content.filter(song => !song.isExplicit);
 	if (track.explicit) {
 		if (explicitList.length > 0) {
 			content = explicitList;
@@ -157,9 +157,9 @@ async function getYoutubeID(track) {
 }
 
 async function downloadImages(album) {
-	return new Promise((resolve) => {
+	return new Promise(resolve => {
 		album.images.forEach((image, i) => {
-			client.get(image.url, (res) => {
+			client.get(image.url, res => {
 				if (res.statusCode === 200) {
 					const filename = `${PATH}images/x${i + 1}/${album.id}.jpg`;
 					try {
@@ -180,11 +180,11 @@ async function downloadImages(album) {
 }
 
 async function getAlbumImage(album) {
-	return new Promise((resolve) => {
+	return new Promise(resolve => {
 		const data = [];
 		try {
-			client.get(album.images[0].url, (res) => {
-				res.on('data', (chunk) => {
+			client.get(album.images[0].url, res => {
+				res.on('data', chunk => {
 					data.push(chunk);
 				}).on('end', () => {
 					resolve(Buffer.concat(data));
@@ -282,8 +282,8 @@ class spottylib {
 	async auth() {
 		const re = /<script id="session" data-testid="session" type="application\/json"\>({.*})<\/script>/;
 		const response = await axios('https://open.spotify.com/search')
-			.then((data) => data.data.match(re)[1])
-			.then((json) => JSON.parse(json))
+			.then(data => data.data.match(re)[1])
+			.then(json => JSON.parse(json))
 			.catch(() => {
 				this.accessToken = null;
 				this.options = null;
@@ -325,61 +325,61 @@ class spottylib {
 	async getTrack(id) {
 		const URL = 'https://api.spotify.com/v1/tracks/' + id;
 
-		const callback = (data) => data.data;
+		const callback = data => data.data;
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch((err) => this.catcher(URL, this.options, callback, err));
+			.catch(err => this.catcher(URL, this.options, callback, err));
 	}
 
 	async getAlbum(id) {
 		const URL = 'https://api.spotify.com/v1/albums/' + id;
 
-		const callback = (data) => data.data;
+		const callback = data => data.data;
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch((err) => this.catcher(URL, this.options, callback, err));
+			.catch(err => this.catcher(URL, this.options, callback, err));
 	}
 
 	async getArtist(id) {
 		const URL = 'https://api.spotify.com/v1/artists/' + id;
 
-		const callback = (data) => data.data;
+		const callback = data => data.data;
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch((err) => this.catcher(URL, this.options, callback, err));
+			.catch(err => this.catcher(URL, this.options, callback, err));
 	}
 
 	async searchTrack(search) {
 		const URL = 'https://api.spotify.com/v1/search?q=' + search + '&type=track';
 
-		const callback = (data) => data.data.tracks.items;
+		const callback = data => data.data.tracks.items;
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch((err) => this.catcher(URL, this.options, callback, err));
+			.catch(err => this.catcher(URL, this.options, callback, err));
 	}
 
 	async searchAlbum(search) {
 		const URL = 'https://api.spotify.com/v1/search?q=' + search + '&type=album';
 
-		const callback = (data) => data.data.albums.items;
+		const callback = data => data.data.albums.items;
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch((err) => this.catcher(URL, this.options, callback, err));
+			.catch(err => this.catcher(URL, this.options, callback, err));
 	}
 
 	async searchArtist(search) {
 		const URL = 'https://api.spotify.com/v1/search?q=' + search + '&type=artist';
 
-		const callback = (data) => data.data.artists.items;
+		const callback = data => data.data.artists.items;
 
 		return await axios(URL, this.options)
 			.then(callback)
-			.catch((err) => this.catcher(URL, this.options, callback, err));
+			.catch(err => this.catcher(URL, this.options, callback, err));
 	}
 
 	removeTrack(TrackID) {

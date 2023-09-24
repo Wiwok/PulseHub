@@ -39,31 +39,31 @@ async function initIpc(mainWindow) {
 	});
 
 	ipcMain.handle('get-track', (e, TrackID) => {
-		return new Promise((res) => {
+		return new Promise(res => {
 			sl.getTrack(TrackID).then(res);
 		});
 	});
 
 	ipcMain.handle('get-album', (e, AlbumID) => {
-		return new Promise((res) => {
+		return new Promise(res => {
 			sl.getAlbum(AlbumID).then(res);
 		});
 	});
 
 	ipcMain.handle('search-track', (e, search) => {
-		return new Promise((res) => {
+		return new Promise(res => {
 			sl.searchTrack(search).then(res);
 		});
 	});
 
 	ipcMain.handle('search-album', (e, search) => {
-		return new Promise((res) => {
+		return new Promise(res => {
 			sl.searchAlbum(search).then(res);
 		});
 	});
 
 	ipcMain.handle('search-artist', (e, search) => {
-		return new Promise((res) => {
+		return new Promise(res => {
 			sl.searchArtist(search).then(res);
 		});
 	});
@@ -88,8 +88,8 @@ async function initIpc(mainWindow) {
 		}
 	});
 
-	ipcMain.handle('remove-track', (TrackID) => {
-		return new Promise((res) => {
+	ipcMain.handle('remove-track', TrackID => {
+		return new Promise(res => {
 			sl.removeTrack(TrackID);
 			res();
 		});

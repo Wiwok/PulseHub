@@ -20,7 +20,7 @@ function Search({ Audio, downloadManager }) {
 			return;
 		}
 		const input = encodeURIComponent(value);
-		window.api.searchTrack(input).then((v) => {
+		window.api.searchTrack(input).then(v => {
 			if (typeof v == 'undefined') {
 				setContent(<div className="SearchingMessage">An error occurred</div>);
 			} else if (v && v.length) {
@@ -66,7 +66,7 @@ function Search({ Audio, downloadManager }) {
 				<input
 					className="searchInput"
 					onInput={input}
-					onKeyUp={(ev) => {
+					onKeyUp={ev => {
 						if (ev.key == 'Enter') {
 							setContent(<div className="SearchingMessage">Searching...</div>);
 							Action();

@@ -7,7 +7,7 @@ function Library({ Audio }: { Audio: PlayerManager }) {
 	const [Content, setContent] = useState(<></>);
 
 	useEffect(() => {
-		window.api.getLocalTracks().then((value) => {
+		window.api.getLocalTracks().then(value => {
 			if (value && value.size) {
 				setContent(
 					<div className="SearchResults">

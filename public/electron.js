@@ -45,6 +45,6 @@ app.on('activate', () => {
 	}
 });
 
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', error => {
 	console.error(`Exception: ${error}`);
 });
