@@ -32,12 +32,27 @@ class PlayerManager {
 		});
 	}
 
+	loadPlayList(idList: Array<string>) {
+		this.playList = [];
+		this.playList = idList;
+	}
+
+	loadTackPlayList(trackList: Map<string, Track>) {
+		this.playList = [];
+		trackList.forEach((element, index) => {
+			this.playList?.push(index);
+		});
+	}
+
 	play(index = this.actualPlaying ?? 0) {
 		return new Promise(resolve => {
 			if (this.playList != null) {
 				window.api.readTrack(this.playList[index]).then(Track => {
 					if (!(Track instanceof Error)) {
-						this.player.load(Track.Buffer, Track.Track).then(() => resolve(true));
+						this.player.load(Track.Buffer, Track.Track).then(() => {
+							this.actualPlaying = index;
+							resolve(true);
+						});
 					} else {
 						resolve(false);
 					}

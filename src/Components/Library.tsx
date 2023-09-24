@@ -23,6 +23,10 @@ function Library({ Audio }: { Audio: PlayerManager }) {
 									Audio={Audio}
 									track={v}
 									key={i}
+									onClick={() => {
+										Audio.loadTackPlayList(value);
+										Audio.play(i);
+									}}
 									downloadedTracks={undefined}
 								/>
 							);

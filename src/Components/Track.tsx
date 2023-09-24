@@ -12,30 +12,36 @@ function Track({
 	track,
 	Audio,
 	downloadManager,
-	downloadedTracks
+	downloadedTracks,
+	onClick
 }: {
 	track: Track;
 	Audio: PlayerManager;
 	downloadManager: DownloadManager | undefined;
 	downloadedTracks: Map<string, Track> | undefined;
+	onClick?: Function;
 }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
-
-	function PlayTrack() {
-		Audio.load(track);
-	}
 
 	return (
 		<div
 			className="track"
 			onMouseEnter={() => setplayVisible('trackPlayButtonVisible')}
 			onMouseLeave={() => setplayVisible('trackPlayButton')}
-			onDoubleClick={() => Audio.addTrack(track.id)}
+			onDoubleClick={() => {
+				if (onClick) onClick();
+			}}
 		>
 			<div className="trackInfo">
 				<img className="trackImage" src={track?.album?.images[1].url}></img>
-				<img className={playVisible} onClick={PlayTrack} src={Play}></img>
+				<img
+					className={playVisible}
+					onClick={() => {
+						if (onClick) onClick();
+					}}
+					src={Play}
+				></img>
 				<div className="trackNameArtist">
 					<div className="trackName">{track?.name}</div>
 					<div className="trackArtists">
