@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron');
 
 const { initIpc } = require('./backend/index');
 
@@ -10,7 +10,7 @@ function createWindow() {
 		height: 600,
 		autoHideMenuBar: true,
 		show: false,
-		icon: __dirname + "/favicon.ico",
+		icon: __dirname + '/favicon.ico',
 		webPreferences: {
 			preload: app.isPackaged
 				? path.join(app.getAppPath(), './build/preload.js')
@@ -23,18 +23,12 @@ function createWindow() {
 	win.show();
 
 	initIpc(win);
-	win.loadURL(
-		app.isPackaged
-			? `file://${path.join(__dirname, '../build/index.html')}`
-			: 'http://localhost:3000'
-	);
+	win.loadURL(app.isPackaged ? `file://${path.join(__dirname, '../build/index.html')}` : 'http://localhost:3000');
 }
 
 app.setPath(
 	'userData',
-	app.isPackaged
-		? path.join(process.resourcesPath, 'user/')
-		: path.join(app.getAppPath(), 'user/')
+	app.isPackaged ? path.join(process.resourcesPath, 'user/') : path.join(app.getAppPath(), 'user/')
 );
 
 app.whenReady().then(createWindow);
@@ -51,6 +45,6 @@ app.on('activate', () => {
 	}
 });
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
 	console.error(`Exception: ${error}`);
 });

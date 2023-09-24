@@ -1,10 +1,10 @@
-import Player from '../Player';
 import SidePlayer from './SidePlayer';
 
 import Home from '../Assets/Home.png';
 import Search from '../Assets/Search.png';
+import PlayerManager from '../Utils/PlayerManager';
 
-function SideBar({ Audio, setPage }: { Audio: Player, setPage: Function }) {
+function SideBar({ Audio, setPage }: { Audio: PlayerManager; setPage: Function }) {
 	return (
 		<div className="sideBar">
 			<div className="sideMenu">

@@ -26,7 +26,7 @@ function addTrackDatas(track) {
 function removeTrackDatas(TrackID) {
 	try {
 		const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
-		datas = datas.filter(value => value.id != TrackID);
+		datas = datas.filter((value) => value.id != TrackID);
 		fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
 		return true;
 	} catch (err) {
@@ -36,7 +36,7 @@ function removeTrackDatas(TrackID) {
 }
 
 async function dl_track(id, filename) {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		try {
 			if (fs.existsSync(filename)) resolve(true);
 			fluent_ffmpeg(ytdl_core(id, { quality: 'highestaudio', filter: 'audioonly' }))
@@ -58,16 +58,19 @@ async function dl_track(id, filename) {
 			resolve(false);
 		}
 	});
-};
+}
 
 async function get_album_playlist(playlistId) {
 	let properUrl = `https://m.youtube.com/playlist?list=${playlistId}`;
 	let resp = await axios.get(properUrl);
-	let ytInitialData = JSON.parse(/(?:window\["ytInitialData"\])|(?:ytInitialData) =.*?({.*?});/s.exec(resp.data)?.[1] || '{}');
-	let listData = ytInitialData.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer
-		.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer;
+	let ytInitialData = JSON.parse(
+		/(?:window\["ytInitialData"\])|(?:ytInitialData) =.*?({.*?});/s.exec(resp.data)?.[1] || '{}'
+	);
+	let listData =
+		ytInitialData.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer
+			.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer;
 	return listData.contents;
-};
+}
 
 async function dl_album(album, tags, callback) {
 	const alb = await ytm.searchAlbums(`${album.artists[0].name} - ${album.name}`);
@@ -122,20 +125,20 @@ function getArtistList(artists) {
 async function getYoutubeID(track) {
 	const duration = track.duration_ms / 1000;
 
-	let content = await ytm.searchSongs(`${track.name} ${track.artists.map(artist => artist.name).join(' ')}`);
+	let content = await ytm.searchSongs(`${track.name} ${track.artists.map((artist) => artist.name).join(' ')}`);
 
 	// We only keep songs that match the duration to within 10 seconds
-	content = content.filter(song => Math.abs(song.duration - duration) < 10);
+	content = content.filter((song) => Math.abs(song.duration - duration) < 10);
 	// We only keep songs with matching artist
-	content = content.filter(song => {
+	content = content.filter((song) => {
 		if (song.artists.length) {
 			return song.artists[0].name == track.artists[0].name;
 		}
 		return true;
 	});
 
-	const explicitList = content.filter(song => song.isExplicit);
-	const nonExplicitList = content.filter(song => !song.isExplicit);
+	const explicitList = content.filter((song) => song.isExplicit);
+	const nonExplicitList = content.filter((song) => !song.isExplicit);
 	if (track.explicit) {
 		if (explicitList.length > 0) {
 			content = explicitList;
@@ -154,9 +157,9 @@ async function getYoutubeID(track) {
 }
 
 async function downloadImages(album) {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		album.images.forEach((image, i) => {
-			client.get(image.url, res => {
+			client.get(image.url, (res) => {
 				if (res.statusCode === 200) {
 					const filename = `${PATH}images/x${i + 1}/${album.id}.jpg`;
 					try {
@@ -177,17 +180,15 @@ async function downloadImages(album) {
 }
 
 async function getAlbumImage(album) {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		const data = [];
 		try {
 			client.get(album.images[0].url, (res) => {
-				res
-					.on("data", chunk => {
-						data.push(chunk);
-					})
-					.on("end", () => {
-						resolve(Buffer.concat(data));
-					});
+				res.on('data', (chunk) => {
+					data.push(chunk);
+				}).on('end', () => {
+					resolve(Buffer.concat(data));
+				});
 			});
 		} catch (err) {
 			console.error('Exception: ' + err);
@@ -231,17 +232,13 @@ async function downloadTrack(track, callback) {
 		if (dlt) {
 			let tagStatus = node_id3.update(tags, filename);
 			if (tagStatus) {
-				if (addTrackDatas(track))
-					callback({ id: track.id, status: 'Finished' });
-				else
-					callback({ id: track.id, status: 'Errored' });
-			}
-			else {
+				if (addTrackDatas(track)) callback({ id: track.id, status: 'Finished' });
+				else callback({ id: track.id, status: 'Errored' });
+			} else {
 				if (fs.existsSync(filename)) fs.unlinkSync(filename);
 				callback({ id: track.id, status: 'Errored' });
 			}
-		}
-		else {
+		} else {
 			if (fs.existsSync(filename)) fs.unlinkSync(filename);
 			callback({ id: track.id, status: 'Errored' });
 		}
@@ -250,7 +247,7 @@ async function downloadTrack(track, callback) {
 		if (fs.existsSync(filename)) fs.unlinkSync(filename);
 		callback({ id: track.id, status: 'Errored' });
 	}
-};
+}
 
 async function downloadAlbum(album, callback) {
 	try {
@@ -268,7 +265,7 @@ async function downloadAlbum(album, callback) {
 		console.error(`Exception: ${err}`);
 		callback({ id: track.id, status: 'Errored' });
 	}
-};
+}
 
 class spottylib {
 	accessToken;
@@ -284,9 +281,9 @@ class spottylib {
 
 	async auth() {
 		const re = /<script id="session" data-testid="session" type="application\/json"\>({.*})<\/script>/;
-		const response = await axios("https://open.spotify.com/search")
-			.then(data => data.data.match(re)[1])
-			.then(json => JSON.parse(json))
+		const response = await axios('https://open.spotify.com/search')
+			.then((data) => data.data.match(re)[1])
+			.then((json) => JSON.parse(json))
 			.catch(() => {
 				this.accessToken = null;
 				this.options = null;
@@ -313,7 +310,7 @@ class spottylib {
 	async catcher(URL, options, callback, err) {
 		if (err?.response?.status) {
 			console.log('Auth issue. Trying re-authenticate...');
-			const v = await this.auth()
+			const v = await this.auth();
 			if (v) {
 				console.log('Authentication successed');
 				return await axios(URL, options).then(callback);

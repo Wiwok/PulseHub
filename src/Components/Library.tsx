@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import Player from "../Player";
-import Track from "./Track";
+import Track from './Track';
+import PlayerManager from '../Utils/PlayerManager';
 
-function Library({ Audio }: { Audio: Player }) {
+function Library({ Audio }: { Audio: PlayerManager }) {
 	const [Content, setContent] = useState(<></>);
 
 	useEffect(() => {
@@ -18,7 +18,13 @@ function Library({ Audio }: { Audio: Player }) {
 						</div>
 						{Array.from(value.values()).map((v, i) => {
 							return (
-								<Track downloadManager={undefined} Audio={Audio} track={v} key={i} downloadedTracks={undefined} />
+								<Track
+									downloadManager={undefined}
+									Audio={Audio}
+									track={v}
+									key={i}
+									downloadedTracks={undefined}
+								/>
 							);
 						})}
 					</div>
@@ -26,14 +32,10 @@ function Library({ Audio }: { Audio: Player }) {
 			} else {
 				setContent(<div className="SearchingMessage">It's sadly empty here...</div>);
 			}
-		})
+		});
 	}, [setContent]);
 
-	return (
-		<div className="SearchPage">
-			{Content}
-		</div>
-	);
+	return <div className="SearchPage">{Content}</div>;
 }
 
 export default Library;

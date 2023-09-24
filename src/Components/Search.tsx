@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import Track from "./Track";
+import Track from './Track';
 
-import SearchImg from "../Assets/Search.png";
+import SearchImg from '../Assets/Search.png';
 
 function Search({ Audio, downloadManager }) {
 	const [Content, setContent] = useState(<></>);
@@ -20,7 +20,7 @@ function Search({ Audio, downloadManager }) {
 			return;
 		}
 		const input = encodeURIComponent(value);
-		window.api.searchTrack(input).then(v => {
+		window.api.searchTrack(input).then((v) => {
 			if (typeof v == 'undefined') {
 				setContent(<div className="SearchingMessage">An error occurred</div>);
 			} else if (v && v.length) {
@@ -32,9 +32,18 @@ function Search({ Audio, downloadManager }) {
 							<div>Duration</div>
 						</div>
 						{v.map((track, i) => {
-							return (<Track downloadManager={downloadManager} Audio={Audio} track={track} key={i} downloadedTracks={downloadedTracks} />);
+							return (
+								<Track
+									downloadManager={downloadManager}
+									Audio={Audio}
+									track={track}
+									key={i}
+									downloadedTracks={downloadedTracks}
+								/>
+							);
 						})}
-					</div>);
+					</div>
+				);
 			} else {
 				setContent(<div className="SearchingMessage">No result</div>);
 			}
@@ -54,12 +63,18 @@ function Search({ Audio, downloadManager }) {
 	return (
 		<div className="SearchPage">
 			<div className="searchBox">
-				<input className="searchInput" onInput={input} onKeyUp={ev => {
-					if (ev.key == 'Enter') {
-						setContent(<div className="SearchingMessage">Searching...</div>);
-						Action();
-					}
-				}} id='input' placeholder="Search"></input>
+				<input
+					className="searchInput"
+					onInput={input}
+					onKeyUp={(ev) => {
+						if (ev.key == 'Enter') {
+							setContent(<div className="SearchingMessage">Searching...</div>);
+							Action();
+						}
+					}}
+					id="input"
+					placeholder="Search"
+				></input>
 				<img src={SearchImg} onClick={Action} alt="Search" className="searchButton"></img>
 			</div>
 			{Content}

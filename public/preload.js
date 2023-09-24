@@ -18,7 +18,6 @@ contextBridge.exposeInMainWorld('api', {
 	searchAlbum: (search) => ipcRenderer.invoke('search-album', search),
 	searchArtist: (search) => ipcRenderer.invoke('search-artist', search),
 
-
 	readTrack: (TrackID) => ipcRenderer.invoke('read-track', TrackID),
 	getLocalTracks: () => ipcRenderer.invoke('get-local-tracks'),
 	removeTrack: (TrackID) => ipcRenderer.invoke('remove-track', TrackID)

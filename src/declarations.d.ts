@@ -1,18 +1,18 @@
-declare module "*.png";
+declare module '*.png';
 
-type AlbumType = 'album' | 'single' | 'compilation'
+type AlbumType = 'album' | 'single' | 'compilation';
 type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
 type PlayerStatus = 'Idle' | 'Loaded' | 'Playing' | 'Paused';
 type PlayerEvents = 'Playing' | 'Paused' | 'Ended' | 'Loaded';
 type PlayerManagerEvent = 'Ended' | 'Next';
-type DownloadHandler = { event: DownloadStatus, callback: Function };
+type DownloadHandler = { event: DownloadStatus; callback: Function };
 
 type Track = {
 	disc_number: number;
 	duration_ms: number;
 	explicit: boolean;
-	external_ids: { isrc: string }
-	external_urls: { spotify: string }
+	external_ids: { isrc: string };
+	external_urls: { spotify: string };
 	name: string;
 	href: string;
 	id: string;
@@ -26,7 +26,7 @@ type Track = {
 		id: string;
 	}[];
 	album: {
-		album_type: AlbumType,
+		album_type: AlbumType;
 		artists: {
 			name: string;
 			href: string;
@@ -45,10 +45,10 @@ type Track = {
 		release_date: string;
 		total_tracks: number;
 	};
-}
+};
 
 type Album = {
-	album_type: AlbumType,
+	album_type: AlbumType;
 	artists: {
 		name: string;
 		href: string;
@@ -58,7 +58,7 @@ type Album = {
 	copyrights: {
 		text: string;
 		type: string;
-	}[]
+	}[];
 	external_ids: { upc: string };
 	external_urls: { spotify: string };
 	genres: string[];
@@ -93,7 +93,7 @@ type Album = {
 			preview_url: string;
 			track_number: number;
 		}[];
-	}
+	};
 };
 
 type Artist = {
@@ -115,8 +115,8 @@ interface Window {
 	api: {
 		downloadTrack: (track: Track) => void;
 		downloadAlbum: (album: Album) => void;
-		downloadTrackHandle: (callback: (event: any, value: { id: string, status: DownloadStatus }) => void) => void;
-		downloadAlbumHandle: (callback: (event: any, value: { id: string, status: DownloadStatus }) => void) => void;
+		downloadTrackHandle: (callback: (event: any, value: { id: string; status: DownloadStatus }) => void) => void;
+		downloadAlbumHandle: (callback: (event: any, value: { id: string; status: DownloadStatus }) => void) => void;
 		downloadTrackClearHandle: () => void;
 		downloadAlbumClearHandle: () => void;
 
@@ -130,7 +130,7 @@ interface Window {
 		searchAlbum: (search: string) => Promise<Album[] | null>;
 		searchArtist: (search: string) => Promise<Artist[] | null>;
 
-		readTrack: (TrackID: string) => Promise<{ Buffer: buffer, Track: track } | Error>;
+		readTrack: (TrackID: string) => Promise<{ Buffer: buffer; Track: track } | Error>;
 		getLocalTracks: () => Promise<Map<Track.id, Track>>;
 		removeTrack: (TrackID: string) => void;
 	};

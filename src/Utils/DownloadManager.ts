@@ -11,9 +11,9 @@ class DownloadManager {
 		this.handlers.get(value.id + value.status)?.callback();
 		this.handlers.get('*' + value.status)?.callback();
 		this.onceHandlers.get(value.id + value.status)?.callback();
-		this.onceHandlers.delete(value.id + value.status)
+		this.onceHandlers.delete(value.id + value.status);
 		this.onceHandlers.get('*' + value.status)?.callback();
-		this.onceHandlers.delete('*' + value.status)
+		this.onceHandlers.delete('*' + value.status);
 	}
 
 	on(event: DownloadStatus, id: string, callback: Function) {

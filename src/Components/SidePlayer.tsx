@@ -1,21 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 import Back from '../Assets/Back.png';
 import Disk from '../Assets/Disk.png';
 import Pause from '../Assets/Pause.png';
 import Play from '../Assets/Play.png';
 
-import { toReadableArtists, toReadableDuration } from "../Utils/Cleaner";
-import PlayerManager from "../Utils/PlayerManager";
+import { toReadableArtists, toReadableDuration } from '../Utils/Cleaner';
+import PlayerManager from '../Utils/PlayerManager';
 
 function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	const progressBarRef: any = useRef();
 	const progressBarClicked = useRef(false);
 
-
 	function onClickDown() {
 		progressBarClicked.current = true;
-	};
+	}
 
 	function onClickUp() {
 		Audio.AudioElement.currentTime = progressBarRef?.current?.value;
@@ -24,7 +23,7 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 
 	function UpdateProgressBar() {
 		if (!progressBarClicked.current && Audio.status == 'Playing')
-			setRangeValue(parseInt((Audio.AudioElement.currentTime).toFixed()));
+			setRangeValue(parseInt(Audio.AudioElement.currentTime.toFixed()));
 	}
 
 	useEffect(() => {
@@ -40,7 +39,7 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 			value={rangeValue}
 			onMouseDown={onClickDown}
 			onMouseUp={onClickUp}
-			onChange={ev => setRangeValue(ev.target.value)}
+			onChange={(ev) => setRangeValue(ev.target.value)}
 		/>
 	);
 }
@@ -57,14 +56,15 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 
 	if (Track != null) {
 		return (
-			<div className='sidePlayer'>
+			<div className="sidePlayer">
 				<img className="sidePlayerImage" src={Track?.album?.images[1]?.url ?? Disk} />
 				<div className="sidePlayerProgress">
 					{toReadableDuration(rangeValue)}
 					<ProgressBar
 						setRangeValue={setRangeValue}
 						rangeValue={isNaN(rangeValue) ? 0 : rangeValue}
-						Audio={PlayerManager} />
+						Audio={PlayerManager}
+					/>
 					{toReadableDuration(parseInt(PlayerManager.player.AudioElement.duration.toFixed(0)))}
 				</div>
 				<div className="sidePlayerInfo">
@@ -76,13 +76,18 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 				</div>
 				<div className="sidePlayerControl">
 					<img src={Back} alt="Back" className="sidePlayerControlBack" onClick={PlayerManager.nextTrack} />
-					<img src={Playing} alt="Play/Pause" className="sidePlayerControllerPlay" onClick={() => PlayerManager.player.togglePlay.bind(PlayerManager)()} />
+					<img
+						src={Playing}
+						alt="Play/Pause"
+						className="sidePlayerControllerPlay"
+						onClick={() => PlayerManager.player.togglePlay.bind(PlayerManager)()}
+					/>
 					<img src={Back} alt="Skip" className="sidePlayerControlSkip" onClick={PlayerManager.previewTrack} />
 				</div>
 			</div>
 		);
 	} else {
-		return (<></>);
+		return <></>;
 	}
 }
 

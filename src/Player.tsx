@@ -18,7 +18,7 @@ class Player {
 			el.song = null;
 		}
 
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			if (this.status == 'Playing') {
 				this.pause();
 				DeconstructSong(this);
@@ -34,7 +34,7 @@ class Player {
 			this.AudioElement.addEventListener('ended', () => DeconstructSong(this));
 
 			if (typeof source == 'object') {
-				const blob = new Blob([source], { type: "audio/mp3" });
+				const blob = new Blob([source], { type: 'audio/mp3' });
 				const url = window.URL.createObjectURL(blob);
 				this.AudioElement.src = url;
 				this.song = url;
@@ -50,11 +50,11 @@ class Player {
 	}
 
 	play() {
-		return new Promise<Boolean>(resolve => {
+		return new Promise<Boolean>((resolve) => {
 			if (this.status == 'Loaded' || this.status == 'Paused') {
 				this.AudioElement.play().then(() => {
 					this.status = 'Playing';
-					resolve(true)
+					resolve(true);
 				});
 			} else {
 				resolve(false);
@@ -71,9 +71,8 @@ class Player {
 		return false;
 	}
 
-
 	togglePlay() {
-		return new Promise<Boolean>(resolve => {
+		return new Promise<Boolean>((resolve) => {
 			if (this.status == 'Paused') {
 				this.play().then(resolve);
 			} else {

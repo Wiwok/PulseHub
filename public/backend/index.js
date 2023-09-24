@@ -1,4 +1,4 @@
-const { ipcMain } = require("electron");
+const { ipcMain } = require('electron');
 const fs = require('fs');
 
 const { spottylib } = require('./spottylib');
@@ -39,31 +39,31 @@ async function initIpc(mainWindow) {
 	});
 
 	ipcMain.handle('get-track', (e, TrackID) => {
-		return new Promise(res => {
+		return new Promise((res) => {
 			sl.getTrack(TrackID).then(res);
 		});
 	});
 
 	ipcMain.handle('get-album', (e, AlbumID) => {
-		return new Promise(res => {
+		return new Promise((res) => {
 			sl.getAlbum(AlbumID).then(res);
 		});
 	});
 
 	ipcMain.handle('search-track', (e, search) => {
-		return new Promise(res => {
+		return new Promise((res) => {
 			sl.searchTrack(search).then(res);
 		});
 	});
 
 	ipcMain.handle('search-album', (e, search) => {
-		return new Promise(res => {
+		return new Promise((res) => {
 			sl.searchAlbum(search).then(res);
 		});
 	});
 
 	ipcMain.handle('search-artist', (e, search) => {
-		return new Promise(res => {
+		return new Promise((res) => {
 			sl.searchArtist(search).then(res);
 		});
 	});
@@ -71,11 +71,12 @@ async function initIpc(mainWindow) {
 	ipcMain.handle('read-track', (e, TrackID) => {
 		try {
 			const tracks = new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
-			const buffer = fs.readFileSync(PATH + 'tracks/' + TrackID + '.mp3')
+			const buffer = fs.readFileSync(PATH + 'tracks/' + TrackID + '.mp3');
 			const track = tracks.get(TrackID);
 			return { Buffer: buffer, Track: track };
+		} catch (err) {
+			return err;
 		}
-		catch (err) { return err }
 	});
 
 	ipcMain.handle('get-local-tracks', () => {
@@ -88,13 +89,13 @@ async function initIpc(mainWindow) {
 	});
 
 	ipcMain.handle('remove-track', (TrackID) => {
-		return new Promise(res => {
+		return new Promise((res) => {
 			sl.removeTrack(TrackID);
 			res();
-		})
+		});
 	});
 
-	if (!await sl.auth()) {
+	if (!(await sl.auth())) {
 		console.error('Spotify authentification failed');
 	}
 }

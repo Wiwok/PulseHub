@@ -1,7 +1,7 @@
-import Player from "../Player";
+import Player from '../Player';
 
 class PlayerManager {
-	playList: Array<string>
+	playList: Array<string>;
 	player: Player;
 	private actualPlaying: number | null;
 	private handlers: Map<PlayerManagerEvent, Function>;
@@ -23,7 +23,7 @@ class PlayerManager {
 	}
 
 	play() {
-		window.api.readTrack(this.playList[this.actualPlaying ?? 0]).then(Track => {
+		window.api.readTrack(this.playList[this.actualPlaying ?? 0]).then((Track) => {
 			if (!(Track instanceof Error)) {
 				this.player.load(Track.Buffer, Track.Track);
 			} else {
@@ -46,7 +46,7 @@ class PlayerManager {
 	nextTrack() {
 		if (!this.actualPlaying) this.actualPlaying = -1;
 		if (!this.playList.length) return;
-		if ((this.actualPlaying == this.playList.length) && (typeof this.handlers.get('Ended') != undefined)) {
+		if (this.actualPlaying == this.playList.length && typeof this.handlers.get('Ended') != undefined) {
 			(this.handlers.get('Ended') as Function)();
 		}
 		this.actualPlaying++;
@@ -58,8 +58,8 @@ class PlayerManager {
 	 * @returns {Array<string>} new playlist
 	 */
 	async addTrack(trackid: string): Promise<string[]> {
-		return new Promise(resolve => {
-			window.api.getLocalTracks().then(localtracks => {
+		return new Promise((resolve) => {
+			window.api.getLocalTracks().then((localtracks) => {
 				if (!localtracks.has(trackid)) resolve(this.playList);
 				this.playList.push(trackid);
 				resolve(this.playList);
@@ -88,7 +88,10 @@ class PlayerManager {
 		while (currentIndex > 0) {
 			randomIndex = Math.floor(Math.random() * currentIndex);
 			currentIndex--;
-			[this.playList[currentIndex], this.playList[randomIndex]] = [this.playList[randomIndex], this.playList[currentIndex]];
+			[this.playList[currentIndex], this.playList[randomIndex]] = [
+				this.playList[randomIndex],
+				this.playList[currentIndex]
+			];
 		}
 		return this.playList;
 	}

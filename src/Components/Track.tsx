@@ -1,29 +1,44 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 import Download from '../Assets/Download.png';
 import Play from '../Assets/Play.png';
 import Success from '../Assets/Success.png';
 
-import Player from "../Player";
-import { toReadableDuration } from "../Utils/Cleaner";
-import DownloadManager from "../Utils/DownloadManager";
+import { toReadableDuration } from '../Utils/Cleaner';
+import DownloadManager from '../Utils/DownloadManager';
+import PlayerManager from '../Utils/PlayerManager';
 
-function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Track, Audio: Player, downloadManager: DownloadManager | undefined, downloadedTracks: Map<string, Track> | undefined }) {
+function Track({
+	track,
+	Audio,
+	downloadManager,
+	downloadedTracks
+}: {
+	track: Track;
+	Audio: PlayerManager;
+	downloadManager: DownloadManager | undefined;
+	downloadedTracks: Map<string, Track> | undefined;
+}) {
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
 	function PlayTrack() {
-		window.api.readTrack(track.id).then(Track => {
+		window.api.readTrack(track.id).then((Track) => {
 			if (!(Track instanceof Error)) {
-				Audio.load(Track.Buffer, track);
+				Audio.player.load(Track.Buffer, track);
 			} else {
-				Audio.load(track.preview_url, track);
+				Audio.player.load(track.preview_url, track);
 			}
 		});
 	}
 
 	return (
-		<div className="track" onMouseEnter={() => setplayVisible("trackPlayButtonVisible")} onMouseLeave={() => setplayVisible("trackPlayButton")} onDoubleClick={PlayTrack} >
+		<div
+			className="track"
+			onMouseEnter={() => setplayVisible('trackPlayButtonVisible')}
+			onMouseLeave={() => setplayVisible('trackPlayButton')}
+			onDoubleClick={PlayTrack}
+		>
 			<div className="trackInfo">
 				<img className="trackImage" src={track?.album?.images[1].url}></img>
 				<img className={playVisible} onClick={PlayTrack} src={Play}></img>
@@ -32,46 +47,54 @@ function Track({ track, Audio, downloadManager, downloadedTracks }: { track: Tra
 					<div className="trackArtists">
 						{track?.artists?.map((element, i) => {
 							if (i != track.artists.length - 1)
-								return (<div key={i} className="trackArtistContainer"><div className="trackArtist">{element.name}</div>,</div>);
+								return (
+									<div key={i} className="trackArtistContainer">
+										<div className="trackArtist">{element.name}</div>,
+									</div>
+								);
 							else
-								return (<div key={i} className="trackArtistContainer"><div className="trackArtist">{element.name}</div></div>);
+								return (
+									<div key={i} className="trackArtistContainer">
+										<div className="trackArtist">{element.name}</div>
+									</div>
+								);
 						})}
 					</div>
 				</div>
 			</div>
 			<div className="trackAlbumContainer">
-				<div className="trackAlbum">
-					{track?.album?.name}
-				</div>
+				<div className="trackAlbum">{track?.album?.name}</div>
 			</div>
-			<div className="trackDuration">
-				{toReadableDuration(track?.duration_ms / 1000)}
-			</div>
+			<div className="trackDuration">{toReadableDuration(track?.duration_ms / 1000)}</div>
 			<div className="trackActionButton">
-				{typeof downloadManager != 'undefined' ?
-					<img src={Downloaded ? Success : Download} className="trackDownload" onClick={() => {
-						if (Downloaded) return;
-						window.api.downloadTrack(track);
-						downloadManager.once('Finished', track.id, () => {
-							setDownloaded(true);
-							window.api.readTrack(track.id).then(Track => {
-								if (!(Track instanceof Error)) {
-									Audio.load(Track.Buffer, track);
-								}
+				{typeof downloadManager != 'undefined' ? (
+					<img
+						src={Downloaded ? Success : Download}
+						className="trackDownload"
+						onClick={() => {
+							if (Downloaded) return;
+							window.api.downloadTrack(track);
+							downloadManager.once('Finished', track.id, () => {
+								setDownloaded(true);
+								window.api.readTrack(track.id).then((Track) => {
+									if (!(Track instanceof Error)) {
+										Audio.player.load(Track.Buffer, track);
+									}
+								});
 							});
-						});
-						downloadManager.once('Errored', track.id, () => {
-							console.log('Errored');
-						});
-					}} />
-					:
+							downloadManager.once('Errored', track.id, () => {
+								console.log('Errored');
+							});
+						}}
+					/>
+				) : (
 					<></>
-				}
+				)}
 				<div className="trackLike">♡</div>
 				<div className="trackOption">•••</div>
 			</div>
-		</div >
-	)
+		</div>
+	);
 }
 
 export default Track;
