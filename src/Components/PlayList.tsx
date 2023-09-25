@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import PlayerManager from '../Utils/PlayerManager';
 import Track from './Track';
 
-function PlayList({ Player }: { Player: PlayerManager }) {
+function PlayList({ Player, setContextMenu }: { Player: PlayerManager; setContextMenu: Function }) {
 	const [Content, setContent] = useState(new Array<Track>());
 
 	useEffect(() => {
@@ -30,6 +30,7 @@ function PlayList({ Player }: { Player: PlayerManager }) {
 						<Track
 							Audio={Player}
 							track={value}
+							setContextMenu={setContextMenu}
 							downloadManager={undefined}
 							downloadedTracks={undefined}
 							key={i}

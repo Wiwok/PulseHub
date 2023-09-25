@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Track from './Track';
 import PlayerManager from '../Utils/PlayerManager';
 
-function Library({ Audio }: { Audio: PlayerManager }) {
+function Library({ Audio, setContextMenu }: { Audio: PlayerManager; setContextMenu: Function }) {
 	const [Content, setContent] = useState(<></>);
 
 	useEffect(() => {
@@ -23,6 +23,7 @@ function Library({ Audio }: { Audio: PlayerManager }) {
 									Audio={Audio}
 									track={v}
 									key={i}
+									setContextMenu={setContextMenu}
 									onClick={() => {
 										Audio.loadTackPlayList(value);
 										Audio.play(i);

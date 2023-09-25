@@ -5,6 +5,8 @@ type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
 type PlayerStatus = 'Idle' | 'Loaded' | 'Playing' | 'Paused';
 type PlayerEvents = 'Playing' | 'Paused' | 'Ended' | 'Loaded';
 type PlayerManagerEvent = 'Ended' | 'Next';
+
+type ContextMenuOptions = { callback: Function; value: string };
 type DownloadHandler = { event: DownloadStatus; callback: Function };
 
 type Track = {

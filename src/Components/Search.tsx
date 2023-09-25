@@ -4,7 +4,7 @@ import Track from './Track';
 
 import SearchImg from '../Assets/Search.png';
 
-function Search({ Audio, downloadManager }) {
+function Search({ Audio, downloadManager, setContextMenu }) {
 	const [Content, setContent] = useState(<></>);
 	const [downloadedTracks, setDownloadedTracks] = useState(new Map<string, Track>());
 
@@ -37,6 +37,7 @@ function Search({ Audio, downloadManager }) {
 									downloadManager={downloadManager}
 									Audio={Audio}
 									track={track}
+									setContextMenu={setContextMenu}
 									key={i}
 									downloadedTracks={downloadedTracks}
 								/>

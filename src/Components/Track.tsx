@@ -7,22 +7,44 @@ import Success from '../Assets/Success.png';
 import { toReadableDuration } from '../Utils/Cleaner';
 import DownloadManager from '../Utils/DownloadManager';
 import PlayerManager from '../Utils/PlayerManager';
+import ContextMenu from './ContextMenu';
 
 function Track({
 	track,
 	Audio,
 	downloadManager,
 	downloadedTracks,
+	setContextMenu,
 	onClick
 }: {
 	track: Track;
 	Audio: PlayerManager;
 	downloadManager: DownloadManager | undefined;
 	downloadedTracks: Map<string, Track> | undefined;
+	setContextMenu: Function;
 	onClick?: Function;
 }) {
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
+
+	const contextMenu = new ContextMenu(setContextMenu, [
+		{ callback: () => console.log('Hello !'), value: 'Play' },
+		{ callback: Download, value: 'Download' }
+	]);
+
+	function Download() {
+		if (typeof downloadManager != 'undefined') {
+			if (Downloaded) return;
+			window.api.downloadTrack(track);
+			downloadManager.once('Finished', track.id, () => {
+				setDownloaded(true);
+				Audio.load(track);
+			});
+			downloadManager.once('Errored', track.id, () => {
+				console.log('Errored');
+			});
+		}
+	}
 
 	return (
 		<div
@@ -32,6 +54,7 @@ function Track({
 			onDoubleClick={() => {
 				if (onClick) onClick();
 			}}
+			onContextMenu={contextMenu.click.bind(contextMenu)}
 		>
 			<div className="trackInfo">
 				<img className="trackImage" src={track?.album?.images[1].url}></img>
@@ -70,21 +93,7 @@ function Track({
 				{(() => {
 					if (typeof downloadManager != 'undefined') {
 						return (
-							<img
-								src={Downloaded ? Success : Download}
-								className="trackDownload"
-								onClick={() => {
-									if (Downloaded) return;
-									window.api.downloadTrack(track);
-									downloadManager.once('Finished', track.id, () => {
-										setDownloaded(true);
-										Audio.load(track);
-									});
-									downloadManager.once('Errored', track.id, () => {
-										console.log('Errored');
-									});
-								}}
-							/>
+							<img src={Downloaded ? Success : Download} className="trackDownload" onClick={Download} />
 						);
 					} else {
 						return <></>;

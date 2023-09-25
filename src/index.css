@@ -306,3 +306,33 @@ body {
 	font-size: 4vh;
 	margin: auto 0;
 }
+
+/* ----------------------------Context Menu---------------------------- */
+
+.ContextMenuBody {
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.ContextMenuBox {
+	width: fit-content;
+	height: fit-content;
+	background-color: gray;
+	padding: 1vw 2vh;
+	border-radius: 1vw;
+	color: white;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	gap: 1vh;
+}
+
+.ContextMenuElement {
+	cursor: pointer;
+}
+
+.ContextMenuElement:hover {
+	text-decoration: underline;
+}
