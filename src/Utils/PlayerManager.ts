@@ -1,4 +1,5 @@
 import Player from '../Player';
+import PlayListObj from './PlayListObj';
 
 class PlayerManager {
 	playList: Array<string> | null;
@@ -35,6 +36,13 @@ class PlayerManager {
 	loadPlayList(idList: Array<string>) {
 		this.playList = [];
 		this.playList = idList;
+	}
+
+	loadPlayListObj(playlist: PlayListObj) {
+		this.playList = [];
+		playlist.tracks.forEach(element => {
+			(this.playList as String[]).push(element);
+		});
 	}
 
 	loadTackPlayList(trackList: Map<string, Track>) {
