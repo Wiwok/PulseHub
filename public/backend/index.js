@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron');
 const fs = require('fs');
 
-const { spottylib } = require('./spottylib');
+const { spottylib, getYoutubeID } = require('./spottylib');
 
 const PATH = './datas/';
 fs.mkdirSync(PATH, { recursive: true });
@@ -88,11 +88,15 @@ async function initIpc(mainWindow) {
 		}
 	});
 
-	ipcMain.handle('remove-track', TrackID => {
+	ipcMain.handle('remove-track', (e, TrackID) => {
 		return new Promise(res => {
 			sl.removeTrack(TrackID);
 			res();
 		});
+	});
+
+	ipcMain.handle('get-youtube-id', (e, Track) => {
+		return getYoutubeID(Track);
 	});
 
 	if (!(await sl.auth())) {

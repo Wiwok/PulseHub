@@ -29,10 +29,21 @@ function Track({
 
 	const contextMenu = new ContextMenu(setContextMenu, [
 		{ callback: () => console.log('Hello !'), value: 'Play' },
-		{ callback: Download, value: 'Download' }
+		{ callback: download, value: 'Download' },
+		{
+			callback: () => {
+				Audio.player.load(track.id, track);
+				console.log(Audio.player.YTPlayerRef.current.contentWindow);
+			},
+			value: 'Test !'
+		}
 	]);
 
-	function Download() {
+	Audio.player.YTPlayerRef.current.contentWindow.onprogress = () => {
+		console.log('Here !');
+	};
+
+	function download() {
 		if (typeof downloadManager != 'undefined') {
 			if (Downloaded) return;
 			window.api.downloadTrack(track);
@@ -93,7 +104,7 @@ function Track({
 				{(() => {
 					if (typeof downloadManager != 'undefined') {
 						return (
-							<img src={Downloaded ? Success : Download} className="trackDownload" onClick={Download} />
+							<img src={Downloaded ? Success : Download} className="trackDownload" onClick={download} />
 						);
 					} else {
 						return <></>;

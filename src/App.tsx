@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import Search from './Components/Search';
 import SideBar from './Components/SideBar';
@@ -8,12 +8,15 @@ import PlayList from './Components/PlayList';
 import DownloadManager from './Utils/DownloadManager';
 import PlayerManager from './Utils/PlayerManager';
 
-const Audio = new PlayerManager();
 const downloadManager = new DownloadManager();
+const Audio = new PlayerManager();
 
 function App() {
 	const [Page, setPage] = useState('');
 	const [ContextMenu, setContextMenu] = useState(<></>);
+	const YTPlayer = useRef(null);
+
+	Audio.player.YTPlayerRef = YTPlayer;
 
 	return (
 		<div className="App" onContextMenu={ev => ev.preventDefault()}>
@@ -36,6 +39,7 @@ function App() {
 				}
 			})()}
 			{ContextMenu}
+			<iframe style={{ height: 0, width: 0, border: 'none' }} ref={YTPlayer}></iframe>
 		</div>
 	);
 }

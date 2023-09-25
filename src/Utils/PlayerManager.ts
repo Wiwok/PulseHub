@@ -1,4 +1,4 @@
-import Player from '../Player';
+import Player from './Player';
 import PlayListObj from './PlayListObj';
 
 class PlayerManager {
@@ -71,7 +71,7 @@ class PlayerManager {
 
 	previewTrack() {
 		if (this.playList != null && this.actualPlaying != null) {
-			if (this.player.AudioElement.currentTime < 5) {
+			if (this.player.getProgress() < 5) {
 				if (this.actualPlaying != 0) {
 					this.actualPlaying--;
 					this.play().then(success => {

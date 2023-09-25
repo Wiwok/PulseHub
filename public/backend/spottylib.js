@@ -390,4 +390,4 @@ class spottylib {
 	}
 }
 
-module.exports = { spottylib };
+module.exports = { spottylib, getYoutubeID };

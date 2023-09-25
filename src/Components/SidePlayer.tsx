@@ -17,13 +17,13 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	}
 
 	function onClickUp() {
-		Audio.player.AudioElement.currentTime = progressBarRef?.current?.value;
+		Audio.player.setProgress(progressBarRef?.current?.value);
 		progressBarClicked.current = false;
 	}
 
 	function UpdateProgressBar() {
 		if (!progressBarClicked.current && Audio.player.status == 'Playing')
-			setRangeValue(parseInt(Audio.player.AudioElement.currentTime.toFixed()));
+			setRangeValue(parseInt(Audio.player.getProgress().toFixed()));
 	}
 
 	useEffect(() => {
@@ -34,7 +34,7 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 		<input
 			type="range"
 			min="0"
-			max={Audio.player.AudioElement.duration.toFixed(0)}
+			max={Audio.player.getDuration().toFixed(0)}
 			ref={progressBarRef}
 			value={rangeValue}
 			onMouseDown={onClickDown}
@@ -44,15 +44,15 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	);
 }
 
-function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
+function SidePlayer({ Audio }: { Audio: PlayerManager }) {
 	const [Playing, setPlaying] = useState(Play);
 	const [Track, setTrack] = useState<Track | null>(null);
 	const [rangeValue, setRangeValue] = useState(NaN);
 
-	PlayerManager.player.on('Paused', () => setPlaying(Play));
-	PlayerManager.player.on('Playing', () => setPlaying(Pause));
-	PlayerManager.player.on('Loaded', () => setTrack(PlayerManager.player.track));
-	PlayerManager.player.on('Ended', () => {
+	Audio.player.on('Paused', () => setPlaying(Play));
+	Audio.player.on('Playing', () => setPlaying(Pause));
+	Audio.player.on('Loaded', () => setTrack(Audio.player.track));
+	Audio.player.on('Ended', () => {
 		setTrack(null);
 		setRangeValue(0);
 	});
@@ -66,9 +66,9 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 					<ProgressBar
 						setRangeValue={setRangeValue}
 						rangeValue={isNaN(rangeValue) ? 0 : rangeValue}
-						Audio={PlayerManager}
+						Audio={Audio}
 					/>
-					{toReadableDuration(parseInt(PlayerManager.player.AudioElement.duration.toFixed(0)))}
+					{toReadableDuration(parseInt(Audio.player.getDuration().toFixed(0)))}
 				</div>
 				<div className="sidePlayerInfo">
 					<div className="sidePlayerInfoLeft">
@@ -82,19 +82,19 @@ function SidePlayer({ Audio: PlayerManager }: { Audio: PlayerManager }) {
 						src={Back}
 						alt="Back"
 						className="sidePlayerControlBack"
-						onClick={PlayerManager.previewTrack.bind(PlayerManager)}
+						onClick={Audio.previewTrack.bind(Audio)}
 					/>
 					<img
 						src={Playing}
 						alt="Play/Pause"
 						className="sidePlayerControllerPlay"
-						onClick={PlayerManager.player.togglePlay.bind(PlayerManager.player)}
+						onClick={Audio.player.togglePlay.bind(Audio.player)}
 					/>
 					<img
 						src={Back}
 						alt="Skip"
 						className="sidePlayerControlSkip"
-						onClick={() => PlayerManager.nextTrack.bind(PlayerManager)(false)}
+						onClick={() => Audio.nextTrack.bind(Audio)(false)}
 					/>
 				</div>
 			</div>
