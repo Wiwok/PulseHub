@@ -59,6 +59,7 @@
 		"node-id3": "^0.2.6",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-youtube": "^10.1.0",
 		"ytdl-core": "git+ssh://git@github.com:khlevon/node-ytdl-core.git#v4.11.4-patch.2",
 		"ytmusic-api": "^4.3.0"
 	},

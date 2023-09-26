@@ -73,11 +73,11 @@ class Player {
 			} else {
 				this.online = true;
 				window.api.getYoutubeID(track).then(YTTrackID => {
-					this.YTPlayerRef.current.src =
-						'http://www.youtube-nocookie.com/embed/' + YTTrackID + '?autoplay=1&amp;enablejsapi=1';
-					this.setStatus('Loaded');
-					this.setStatus('Playing');
-					resolve();
+					this.YTPlayerRef.current.internalPlayer.loadVideoById(YTTrackID).then(() => {
+						this.setStatus('Loaded');
+						this.play();
+						resolve();
+					});
 				});
 			}
 		});
@@ -87,10 +87,7 @@ class Player {
 		return new Promise<Boolean>(resolve => {
 			if (this.status == 'Loaded' || this.status == 'Paused') {
 				if (this.online) {
-					this.YTPlayerRef.current.contentWindow.postMessage(
-						'{"event":"command","func":"playVideo","args":""}',
-						'*'
-					);
+					this.YTPlayerRef.current.internalPlayer.playVideo();
 					this.setStatus('Playing');
 					resolve(true);
 				} else {
@@ -105,26 +102,41 @@ class Player {
 		});
 	}
 
-	getProgress() {
-		return this.AudioElement.currentTime;
+	getProgress(): Promise<number> {
+		return new Promise(resolve => {
+			if (this.online) {
+				this.YTPlayerRef.current.internalPlayer.getCurrentTime().then(value => resolve(parseFloat(value)));
+			} else {
+				resolve(this.AudioElement.currentTime);
+			}
+		});
 	}
 
 	setProgress(value: number) {
-		this.AudioElement.currentTime = value;
+		if (this.online) {
+			this.YTPlayerRef.current.internalPlayer.seekTo(value);
+		} else {
+			this.AudioElement.currentTime = value;
+		}
 	}
 
-	getDuration() {
-		return this.AudioElement.duration;
+	getDuration(): Promise<number> {
+		return new Promise(resolve => {
+			if (this.online) {
+				this.YTPlayerRef.current.internalPlayer.getDuration().then(value => {
+					resolve(parseFloat(value));
+				});
+			} else {
+				resolve(this.AudioElement.duration);
+			}
+		});
 	}
 
 	pause() {
 		if (this.status != 'Playing') return false;
 		this.setStatus('Paused');
 		if (this.online) {
-			this.YTPlayerRef.current.contentWindow.postMessage(
-				'{"event":"command","func":"pauseVideo","args":""}',
-				'*'
-			);
+			this.YTPlayerRef.current.internalPlayer.pauseVideo();
 		} else {
 			this.AudioElement.pause();
 		}

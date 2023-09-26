@@ -28,20 +28,9 @@ function Track({
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
 	const contextMenu = new ContextMenu(setContextMenu, [
-		{ callback: () => console.log('Hello !'), value: 'Play' },
-		{ callback: download, value: 'Download' },
-		{
-			callback: () => {
-				Audio.player.load(track.id, track);
-				console.log(Audio.player.YTPlayerRef.current.contentWindow);
-			},
-			value: 'Test !'
-		}
+		{ callback: play, value: 'Play' },
+		{ callback: download, value: 'Download' }
 	]);
-
-	Audio.player.YTPlayerRef.current.contentWindow.onprogress = () => {
-		console.log('Here !');
-	};
 
 	function download() {
 		if (typeof downloadManager != 'undefined') {
@@ -54,6 +43,14 @@ function Track({
 			downloadManager.once('Errored', track.id, () => {
 				console.log('Errored');
 			});
+		}
+	}
+
+	function play() {
+		if (Downloaded) {
+			Audio.load(track);
+		} else if (typeof downloadManager != 'undefined') {
+			Audio.player.load(track.id, track);
 		}
 	}
 

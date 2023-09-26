@@ -29,6 +29,8 @@ class PlayerManager {
 				this.player.load(Track.Buffer, track);
 				this.playList = [track.id];
 				this.actualPlaying = 0;
+			} else {
+				this.player.load(track.id, track);
 			}
 		});
 	}
@@ -71,18 +73,20 @@ class PlayerManager {
 
 	previewTrack() {
 		if (this.playList != null && this.actualPlaying != null) {
-			if (this.player.getProgress() < 5) {
-				if (this.actualPlaying != 0) {
-					this.actualPlaying--;
+			this.player.getProgress().then(progress => {
+				if (progress < 5) {
+					if (this.actualPlaying != null && this.actualPlaying != 0) {
+						this.actualPlaying--;
+						this.play().then(success => {
+							if (!success) this.nextTrack();
+						});
+					}
+				} else {
 					this.play().then(success => {
 						if (!success) this.nextTrack();
 					});
 				}
-			} else {
-				this.play().then(success => {
-					if (!success) this.nextTrack();
-				});
-			}
+			});
 		}
 	}
 

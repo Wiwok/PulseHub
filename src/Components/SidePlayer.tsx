@@ -8,8 +8,20 @@ import Play from '../Assets/Play.png';
 import { toReadableArtists, toReadableDuration } from '../Utils/Cleaner';
 import PlayerManager from '../Utils/PlayerManager';
 
-function ProgressBar({ rangeValue, setRangeValue, Audio }) {
-	const progressBarRef: any = useRef();
+function ProgressBar({
+	rangeValue,
+	setRangeValue,
+	Audio,
+	duration,
+	requestDuration
+}: {
+	rangeValue: number;
+	setRangeValue: Function;
+	Audio: PlayerManager;
+	duration: number;
+	requestDuration: Function;
+}) {
+	const progressBarRef: any = useRef(null);
 	const progressBarClicked = useRef(false);
 
 	function onClickDown() {
@@ -22,19 +34,21 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 	}
 
 	function UpdateProgressBar() {
+		if (isNaN(duration)) requestDuration();
 		if (!progressBarClicked.current && Audio.player.status == 'Playing')
-			setRangeValue(parseInt(Audio.player.getProgress().toFixed()));
+			Audio.player.getProgress().then(value => setRangeValue(parseInt(value.toFixed())));
 	}
 
 	useEffect(() => {
-		setInterval(UpdateProgressBar, 1000);
-	}, [setRangeValue]);
+		const interval = setInterval(UpdateProgressBar, 1000);
+		return () => clearInterval(interval);
+	}, [UpdateProgressBar]);
 
 	return (
 		<input
 			type="range"
 			min="0"
-			max={Audio.player.getDuration().toFixed(0)}
+			max={isNaN(duration) ? 0 : duration}
 			ref={progressBarRef}
 			value={rangeValue}
 			onMouseDown={onClickDown}
@@ -45,13 +59,26 @@ function ProgressBar({ rangeValue, setRangeValue, Audio }) {
 }
 
 function SidePlayer({ Audio }: { Audio: PlayerManager }) {
-	const [Playing, setPlaying] = useState(Play);
+	const [Playing, setPlaying] = useState(false);
 	const [Track, setTrack] = useState<Track | null>(null);
-	const [rangeValue, setRangeValue] = useState(NaN);
+	const [rangeValue, setRangeValue] = useState(0);
+	const [duration, setDuration] = useState(NaN);
 
-	Audio.player.on('Paused', () => setPlaying(Play));
-	Audio.player.on('Playing', () => setPlaying(Pause));
-	Audio.player.on('Loaded', () => setTrack(Audio.player.track));
+	function requestDuration() {
+		Audio.player.getDuration().then(value => {
+			setDuration(parseFloat(value.toFixed(0)));
+		});
+	}
+
+	Audio.player.on('Paused', () => setPlaying(false));
+	Audio.player.on('Playing', () => setPlaying(true));
+	Audio.player.on('Loaded', () => {
+		Audio.player.getDuration().then(value => {
+			setDuration(parseFloat(value.toFixed(0)));
+			console.log('Hello !');
+		});
+		setTrack(Audio.player.track);
+	});
 	Audio.player.on('Ended', () => {
 		setTrack(null);
 		setRangeValue(0);
@@ -65,10 +92,12 @@ function SidePlayer({ Audio }: { Audio: PlayerManager }) {
 					{toReadableDuration(rangeValue)}
 					<ProgressBar
 						setRangeValue={setRangeValue}
-						rangeValue={isNaN(rangeValue) ? 0 : rangeValue}
+						rangeValue={rangeValue}
 						Audio={Audio}
+						duration={duration}
+						requestDuration={requestDuration}
 					/>
-					{toReadableDuration(parseInt(Audio.player.getDuration().toFixed(0)))}
+					{toReadableDuration(duration)}
 				</div>
 				<div className="sidePlayerInfo">
 					<div className="sidePlayerInfoLeft">
@@ -85,7 +114,7 @@ function SidePlayer({ Audio }: { Audio: PlayerManager }) {
 						onClick={Audio.previewTrack.bind(Audio)}
 					/>
 					<img
-						src={Playing}
+						src={Playing ? Pause : Play}
 						alt="Play/Pause"
 						className="sidePlayerControllerPlay"
 						onClick={Audio.player.togglePlay.bind(Audio.player)}

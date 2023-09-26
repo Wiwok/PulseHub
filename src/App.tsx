@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import YouTube from 'react-youtube';
 
 import Search from './Components/Search';
 import SideBar from './Components/SideBar';
@@ -39,7 +40,7 @@ function App() {
 				}
 			})()}
 			{ContextMenu}
-			<iframe style={{ height: 0, width: 0, border: 'none' }} ref={YTPlayer}></iframe>
+			<YouTube opts={{ height: '0', width: '0', playerVars: { autoplay: 1 } }} ref={YTPlayer} />
 		</div>
 	);
 }

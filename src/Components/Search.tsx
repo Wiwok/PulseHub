@@ -3,8 +3,18 @@ import { useEffect, useState } from 'react';
 import Track from './Track';
 
 import SearchImg from '../Assets/Search.png';
+import PlayerManager from '../Utils/PlayerManager';
+import DownloadManager from '../Utils/DownloadManager';
 
-function Search({ Audio, downloadManager, setContextMenu }) {
+function Search({
+	Audio,
+	downloadManager,
+	setContextMenu
+}: {
+	Audio: PlayerManager;
+	downloadManager: DownloadManager;
+	setContextMenu: Function;
+}) {
 	const [Content, setContent] = useState(<></>);
 	const [downloadedTracks, setDownloadedTracks] = useState(new Map<string, Track>());
 
@@ -39,6 +49,9 @@ function Search({ Audio, downloadManager, setContextMenu }) {
 									track={track}
 									setContextMenu={setContextMenu}
 									key={i}
+									onClick={() => {
+										Audio.load(track);
+									}}
 									downloadedTracks={downloadedTracks}
 								/>
 							);
