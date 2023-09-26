@@ -312,8 +312,8 @@ class spottylib {
 			console.log('Auth issue. Trying re-authenticate...');
 			const v = await this.auth();
 			if (v) {
-				console.log('Authentication successed');
-				return await axios(URL, options).then(callback);
+				console.log('Authentication succeed');
+				return await axios(URL, options).then(callback).catch();
 			} else {
 				console.error('Authentication failed');
 			}
