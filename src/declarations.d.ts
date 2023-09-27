@@ -134,7 +134,7 @@ interface Window {
 
 		readTrack: (TrackID: string) => Promise<{ Buffer: buffer; Track: track } | Error>;
 		getLocalTracks: () => Promise<Map<Track.id, Track>>;
-		removeTrack: (TrackID: string) => void;
+		removeTrack: (TrackID: string) => Promise<boolean>;
 
 		getYoutubeID: (Track) => Promise<string>;
 	};

@@ -50,7 +50,7 @@ class Player {
 		return new Promise<void>(resolve => {
 			if (this.status == 'Playing') {
 				this.pause();
-				this.DeconstructSong();
+				this.DeconstructSong.bind(this)();
 			}
 
 			this.track = track;
@@ -62,7 +62,7 @@ class Player {
 					this.play();
 					resolve();
 				});
-				this.AudioElement.addEventListener('ended', this.DeconstructSong);
+				this.AudioElement.addEventListener('ended', this.DeconstructSong.bind(this));
 				const blob = new Blob([source], { type: 'audio/mp3' });
 				const url = window.URL.createObjectURL(blob);
 				this.AudioElement.src = url;
@@ -163,6 +163,18 @@ class Player {
 		} else if (Event == 'Playing') {
 			this.playCallback.push(callback);
 		}
+	}
+
+	initialize() {
+		this.YTPlayerRef.current.onPlayerStateChange = ev => {
+			if (ev.data == 0) {
+				this.TriggerEvent('Ended');
+			} else if (ev.data == 1) {
+				this.TriggerEvent('Playing');
+			} else if (ev.data == 1) {
+				this.TriggerEvent('Paused');
+			}
+		};
 	}
 
 	private TriggerEvent(Event: PlayerEvents) {

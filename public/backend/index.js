@@ -10,7 +10,7 @@ fs.mkdirSync(PATH + 'images/x1/', { recursive: true });
 fs.mkdirSync(PATH + 'images/x2/', { recursive: true });
 fs.mkdirSync(PATH + 'images/x3/', { recursive: true });
 if (!fs.existsSync(PATH + 'tracks.json')) {
-	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(new Map()));
+	fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(Array.from(new Map())));
 }
 
 async function initIpc(mainWindow) {
@@ -90,8 +90,7 @@ async function initIpc(mainWindow) {
 
 	ipcMain.handle('remove-track', (e, TrackID) => {
 		return new Promise(res => {
-			sl.removeTrack(TrackID);
-			res();
+			res(sl.removeTrack(TrackID));
 		});
 	});
 

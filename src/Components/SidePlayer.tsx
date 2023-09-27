@@ -34,7 +34,7 @@ function ProgressBar({
 	}
 
 	function UpdateProgressBar() {
-		if (isNaN(duration)) requestDuration();
+		if (!duration) requestDuration();
 		if (!progressBarClicked.current && Audio.player.status == 'Playing')
 			Audio.player.getProgress().then(value => setRangeValue(parseInt(value.toFixed())));
 	}
@@ -48,7 +48,7 @@ function ProgressBar({
 		<input
 			type="range"
 			min="0"
-			max={isNaN(duration) ? 0 : duration}
+			max={!duration ? 0 : duration}
 			ref={progressBarRef}
 			value={rangeValue}
 			onMouseDown={onClickDown}
@@ -75,7 +75,6 @@ function SidePlayer({ Audio }: { Audio: PlayerManager }) {
 	Audio.player.on('Loaded', () => {
 		Audio.player.getDuration().then(value => {
 			setDuration(parseFloat(value.toFixed(0)));
-			console.log('Hello !');
 		});
 		setTrack(Audio.player.track);
 	});

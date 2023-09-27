@@ -25,9 +25,9 @@ function addTrackDatas(track) {
 
 function removeTrackDatas(TrackID) {
 	try {
-		const datas = JSON.parse(fs.readFileSync(PATH + 'tracks.json'));
-		datas = datas.filter(value => value.id != TrackID);
-		fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(datas));
+		const datas = new Map(JSON.parse(fs.readFileSync(PATH + 'tracks.json')));
+		datas.delete(TrackID);
+		fs.writeFileSync(PATH + 'tracks.json', JSON.stringify(Array.from(datas.entries())));
 		return true;
 	} catch (err) {
 		console.error('Exception: ' + err);
@@ -386,7 +386,7 @@ class spottylib {
 		if (fs.existsSync(PATH + 'tracks/' + TrackID + '.mp3')) {
 			fs.unlinkSync(PATH + 'tracks/' + TrackID + '.mp3');
 		}
-		removeTrackDatas(TrackID);
+		return removeTrackDatas(TrackID);
 	}
 }
 

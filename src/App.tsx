@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import YouTube from 'react-youtube';
 
 import Search from './Components/Search';
@@ -18,6 +18,10 @@ function App() {
 	const YTPlayer = useRef(null);
 
 	Audio.player.YTPlayerRef = YTPlayer;
+
+	useEffect(() => {
+		Audio.player.initialize();
+	}, [YTPlayer]);
 
 	return (
 		<div className="App" onContextMenu={ev => ev.preventDefault()}>

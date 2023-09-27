@@ -27,10 +27,25 @@ function Track({
 	const [playVisible, setplayVisible] = useState('trackPlayButton');
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
-	const contextMenu = new ContextMenu(setContextMenu, [
-		{ callback: play, value: 'Play' },
-		{ callback: download, value: 'Download' }
-	]);
+	const contextMenu = new ContextMenu(
+		setContextMenu,
+		(() => {
+			const options = [{ callback: play, value: 'Play' }];
+			if (typeof downloadManager == 'undefined' || Downloaded) {
+				options.push({ callback: deleteTrack, value: 'Delete' });
+			} else {
+				options.push({ callback: download, value: 'Download' });
+			}
+			return options;
+		})()
+	);
+
+	function deleteTrack() {
+		return new Promise<boolean>(resolve => {
+			if (!Downloaded) resolve(false);
+			window.api.removeTrack(track.id).then(resolve);
+		});
+	}
 
 	function download() {
 		if (typeof downloadManager != 'undefined') {
@@ -38,10 +53,9 @@ function Track({
 			window.api.downloadTrack(track);
 			downloadManager.once('Finished', track.id, () => {
 				setDownloaded(true);
-				Audio.load(track);
 			});
 			downloadManager.once('Errored', track.id, () => {
-				console.log('Errored');
+				console.log('An error occurred when downloading ' + track.name);
 			});
 		}
 	}
