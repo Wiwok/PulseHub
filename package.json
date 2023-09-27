@@ -33,11 +33,11 @@
 		}
 	},
 	"scripts": {
-		"start": "react-scripts start",
+		"start": "concurrently -kn react,electron \"npm run react\" \"npm run electron\"",
+		"react": "cross-env BROWSER=none react-scripts start",
+		"electron": "wait-on http://127.0.0.1:3000 && electron .",
 		"rbuild": "react-scripts build",
 		"ebuild": "electron-builder -w -c.extraMetadata.main=build/electron.js",
-		"dev": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm:electron\"",
-		"electron": "wait-on http://127.0.0.1:3000 && electron .",
 		"build": "npm run rbuild && npm run ebuild"
 	},
 	"browserslist": {
