@@ -22,5 +22,6 @@ contextBridge.exposeInMainWorld('api', {
 	getLocalTracks: () => ipcRenderer.invoke('get-local-tracks'),
 	removeTrack: TrackID => ipcRenderer.invoke('remove-track', TrackID),
 
-	getYoutubeID: Track => ipcRenderer.invoke('get-youtube-id', Track)
+	getYoutubeID: Track => ipcRenderer.invoke('get-youtube-id', Track),
+	savePlaylist: playlist => ipcRenderer.invoke('save-playlist', playlist)
 });

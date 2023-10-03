@@ -113,6 +113,12 @@ type Artist = {
 	popularity: number;
 };
 
+type Playlist = {
+	name: string;
+	id: string;
+	tracks: string[];
+};
+
 interface Window {
 	api: {
 		downloadTrack: (track: Track) => void;
@@ -137,5 +143,7 @@ interface Window {
 		removeTrack: (TrackID: string) => Promise<boolean>;
 
 		getYoutubeID: (Track) => Promise<string>;
+
+		savePlayList: (playlist: Playlist) => Promise<boolean>;
 	};
 }
