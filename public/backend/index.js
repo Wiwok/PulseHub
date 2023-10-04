@@ -103,6 +103,10 @@ async function initIpc(mainWindow) {
 		return savePlayList(Playlist);
 	});
 
+	ipcMain.handle('get-playlist', (e, Playlist) => {
+		return getPlayList(Playlist);
+	});
+
 	if (!(await sl.auth())) {
 		console.error('Spotify authentification failed');
 	}

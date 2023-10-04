@@ -11,4 +11,13 @@ function savePlayList(playlist) {
 	}
 }
 
-export { savePlayList };
+function getPlayList(id) {
+	const PATH = './datas/';
+	try {
+		return JSON.parse(fs.readFileSync(PATH + 'playlist/' + playlist.id + '.json'));
+	} catch (error) {
+		return undefined;
+	}
+}
+
+module.exports = { savePlayList, getPlayList };

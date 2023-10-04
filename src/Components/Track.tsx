@@ -8,7 +8,8 @@ import { toReadableDuration } from '../Utils/Cleaner';
 import DownloadManager from '../Utils/DownloadManager';
 import PlayerManager from '../Utils/PlayerManager';
 import ContextMenu from './ContextMenu';
-
+import PlayListObj from '../Utils/PlayListObj';
+const playlist = new PlayListObj('123', 'test');
 function Track({
 	track,
 	Audio,
@@ -30,7 +31,11 @@ function Track({
 	const contextMenu = new ContextMenu(
 		setContextMenu,
 		(() => {
-			const options = [{ callback: play, value: 'Play' }];
+			const options = [
+				{ callback: play, value: 'Play' },
+				{ callback: () => window.api.savePlaylist(playlist), value: 'save playlist' },
+				{ callback: () => playlist.addTrack('1bdm32mVmoGcek5bVKxQKd'), value: 'add' }
+			];
 			if (typeof downloadManager == 'undefined' || Downloaded) {
 				options.push({ callback: deleteTrack, value: 'Delete' });
 			} else {
