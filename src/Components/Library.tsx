@@ -25,7 +25,7 @@ function Library({ Audio, setContextMenu }: { Audio: PlayerManager; setContextMe
 									key={i}
 									setContextMenu={setContextMenu}
 									onClick={() => {
-										Audio.loadTackPlayList(value);
+										Audio.loadTrackPlayList(value);
 										Audio.play(i);
 									}}
 									downloadedTracks={undefined}
@@ -40,7 +40,7 @@ function Library({ Audio, setContextMenu }: { Audio: PlayerManager; setContextMe
 		});
 	}, [setContent]);
 
-	return <div className="SearchPage">{Content}</div>;
+	return <div className="DefaultPage">{Content}</div>;
 }
 
 export default Library;

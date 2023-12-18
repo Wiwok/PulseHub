@@ -67,9 +67,9 @@ async function get_album_playlist(playlistId) {
 		/(?:window\["ytInitialData"\])|(?:ytInitialData) =.*?({.*?});/s.exec(resp.data)?.[1] || '{}'
 	);
 	let listData =
-		ytInitialData.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer
-			.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer;
-	return listData.contents;
+		ytInitialData?.contents?.twoColumnBrowseResultsRenderer?.tabs[0]?.tabRenderer?.content?.sectionListRenderer
+			?.contents[0]?.itemSectionRenderer?.contents[0]?.playlistVideoListRenderer;
+	return listData?.contents?.map(el => el?.playlistVideoRenderer?.videoId);
 }
 
 async function dl_album(album, tags, callback) {
@@ -390,4 +390,4 @@ class spottylib {
 	}
 }
 
-module.exports = { spottylib, getYoutubeID };
+module.exports = { spottylib, getYoutubeID, get_album_playlist };

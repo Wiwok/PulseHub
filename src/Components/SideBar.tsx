@@ -24,6 +24,10 @@ function SideBar({ Audio, setPage }: { Audio: PlayerManager; setPage: Function }
 					<img src={Search} alt="PlayList" className="sideMenuIcon" />
 					<div className="sideMenuText">PlayList</div>
 				</div>
+				<div className="sideMenuButton" onClick={() => setPage('Advanced')}>
+					<img src={Search} alt="Advanced" className="sideMenuIcon" />
+					<div className="sideMenuText">Advanced</div>
+				</div>
 			</div>
 			<SidePlayer Audio={Audio} />
 		</div>

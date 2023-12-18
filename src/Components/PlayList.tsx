@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import PlayerManager from '../Utils/PlayerManager';
 import Track from './Track';
 
-function PlayList({ Player, setContextMenu }: { Player: PlayerManager; setContextMenu: Function }) {
+function PlayList({ Audio, setContextMenu }: { Audio: PlayerManager; setContextMenu: Function }) {
 	const [Content, setContent] = useState(new Array<Track>());
 
 	useEffect(() => {
 		window.api.getLocalTracks().then(tracks => {
-			if (Player.playList != null) {
+			if (Audio.playList != null) {
 				const array = new Array<Track>();
-				Player.playList.forEach(value => {
+				Audio.playList.forEach(value => {
 					const track = tracks.get(value);
 					if (track) array.push(track);
 				});
@@ -28,7 +28,7 @@ function PlayList({ Player, setContextMenu }: { Player: PlayerManager; setContex
 				return Content.map((value, i) => {
 					return (
 						<Track
-							Audio={Player}
+							Audio={Audio}
 							track={value}
 							setContextMenu={setContextMenu}
 							downloadManager={undefined}

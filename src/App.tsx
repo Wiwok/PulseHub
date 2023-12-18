@@ -8,6 +8,7 @@ import Library from './Components/Library';
 import PlayList from './Components/PlayList';
 import DownloadManager from './Utils/DownloadManager';
 import PlayerManager from './Utils/PlayerManager';
+import Advanced from './Components/Advanced';
 
 const downloadManager = new DownloadManager();
 const Audio = new PlayerManager();
@@ -38,7 +39,9 @@ function App() {
 					case 'Library':
 						return <Library setContextMenu={setContextMenu} Audio={Audio} />;
 					case 'PlayList':
-						return <PlayList setContextMenu={setContextMenu} Player={Audio} />;
+						return <PlayList setContextMenu={setContextMenu} Audio={Audio} />;
+					case 'Advanced':
+						return <Advanced Audio={Audio} />;
 					default:
 						return <>Oops... Page not found...</>;
 				}

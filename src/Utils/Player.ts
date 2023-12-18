@@ -46,14 +46,15 @@ class Player {
 		this.setStatus('Idle');
 	}
 
-	load(source: string | Buffer, track: Track) {
+	load(source: string | Buffer, track?: Track | undefined) {
 		return new Promise<void>(resolve => {
 			if (this.status == 'Playing') {
 				this.pause();
 				this.DeconstructSong.bind(this)();
 			}
 
-			this.track = track;
+			if (track) this.track = track;
+			else this.track = null;
 
 			if (typeof source != 'string') {
 				this.online = false;
@@ -72,13 +73,21 @@ class Player {
 				this.AudioElement.load();
 			} else {
 				this.online = true;
-				window.api.getYoutubeID(track).then(YTTrackID => {
-					this.YTPlayerRef.current.internalPlayer.loadVideoById(YTTrackID).then(() => {
+				if (source.length != 11) {
+					window.api.getYoutubeID(track).then(YTTrackID => {
+						this.YTPlayerRef.current.internalPlayer.loadVideoById(YTTrackID).then(() => {
+							this.setStatus('Loaded');
+							this.play();
+							resolve();
+						});
+					});
+					this.YTPlayerRef.current.internalPlayer.loadVideoById(source).then(() => {
 						this.setStatus('Loaded');
 						this.play();
 						resolve();
 					});
-				});
+				} else {
+				}
 			}
 		});
 	}

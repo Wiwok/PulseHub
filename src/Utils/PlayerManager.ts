@@ -23,31 +23,50 @@ class PlayerManager {
 		this.handlers.delete(Event);
 	}
 
-	load(track: Track) {
-		window.api.readTrack(track.id).then(Track => {
-			if (!(Track instanceof Error)) {
-				this.player.load(Track.Buffer, track);
-				this.playList = [track.id];
-				this.actualPlaying = 0;
+	load(track: Track | string) {
+		if (typeof track != 'string') {
+			window.api.readTrack(track.id).then(tr => {
+				if (!(tr instanceof Error)) {
+					this.player.load(tr.Buffer, track);
+					this.playList = [track.id];
+					this.actualPlaying = 0;
+				} else {
+					this.player.load(track.id, track);
+				}
+			});
+		} else {
+			if (track.length != 11) {
+				window.api.getTrack(track).then(onlineTrack => {
+					if (onlineTrack) {
+						window.api.readTrack(onlineTrack.id).then(Track => {
+							if (!(Track instanceof Error)) {
+								this.player.load(Track.Buffer, onlineTrack);
+								this.playList = [onlineTrack.id];
+								this.actualPlaying = 0;
+							} else {
+								this.player.load(onlineTrack.id, onlineTrack);
+							}
+						});
+					}
+				});
 			} else {
-				this.player.load(track.id, track);
+				this.player.load(track);
 			}
-		});
+		}
 	}
 
 	loadPlayList(idList: Array<string>) {
-		this.playList = [];
 		this.playList = idList;
 	}
 
 	loadPlayListObj(playlist: PlayListObj) {
 		this.playList = [];
 		playlist.tracks.forEach(element => {
-			(this.playList as String[]).push(element);
+			this.playList?.push(element);
 		});
 	}
 
-	loadTackPlayList(trackList: Map<string, Track>) {
+	loadTrackPlayList(trackList: Map<string, Track>) {
 		this.playList = [];
 		trackList.forEach((element, index) => {
 			this.playList?.push(index);
@@ -64,7 +83,11 @@ class PlayerManager {
 							resolve(true);
 						});
 					} else {
-						resolve(false);
+						if (this.playList)
+							this.player.load(this.playList[index]).then(() => {
+								this.actualPlaying = index;
+								resolve(true);
+							});
 					}
 				});
 			}

@@ -23,5 +23,6 @@ contextBridge.exposeInMainWorld('api', {
 	removeTrack: TrackID => ipcRenderer.invoke('remove-track', TrackID),
 
 	getYoutubeID: Track => ipcRenderer.invoke('get-youtube-id', Track),
-	savePlaylist: playlist => ipcRenderer.invoke('save-playlist', playlist)
+	savePlaylist: playlist => ipcRenderer.invoke('save-playlist', playlist),
+	getYoutubeIDsFromPlaylistID: playlist => ipcRenderer.invoke('get-youtube-ids-from-playlistid', playlist)
 });

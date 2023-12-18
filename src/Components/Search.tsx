@@ -75,7 +75,7 @@ function Search({
 	}
 
 	return (
-		<div className="SearchPage">
+		<div className="DefaultPage">
 			<div className="searchBox">
 				<input
 					className="searchInput"

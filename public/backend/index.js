@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron');
 const fs = require('fs');
 
-const { spottylib, getYoutubeID } = require('./spottylib');
+const { spottylib, getYoutubeID, get_album_playlist } = require('./spottylib');
 const { savePlayList } = require('./playList');
 
 const PATH = './datas/';
@@ -97,6 +97,10 @@ async function initIpc(mainWindow) {
 
 	ipcMain.handle('get-youtube-id', (e, Track) => {
 		return getYoutubeID(Track);
+	});
+
+	ipcMain.handle('get-youtube-ids-from-playlistid', (e, PlaylistID) => {
+		return get_album_playlist(PlaylistID);
 	});
 
 	ipcMain.handle('save-playlist', (e, Playlist) => {

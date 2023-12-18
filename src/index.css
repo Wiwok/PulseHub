@@ -6,8 +6,6 @@ body {
 
 .App {
 	display: flex;
-	justify-content: center;
-	flex-direction: row;
 	width: 100vw;
 }
 
@@ -142,16 +140,20 @@ body {
 }
 
 .SideBarPlaceHolder {
-	width: 18vw;
+	width: 20vw;
 	height: 100vh;
 }
 
 .sideMenu {
 	background-color: #D9D9D9;
-	width: 18vw;
+	width: 14vw;
 	height: 96vh;
 	margin: 2vh 2vw;
 	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 1vh;
+	padding: 2vh 1vw;
 }
 
 .sideMenuIcon {
@@ -164,7 +166,6 @@ body {
 	gap: 1em;
 	background-color: gray;
 	color: white;
-	margin: 0.5vw;
 	padding: 0.3vw;
 	border-radius: calc(20px - 0.5vw);
 	transition-duration: 100ms;
@@ -251,7 +252,7 @@ body {
 
 /* ----------------------------Search page---------------------------- */
 
-.SearchPage {
+.DefaultPage {
 	margin-top: 2vh;
 	margin-bottom: 2vh;
 	padding: 1vh 1vw;

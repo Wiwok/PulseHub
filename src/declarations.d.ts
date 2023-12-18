@@ -146,5 +146,7 @@ interface Window {
 
 		savePlaylist: (playlist: Playlist) => Promise<boolean>;
 		getPlayList: (id: string) => Promise<Playlist | undefined>;
+
+		getYoutubeIDsFromPlaylistID: (PlaylistID) => Promise<string[] | undefined>;
 	};
 }
