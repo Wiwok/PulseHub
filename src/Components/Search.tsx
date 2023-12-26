@@ -1,97 +1,13 @@
-import { useEffect, useState } from 'react';
-
-import Track from './Track';
-
-import SearchImg from '../Assets/Search.png';
-import PlayerManager from '../Utils/PlayerManager';
-import DownloadManager from '../Utils/DownloadManager';
-
-function Search({
-	Audio,
-	downloadManager,
-	setContextMenu
-}: {
-	Audio: PlayerManager;
-	downloadManager: DownloadManager;
-	setContextMenu: Function;
-}) {
-	const [Content, setContent] = useState(<></>);
-	const [downloadedTracks, setDownloadedTracks] = useState(new Map<string, Track>());
-
-	useEffect(() => {
-		window.api.getLocalTracks().then(setDownloadedTracks);
-		document.getElementById('input')?.focus();
-	}, [setDownloadedTracks]);
-
-	function Action() {
-		const value = (document.getElementById('input') as HTMLInputElement).value;
-		if (value == '') {
-			setContent(<></>);
-			return;
-		}
-		const input = encodeURIComponent(value);
-		window.api.searchTrack(input).then(v => {
-			if (typeof v == 'undefined') {
-				setContent(<div className="SearchingMessage">An error occurred</div>);
-			} else if (v && v.length) {
-				setContent(
-					<div className="SearchResults">
-						<div className="SearchResultsDescription">
-							<div>Title</div>
-							<div className="SearchResultsDescriptionAlbum">Album</div>
-							<div>Duration</div>
-						</div>
-						{v.map((track, i) => {
-							return (
-								<Track
-									downloadManager={downloadManager}
-									Audio={Audio}
-									track={track}
-									setContextMenu={setContextMenu}
-									key={i}
-									onClick={() => {
-										Audio.load(track);
-									}}
-									downloadedTracks={downloadedTracks}
-								/>
-							);
-						})}
-					</div>
-				);
-			} else {
-				setContent(<div className="SearchingMessage">No result</div>);
-			}
-		});
+import SearchIcon from '../Assets/Search.png';
+import SearchPage from './SearchPage';
+function Search({ setPage }: { setPage: Function }) {
+	function handleChange(e) {
+		setPage(SearchPage(e.target.value));
 	}
-
-	function input() {
-		const oldValue = (document.getElementById('input') as HTMLInputElement).value;
-		setTimeout(() => {
-			const value = (document.getElementById('input') as HTMLInputElement).value;
-			if (oldValue == value) {
-				Action();
-			}
-		}, 500);
-	}
-
 	return (
-		<div className="DefaultPage">
-			<div className="searchBox">
-				<input
-					className="searchInput"
-					onInput={input}
-					onKeyUp={ev => {
-						if (ev.key == 'Enter') {
-							setContent(<div className="SearchingMessage">Searching...</div>);
-							Action();
-						}
-					}}
-					id="input"
-					placeholder="Search"
-				></input>
-				<img src={SearchImg} onClick={Action} alt="Search" className="searchButton"></img>
-			</div>
-			{Content}
+		<div className="serach">
+			<input type="text" className="searchInput" placeholder="Search" onInput={handleChange} />
+			<img src={SearchIcon} alt="search" className="searchIcon" />
 		</div>
 	);
 }

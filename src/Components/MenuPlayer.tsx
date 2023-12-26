@@ -58,7 +58,7 @@ function ProgressBar({
 	);
 }
 
-function SidePlayer({ Audio }: { Audio: PlayerManager }) {
+function MenuPlayer({ Audio }: { Audio: PlayerManager }) {
 	const [Playing, setPlaying] = useState(false);
 	const [Track, setTrack] = useState<Track | null>(null);
 	const [rangeValue, setRangeValue] = useState(0);
@@ -132,4 +132,4 @@ function SidePlayer({ Audio }: { Audio: PlayerManager }) {
 	}
 }
 
-export default SidePlayer;
+export default MenuPlayer;

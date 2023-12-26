@@ -5,335 +5,72 @@ body {
 }
 
 .App {
-	display: flex;
 	width: 100vw;
-}
-
-/* ----------------------------Track--------------------------------- */
-.track {
-	max-width: 98%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	padding: 1vh 1vw;
-	border-top: 2px solid lightgrey;
-	box-shadow: 0 0 0 gray;
-	transition-duration: 100ms;
-}
-
-.track:hover {
-	box-shadow: 0 0 20px rgba(128, 128, 128, 0.479);
-}
-
-.trackImage {
-	border-radius: 4px;
-	height: 5vw;
-	width: 5vw;
-}
-
-.trackPlayButton {
-	border-radius: 4px;
-	height: 5vw;
-	width: 5vw;
-	margin-left: -5vw;
-	opacity: 0;
-	transition-duration: 100ms;
-}
-
-.trackPlayButtonVisible {
-	border-radius: 4px;
-	height: 5vw;
-	width: 5vw;
-	margin-left: -5vw;
-	opacity: 0.8;
-	transition-duration: 100ms;
-}
-
-.trackInfo {
-	display: flex;
-	align-items: center;
-	width: 35vw;
-}
-
-.trackNameArtist {
-	padding-left: 1vw;
-}
-
-.trackName {
-	font-size: 1.2em;
-	font-weight: bold;
-}
-
-.trackArtists {
-	display: flex;
-	gap: 5px
-}
-
-.trackArtistContainer {
-	font-size: 0.8em;
-	display: flex;
-	color: gray;
-	cursor: pointer;
-}
-
-.trackArtist {
-	color: grey;
-}
-
-.trackArtist:hover {
-	text-decoration: underline;
-}
-
-.trackAlbumContainer {
-	width: 30vw;
-}
-
-.trackAlbum {
-	font-size: 1.2em;
-	cursor: pointer;
-	width: fit-content;
-}
-
-.trackAlbum:hover {
-	text-decoration: underline;
-}
-
-.trackDuration {
-	width: 5vw;
-	display: flex;
-	justify-content: center;
-}
-
-.trackActionButton {
-	display: flex;
-	justify-content: space-between;
-	gap: 0.5vw;
-	width: 6vw;
-	text-align: center;
-}
-
-.trackLike {
-	width: 2vw;
-	cursor: pointer;
-}
-
-.trackOption {
-	width: 2vw;
-	cursor: pointer;
-}
-
-.trackDownload {
-	width: 1em;
-	cursor: pointer;
-}
-
-/* ----------------------------Side bar--------------------------------- */
-.sideBar {
-	position: fixed;
-	left: 0px;
-	width: 20vw;
 	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.SideBarPlaceHolder {
-	width: 20vw;
-	height: 100vh;
-}
-
-.sideMenu {
-	background-color: #D9D9D9;
-	width: 14vw;
-	height: 96vh;
-	margin: 2vh 2vw;
-	border-radius: 20px;
-	display: flex;
-	flex-direction: column;
-	gap: 1vh;
-	padding: 2vh 1vw;
-}
-
-.sideMenuIcon {
-	height: 3vh;
-}
-
-.sideMenuButton {
-	display: flex;
-	align-items: center;
-	gap: 1em;
-	background-color: gray;
-	color: white;
-	padding: 0.3vw;
-	border-radius: calc(20px - 0.5vw);
-	transition-duration: 100ms;
-	cursor: pointer;
-}
-
-.sideMenuButton:hover {
 	background-color: #ffaa36;
-	color: black;
 }
 
-.sideMenuText {
-	font-size: 1.4em;
-}
-
-/* -------------------------SideMenuplayer------------------------------ */
-
-.sidePlayer {
-	background-color: #D9D9D9;
-	width: 16vw;
-	height: 52vh;
-	margin: 0vh 2vw 2vh;
-	border-radius: 20px;
-	padding: 1vw;
-}
-
-.sidePlayerImage {
-	border-radius: calc(20px - 1vw);
-	width: 100%;
-}
-
-.sidePlayerProgress {
-	width: 100%;
+.topBar {
+	height: 50px;
 	display: flex;
-	gap: 0.3vw;
-	justify-content: center;
-}
-
-.sidePlayerProgressBar {
-	width: 100%;
-}
-
-.sidePlayerInfo {
-	display: flex;
-	width: 100%;
+	align-items: center;
 	justify-content: space-between;
-	align-items: center;
+	padding: 0 2%;
 }
 
-.sidePlayerInfoTitle {
+.appName {
+	font-size: 2em;
+}
+
+.page {
+	display: flex;
+	justify-content: space-between;
+	height: calc(100vh - 50px);
+}
+
+.appPage {
+	height: 100%;
+	width: 100%;
+	background-color: #d9d9d9;
+	border-top-left-radius: 50px;
+}
+
+/*---------------------------------menu------------------------------------*/
+.menu {
+	width: 30vh;
+}
+
+.menuCategory {
 	font-size: 1.8em;
+	padding-left: 5%;
+	width: 30vh;
 }
 
-.sidePlayerInfoArtist {
-	font-size: 1.2em;
-}
-
-.sidePlayerInfoRight {
+.menuCategoryElement {
 	font-size: 1.3em;
+	padding: 5%;
+	padding-left: 20%;
 }
 
-.sidePlayerControl {
-	display: flex;
-	gap: 0.3vw;
-	align-items: center;
-	justify-content: center;
+.menuCategoryElement:hover {
+	background-color: #ffffff3f;
 }
 
-.sidePlayerControlBack {
-	height: 5vh;
-	rotate: 180deg;
-	cursor: pointer;
-}
-
-.sidePlayerControlSkip {
-	height: 5vh;
-	cursor: pointer;
-}
-
-.sidePlayerControllerPlay {
-	height: 6vh;
-	cursor: pointer;
-}
-
-/* ----------------------------Search page---------------------------- */
-
-.DefaultPage {
-	margin-top: 2vh;
-	margin-bottom: 2vh;
-	padding: 1vh 1vw;
-	border-radius: 20px;
-	background-color: #D9D9D9;
-	width: 76vw;
-	display: flex;
-	flex-direction: column;
-}
-
-.SearchResults {
-	display: flex;
-	flex-direction: column;
-}
+/*------------------------------search------------------------------------*/
 
 .searchInput {
-	width: 100%;
-	border-radius: 10px;
-	border: none;
-	height: 2em;
-	font-size: 1.3em;
-	padding-left: 0.5em;
-}
-
-.searchInput:focus {
+	background-color: #ffaa36;
+	border: 0;
+	border-bottom: grey solid 1px;
+	height: 30px;
 	outline: none;
 }
 
-.searchButton {
-	height: 2em;
+.searchIcon {
+	height: 30px;
 }
 
-.searchBox {
+.serach {
 	display: flex;
-	gap: 0.5vw;
 	align-items: center;
-}
-
-.SearchResultsDescription {
-	display: flex;
-	justify-content: space-between;
-	margin-left: 1vw;
-	margin-right: 8vw;
-}
-
-.SearchResultsDescriptionAlbum {
-	margin-left: 8vh;
-}
-
-.SearchingMessage {
-	text-align: center;
-	font-size: 4vh;
-	margin: auto 0;
-}
-
-/* ----------------------------Context Menu---------------------------- */
-
-.ContextMenuBody {
-	width: 100vw;
-	height: 100vh;
-	position: absolute;
-	background-color: rgba(0, 0, 0, 0);
-}
-
-.ContextMenuBox {
-	width: fit-content;
-	height: fit-content;
-	background-color: gray;
-	padding: 1vw 2vh;
-	border-radius: 1vw;
-	color: white;
-	position: absolute;
-	display: flex;
-	flex-direction: column;
-	gap: 1vh;
-}
-
-.ContextMenuElement {
-	cursor: pointer;
-}
-
-.ContextMenuElement:hover {
-	text-decoration: underline;
 }
