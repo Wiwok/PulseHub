@@ -14,7 +14,7 @@ class PlaylistManager {
 		return this.playLists.find(el => el.name == name);
 	}
 
-	listName(): Array<string>{
-		return this.playLists.map((el)=>el.name);
+	listName(): Array<string> {
+		return this.playLists.map(el => el.name);
 	}
 }

@@ -9,7 +9,9 @@ import DownloadManager from '../Utils/DownloadManager';
 import PlayerManager from '../Utils/PlayerManager';
 import ContextMenu from './ContextMenu';
 import PlayListObj from '../Utils/PlayListObj';
+
 const playlist = new PlayListObj('123', 'test');
+
 function Track({
 	track,
 	Audio,

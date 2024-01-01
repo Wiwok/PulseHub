@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import Track from './Track';
 
-import SearchImg from '../Assets/Search.png';
-import PlayerManager from '../Utils/PlayerManager';
 import DownloadManager from '../Utils/DownloadManager';
+import PlayerManager from '../Utils/PlayerManager';
+
 function SearchPage({
 	search,
 	Audio,
@@ -67,4 +67,5 @@ function SearchPage({
 
 	return { Content };
 }
+
 export default SearchPage;
