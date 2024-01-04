@@ -130,12 +130,12 @@ async function getYoutubeID(track) {
 	// We only keep songs that match the duration to within 10 seconds
 	content = content.filter(song => Math.abs(song.duration - duration) < 10);
 	// We only keep songs with matching artist
-	content = content.filter(song => {
-		if (song.artists.length) {
-			return song.artists[0].name == track.artists[0].name;
-		}
-		return true;
-	});
+	//content = content.filter(song => {
+	//	if (song.artists.length) {
+	//		return song.artists[0].name == track.artists[0].name;
+	//	}
+	//	return true;
+	//});
 
 	const explicitList = content.filter(song => song.isExplicit);
 	const nonExplicitList = content.filter(song => !song.isExplicit);
