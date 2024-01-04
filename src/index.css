@@ -37,6 +37,7 @@ body {
 	background-color: #181a1c;
 	color: white;
 }
+
 .youtube {
 	height: 0px;
 }
@@ -86,6 +87,7 @@ body {
 	display: flex;
 	align-items: center;
 }
+
 /*---------------------------search Page--------------------------------*/
 
 .searchPage {
@@ -112,17 +114,18 @@ body {
 	height: 100%;
 }
 
-/*------------------------------Tracks------------------------------------*/
+/*------------------------------Track------------------------------------*/
 
 .track {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	margin-top: 2vh;
 	background-color: #1d1e20;
 	border-radius: 15px;
 	padding: 5px;
 	box-shadow: 0px 5px 50px #ffffff36;
-	/* width: calc(100% - 10px); */
+	/*width: calc(100% - 10px);*/
 	width: 800px;
 }
 
@@ -130,14 +133,15 @@ body {
 	display: block;
 	margin: auto 0;
 	border: 1px solid lime;
+	width: 70%;
 }
 
 .trackName {
-	display: block;
 	font-size: 2em;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	width: 100%;
 }
 
 .trackArtists {
@@ -154,7 +158,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	width: 179.5px;
+	width: 25%;
 }
 
 .trackPlayImage,
@@ -169,8 +173,8 @@ body {
 
 .trackLeft {
 	display: flex;
-	width: 100%;
 	border: 1px solid red;
+	width: 75%;
 }
 
 .trackDuration {
