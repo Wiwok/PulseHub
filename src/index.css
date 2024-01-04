@@ -1,13 +1,13 @@
 body {
 	margin: 0;
 	font-family: sans-serif;
-	overflow-x: hidden;
+	overflow: hidden;
 }
 
 .App {
 	width: 100vw;
 	height: 100vh;
-	background-color: #ffaa36;
+	background-color: #d68f2c;
 }
 
 .topBar {
@@ -26,31 +26,42 @@ body {
 	display: flex;
 	justify-content: space-between;
 	height: calc(100vh - 50px);
+	width: 100vw;
 }
 
 .appPage {
 	height: 100%;
-	width: 100%;
+	width: 80vw;
 	background-color: #d9d9d9;
 	border-top-left-radius: 50px;
+	background-color: #181a1c;
+	color: white;
+}
+.youtube {
+	height: 0px;
 }
 
 /*---------------------------------menu------------------------------------*/
 
 .menu {
-	width: 30vh;
+	margin-top: 2vh;
+	width: 20vw;
+	min-width: min-content;
 }
 
 .menuCategory {
 	font-size: 1.8em;
 	padding-left: 5%;
-	width: 30vh;
+	white-space: nowrap;
+	min-width: min-content;
 }
 
 .menuCategoryElement {
 	font-size: 1.3em;
 	padding: 5%;
 	padding-left: 20%;
+	white-space: nowrap;
+	min-width: min-content;
 }
 
 .menuCategoryElement:hover {
@@ -60,7 +71,7 @@ body {
 /*------------------------------search------------------------------------*/
 
 .searchInput {
-	background-color: #ffaa36;
+	background-color: #d68f2c;
 	border: 0;
 	border-bottom: grey solid 1px;
 	height: 30px;
@@ -74,4 +85,94 @@ body {
 .search {
 	display: flex;
 	align-items: center;
+}
+/*---------------------------search Page--------------------------------*/
+
+.searchPage {
+	margin: 50px;
+	height: calc(100% - 50px);
+	width: calc(80vw - 50px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: auto;
+}
+
+.SearchingMessage {
+	font-size: 3em;
+}
+
+.SearchResultsDescription {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.SearchResults {
+	width: calc(80vw - 50px);
+	height: 100%;
+}
+
+/*------------------------------Tracks------------------------------------*/
+
+.track {
+	display: flex;
+	align-items: center;
+	margin-top: 2vh;
+	background-color: #1d1e20;
+	border-radius: 15px;
+	padding: 5px;
+	box-shadow: 0px 5px 50px #ffffff36;
+	/* width: calc(100% - 10px); */
+	width: 800px;
+}
+
+.trackDescription {
+	display: block;
+	margin: auto 0;
+	border: 1px solid lime;
+}
+
+.trackName {
+	display: block;
+	font-size: 2em;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.trackArtists {
+	display: flex;
+	font-size: 1.3em;
+	color: gray;
+}
+
+.trackDate {
+	color: gray;
+}
+
+.trackRight {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	width: 179.5px;
+}
+
+.trackPlayImage,
+.trackPlaylistAdd {
+	height: 3em;
+}
+
+.trackImage {
+	height: 10em;
+	border-radius: 10px;
+}
+
+.trackLeft {
+	display: flex;
+	width: 100%;
+	border: 1px solid red;
+}
+
+.trackDuration {
+	margin-right: 50px;
 }

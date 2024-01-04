@@ -1,16 +1,12 @@
 import { useState } from 'react';
 
-import Download from '../Assets/Download.png';
-import Play from '../Assets/Play.png';
-import Success from '../Assets/Success.png';
+import Play from '../Assets/Play.svg';
+import PlaylistAdd from '../Assets/playlistAdd.svg';
 
 import { toReadableDuration } from '../Utils/Cleaner';
 import DownloadManager from '../Utils/DownloadManager';
 import PlayerManager from '../Utils/PlayerManager';
 import ContextMenu from './ContextMenu';
-import PlayListObj from '../Utils/PlayListObj';
-
-const playlist = new PlayListObj('123', 'test');
 
 function Track({
 	track,
@@ -27,17 +23,12 @@ function Track({
 	setContextMenu: Function;
 	onClick?: Function;
 }) {
-	const [playVisible, setplayVisible] = useState('trackPlayButton');
 	const [Downloaded, setDownloaded] = useState(downloadedTracks ? downloadedTracks.has(track.id) : false);
 
 	const contextMenu = new ContextMenu(
 		setContextMenu,
 		(() => {
-			const options = [
-				{ callback: play, value: 'Play' },
-				{ callback: () => window.api.savePlaylist(playlist), value: 'save playlist' },
-				{ callback: () => playlist.addTrack('1bdm32mVmoGcek5bVKxQKd'), value: 'add' }
-			];
+			const options = [{ callback: play, value: 'Play' }];
 			if (typeof downloadManager == 'undefined' || Downloaded) {
 				options.push({ callback: deleteTrack, value: 'Delete' });
 			} else {
@@ -78,58 +69,38 @@ function Track({
 	return (
 		<div
 			className="track"
-			onMouseEnter={() => setplayVisible('trackPlayButtonVisible')}
-			onMouseLeave={() => setplayVisible('trackPlayButton')}
 			onDoubleClick={() => {
 				if (onClick) onClick();
 			}}
 			onContextMenu={contextMenu.click.bind(contextMenu)}
 		>
-			<div className="trackInfo">
+			<div className="trackLeft">
 				<img className="trackImage" src={track?.album?.images[1].url}></img>
-				<img
-					className={playVisible}
-					onClick={() => {
-						if (onClick) onClick();
-					}}
-					src={Play}
-				></img>
-				<div className="trackNameArtist">
-					<div className="trackName">{track?.name}</div>
+				<div className="trackDescription">
+					<div className="trackName">{track.name}</div>
 					<div className="trackArtists">
 						{track?.artists?.map((element, i) => {
 							if (i != track.artists.length - 1)
 								return (
-									<div key={i} className="trackArtistContainer">
-										<div className="trackArtist">{element.name}</div>,
+									<div key={i} className="trackArtist">
+										{element.name},&nbsp;
 									</div>
 								);
 							else
 								return (
-									<div key={i} className="trackArtistContainer">
-										<div className="trackArtist">{element.name}</div>
+									<div key={i} className="trackArtist">
+										{element.name}
 									</div>
 								);
 						})}
 					</div>
+					<div className="trackDate">{track.album.release_date.split('-')[0]}</div>
 				</div>
 			</div>
-			<div className="trackAlbumContainer">
-				<div className="trackAlbum">{track?.album?.name}</div>
-			</div>
-			<div className="trackDuration">{toReadableDuration(track?.duration_ms / 1000)}</div>
-			<div className="trackActionButton">
-				{(() => {
-					if (typeof downloadManager != 'undefined') {
-						return (
-							<img src={Downloaded ? Success : Download} className="trackDownload" onClick={download} />
-						);
-					} else {
-						return <></>;
-					}
-				})()}
-				<div className="trackLike">♡</div>
-				<div className="trackOption">•••</div>
+			<div className="trackRight">
+				<div className="trackDuration">{toReadableDuration(track?.duration_ms / 1000)}</div>
+				<img src={Play} className="trackPlayImage"></img>
+				<img src={PlaylistAdd} className="trackPlaylistAdd"></img>
 			</div>
 		</div>
 	);

@@ -1,21 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import MenuPlayer from './Components/MenuPlayer';
 import Search from './Components/Search';
 import PlayerManager from './Utils/PlayerManager';
+import SearchPage from './Components/SearchPage';
+import DownloadManager from './Utils/DownloadManager';
+import YouTube from 'react-youtube';
 
-// const Audio = new PlayerManager();
-// const YTPlayer = useRef(null);
-
-// Audio.player.YTPlayerRef = YTPlayer;
-// useEffect(() => {
-// 	Audio.player.initialize();
-// }, [YTPlayer]);
+const downloadManager = new DownloadManager();
+const Audio = new PlayerManager();
 
 function App() {
-	const [page, setPage] = useState(<></>);
+	const [Page, setPage] = useState('');
+	const [ContextMenu, setContextMenu] = useState(<></>);
+	const YTPlayer = useRef(null);
 
-	const Audio = new PlayerManager();
+	Audio.player.YTPlayerRef = YTPlayer;
+
+	useEffect(() => {
+		Audio.player.initialize();
+	}, [YTPlayer]);
 
 	return (
 		<div className="App">
@@ -32,8 +36,31 @@ function App() {
 					<div className="menuCategory">Your playlists</div>
 					<MenuPlayer Audio={Audio} />
 				</div>
-				<div className="appPage">{page}</div>
+				<div className="appPage">
+					{(() => {
+						switch (Page) {
+							case '':
+								return <>Welcome !</>;
+							case 'Search':
+								return (
+									<SearchPage
+										setContextMenu={setContextMenu}
+										downloadManager={downloadManager}
+										Audio={Audio}
+									/>
+								);
+							default:
+								return <>Oops... Page not found...</>;
+						}
+					})()}
+				</div>
 			</div>
+			{ContextMenu}
+			<YouTube
+				className="youtube"
+				opts={{ height: '0', width: '0', playerVars: { autoplay: 1 } }}
+				ref={YTPlayer}
+			/>
 		</div>
 	);
 }

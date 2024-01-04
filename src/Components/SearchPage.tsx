@@ -1,47 +1,33 @@
 import { useEffect, useState } from 'react';
-
 import Track from './Track';
-
-import DownloadManager from '../Utils/DownloadManager';
 import PlayerManager from '../Utils/PlayerManager';
+import DownloadManager from '../Utils/DownloadManager';
 
 function SearchPage({
-	search,
 	Audio,
 	downloadManager,
 	setContextMenu
 }: {
-	search: string;
 	Audio: PlayerManager;
 	downloadManager: DownloadManager;
 	setContextMenu: Function;
 }) {
-	const [Content, setContent] = useState(<div className="SearchingMessage">Searching...</div>);
+	const [Content, setContent] = useState(<></>);
 	const [downloadedTracks, setDownloadedTracks] = useState(new Map<string, Track>());
 
-	useEffect(() => {
-		window.api.getLocalTracks().then(setDownloadedTracks);
-		document.getElementById('input')?.focus();
-	}, [setDownloadedTracks]);
-
 	function Action() {
-		const value = search;
+		const value = (document.getElementById('searchInput') as HTMLInputElement).value;
 		if (value == '') {
 			setContent(<></>);
 			return;
 		}
-		const input = encodeURIComponent(value);
-		window.api.searchTrack(input).then(v => {
+		const searchInput = encodeURIComponent(value);
+		window.api.searchTrack(searchInput).then(v => {
 			if (typeof v == 'undefined') {
 				setContent(<div className="SearchingMessage">An error occurred</div>);
 			} else if (v && v.length) {
 				setContent(
 					<div className="SearchResults">
-						<div className="SearchResultsDescription">
-							<div>Title</div>
-							<div className="SearchResultsDescriptionAlbum">Album</div>
-							<div>Duration</div>
-						</div>
 						{v.map((track, i) => {
 							return (
 								<Track
@@ -65,7 +51,22 @@ function SearchPage({
 		});
 	}
 
-	return { Content };
+	function searchInput() {
+		const oldValue = (document.getElementById('searchInput') as HTMLInputElement).value;
+		setTimeout(() => {
+			const value = (document.getElementById('searchInput') as HTMLInputElement).value;
+			if (oldValue == value) {
+				Action();
+			}
+		}, 500);
+	}
+
+	useEffect(() => {
+		document.getElementById('searchInput')?.addEventListener('input', searchInput);
+		window.api.getLocalTracks().then(setDownloadedTracks);
+	}, [setDownloadedTracks]);
+
+	return <div className="searchPage">{Content}</div>;
 }
 
 export default SearchPage;

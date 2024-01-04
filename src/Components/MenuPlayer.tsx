@@ -113,7 +113,7 @@ function MenuPlayer({ Audio }: { Audio: PlayerManager }) {
 						onClick={Audio.previewTrack.bind(Audio)}
 					/>
 					<img
-						src={Playing ? Pause : Play}
+						src={Playing ? Pause : 'src/Assets/Play.svg'}
 						alt="Play/Pause"
 						className="sidePlayerControllerPlay"
 						onClick={Audio.player.togglePlay.bind(Audio.player)}

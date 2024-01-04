@@ -1,4 +1,5 @@
 declare module '*.png';
+declare module '*.svg';
 
 type AlbumType = 'album' | 'single' | 'compilation';
 type DownloadStatus = 'Started' | 'Errored' | 'Finished' | 'Ended';
