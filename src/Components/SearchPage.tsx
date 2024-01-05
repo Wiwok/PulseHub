@@ -66,7 +66,7 @@ function SearchPage({
 		window.api.getLocalTracks().then(setDownloadedTracks);
 	}, [setDownloadedTracks]);
 
-	return <div className="searchPage">{Content}</div>;
+	return <div className="searchPage scrollbar-hidden">{Content}</div>;
 }
 
 export default SearchPage;

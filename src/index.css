@@ -4,6 +4,17 @@ body {
 	overflow: hidden;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hidden::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge add Firefox */
+.scrollbar-hidden {
+	-ms-overflow-style: none;
+	scrollbar-width: none; /* Firefox */
+}
+
 .App {
 	width: 100vw;
 	height: 100vh;
@@ -93,7 +104,7 @@ body {
 .searchPage {
 	margin: 50px;
 	height: calc(100% - 50px);
-	width: calc(80vw - 50px);
+	width: calc(80vw - 100px);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -125,14 +136,12 @@ body {
 	border-radius: 15px;
 	padding: 5px;
 	box-shadow: 0px 5px 50px #ffffff36;
-	/*width: calc(100% - 10px);*/
-	width: 800px;
+	width: calc(100% - 20px);
 }
 
 .trackDescription {
 	display: block;
 	margin: auto 0;
-	border: 1px solid lime;
 	width: 70%;
 }
 
@@ -173,7 +182,6 @@ body {
 
 .trackLeft {
 	display: flex;
-	border: 1px solid red;
 	width: 75%;
 }
 
