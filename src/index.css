@@ -231,7 +231,8 @@ body {
 }
 
 .sidePlayerInfoTitle {
-	font-size: 2em;
+	margin-top: 1vw;
+	font-size: 1.5em;
 	max-height: 2.4em;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -240,6 +241,7 @@ body {
 .sidePlayerInfo {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 }
 
 .sidePlayerControl {
