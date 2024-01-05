@@ -29,11 +29,13 @@ function App() {
 			</div>
 			<div className="page">
 				<div className="menu">
-					<div className="menuCategory">Your music</div>
-					<div className="menuCategoryElement">Songs</div>
-					<div className="menuCategoryElement">Album</div>
-					<div className="menuCategoryElement">Artist</div>
-					<div className="menuCategory">Your playlists</div>
+					<div>
+						<div className="menuCategory">Your musicdi</div>
+						<div className="menuCategoryElement">Songs</div>
+						<div className="menuCategoryElement">Album</div>
+						<div className="menuCategoryElement">Artist</div>
+						<div className="menuCategory">Your playlists</div>
+					</div>
 					<MenuPlayer Audio={Audio} />
 				</div>
 				<div className="appPage">

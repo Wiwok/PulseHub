@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Back from '../Assets/Back.png';
+import Back from '../Assets/Back.svg';
 import Disk from '../Assets/Disk.png';
 import Pause from '../Assets/Pause.png';
-import Play from '../Assets/Play.png';
+import Play from '../Assets/Play.svg';
 
 import { toReadableArtists, toReadableDuration } from '../Utils/Cleaner';
 import PlayerManager from '../Utils/PlayerManager';
@@ -46,6 +46,7 @@ function ProgressBar({
 
 	return (
 		<input
+			className="musicProgress"
 			type="range"
 			min="0"
 			max={!duration ? 0 : duration}
@@ -113,7 +114,7 @@ function MenuPlayer({ Audio }: { Audio: PlayerManager }) {
 						onClick={Audio.previewTrack.bind(Audio)}
 					/>
 					<img
-						src={Playing ? Pause : 'src/Assets/Play.svg'}
+						src={Playing ? Pause : Play}
 						alt="Play/Pause"
 						className="sidePlayerControllerPlay"
 						onClick={Audio.player.togglePlay.bind(Audio.player)}

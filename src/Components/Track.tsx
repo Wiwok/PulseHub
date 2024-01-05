@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import Play from '../Assets/Play.svg';
-import PlaylistAdd from '../Assets/playlistAdd.svg';
+import PlaylistAdd from '../Assets/PlaylistAdd.svg';
 
 import { toReadableDuration } from '../Utils/Cleaner';
 import DownloadManager from '../Utils/DownloadManager';
@@ -99,7 +99,13 @@ function Track({
 			</div>
 			<div className="trackRight">
 				<div className="trackDuration">{toReadableDuration(track?.duration_ms / 1000)}</div>
-				<img src={Play} className="trackPlayImage"></img>
+				<img
+					src={Play}
+					className="trackPlayImage"
+					onClick={() => {
+						Audio.load(track);
+					}}
+				></img>
 				<img src={PlaylistAdd} className="trackPlaylistAdd"></img>
 			</div>
 		</div>

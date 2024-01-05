@@ -23,6 +23,10 @@ class PlayerManager {
 		this.handlers.delete(Event);
 	}
 
+	/**
+	 * The `load` function is used to load a track into the player, either from a local source or from an online source.
+	 * @param {Track | string} track - The `track` parameter can be either a `Track` object or a string.
+	 */
 	load(track: Track | string) {
 		if (typeof track != 'string') {
 			window.api.readTrack(track.id).then(tr => {

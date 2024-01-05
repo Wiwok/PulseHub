@@ -59,6 +59,9 @@ body {
 	margin-top: 2vh;
 	width: 20vw;
 	min-width: min-content;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .menuCategory {
@@ -187,4 +190,58 @@ body {
 
 .trackDuration {
 	margin-right: 50px;
+}
+
+/*------------------------------side-Player------------------------------------*/
+
+.sidePlayer {
+	width: 16vw;
+	padding: 1vw;
+	padding-bottom: 0%;
+	border-top-right-radius: 50px;
+	background-color: #181a1c;
+	color: white;
+}
+
+.sidePlayerImage {
+	border-radius: 15px;
+	border-top-right-radius: calc(50px - 1vw - 2px);
+	border: 2px solid white;
+}
+
+.sidePlayerControlBack,
+.sidePlayerControllerPlay,
+.sidePlayerControlSkip {
+	width: 5vw;
+}
+
+.sidePlayerControlBack {
+	rotate: 180deg;
+}
+
+.sidePlayerProgress {
+	width: 100%;
+	display: flex;
+	gap: 0.3vw;
+	justify-content: center;
+}
+
+.musicProgress {
+	width: 50%;
+}
+
+.sidePlayerInfoTitle {
+	font-size: 2em;
+	max-height: 2.4em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.sidePlayerInfo {
+	display: flex;
+	align-items: center;
+}
+
+.sidePlayerControl {
+	margin-top: 1vw;
 }
