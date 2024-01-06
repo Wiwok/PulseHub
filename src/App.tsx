@@ -6,6 +6,7 @@ import PlayerManager from './Utils/PlayerManager';
 import SearchPage from './Components/SearchPage';
 import DownloadManager from './Utils/DownloadManager';
 import YouTube from 'react-youtube';
+import SongsList from './Components/SongsList';
 
 const downloadManager = new DownloadManager();
 const Audio = new PlayerManager();
@@ -31,7 +32,14 @@ function App() {
 				<div className="menu">
 					<div>
 						<div className="menuCategory">Your musicdi</div>
-						<div className="menuCategoryElement">Songs</div>
+						<div
+							className="menuCategoryElement"
+							onClick={() => {
+								setPage('Songs');
+							}}
+						>
+							Songs
+						</div>
 						<div className="menuCategoryElement">Album</div>
 						<div className="menuCategoryElement">Artist</div>
 						<div className="menuCategory">Your playlists</div>
@@ -51,6 +59,8 @@ function App() {
 										Audio={Audio}
 									/>
 								);
+							case 'Songs':
+								return <SongsList Audio={Audio} setContextMenu={setContextMenu} />;
 							default:
 								return <>Oops... Page not found...</>;
 						}

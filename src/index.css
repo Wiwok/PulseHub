@@ -104,7 +104,8 @@ body {
 
 /*---------------------------search Page--------------------------------*/
 
-.searchPage {
+.searchPage,
+.SongList {
 	margin: 50px;
 	height: calc(100% - 50px);
 	width: calc(80vw - 100px);
@@ -123,9 +124,21 @@ body {
 	justify-content: space-evenly;
 }
 
-.SearchResults {
+.SearchResults,
+.SongListResults {
 	width: calc(80vw - 50px);
 	height: 100%;
+}
+
+.searchTerm,
+.SongListColored {
+	color: #d68f2c;
+	display: inline;
+}
+
+.serchText,
+.SongListText {
+	font-size: 2em;
 }
 
 /*------------------------------Track------------------------------------*/

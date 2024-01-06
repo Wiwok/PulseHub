@@ -28,6 +28,9 @@ function SearchPage({
 			} else if (v && v.length) {
 				setContent(
 					<div className="SearchResults">
+						<div className="serchText">
+							You are search <div className="searchTerm">{value}</div>:
+						</div>
 						{v.map((track, i) => {
 							return (
 								<Track
