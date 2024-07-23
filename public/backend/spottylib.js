@@ -3,7 +3,7 @@ const client = require('https');
 const fluent_ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const node_id3 = require('node-id3');
-const ytdl_core = require('ytdl-core');
+const ytdl_core = require('@distube/ytdl-core');
 const ytmusic_api = require('ytmusic-api');
 
 const ytm = new ytmusic_api.default();
