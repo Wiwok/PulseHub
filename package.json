@@ -2,7 +2,7 @@
 	"name": "pulsehub-backend",
 	"version": "1.0.0",
 	"dependencies": {
-		"@distube/ytdl-core": "^4.16.0",
+		"@distube/ytdl-core": "^4.16.3",
 		"@hydralerne/youtube-api": "^1.0.3",
 		"cors": "^2.8.5",
 		"express": "^4.21.2",
@@ -12,7 +12,7 @@
 		"ytmusic-api": "^5.3.0"
 	},
 	"scripts": {
-		"start": "concurrently -kn express,react \"ts-node .\" \"npm run react\"",
+		"start": "concurrently -kn express,react \"nodemon index.ts\" \"npm run react\"",
 		"react": "react-scripts start",
 		"build": "react-scripts build"
 	},
@@ -25,6 +25,7 @@
 		"@types/react-dom": "^19.0.3",
 		"axios": "^1.7.9",
 		"concurrently": "^9.1.2",
+		"nodemon": "^3.1.9",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-router-dom": "^7.1.5",
