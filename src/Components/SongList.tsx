@@ -1,15 +1,14 @@
 import { SongDetailed } from 'ytmusic-api';
 
-function Song({ song }: { song: SongDetailed }) {
-	return <div className="Song">{song.name}</div>;
-}
+import { cleanTime } from '../utils';
 
-function SongList({ songs }: { songs: Array<SongDetailed> }) {
+function SongList({ song }: { song: SongDetailed }) {
 	return (
 		<div className="SongList">
-			{songs.map(song => (
-				<Song song={song} />
-			))}
+			<img src={song.thumbnails.at(-1)?.url} />
+			<div>{song.name}</div>
+			<div>{song.artist.name}</div>
+			<div>{song.duration ? cleanTime(song.duration) : '??:??'}</div>
 		</div>
 	);
 }

@@ -11,6 +11,27 @@
 body {
 	margin: 0;
 	font-family: 'Poppins';
+	background-color: rgb(42, 42, 49);
+	color: white;
+}
+
+h1 {
+	font-family: 'Poppins Black';
+}
+
+input {
+	border: none;
+	outline: none;
+
+	background-color: rgb(17, 16, 14);
+	color: white;
+	padding: 1vh 1vw;
+	font-size: 1.5em;
+
+	&:focus {
+		outline: none;
+		border: none;
+	}
 }
 
 .App {
@@ -24,9 +45,26 @@ body {
 .Navbar {
 	display: flex;
 	align-items: center;
-	width: 100%;
+	gap: 3vw;
+
+	width: 95%;
+	padding: 0 2.5%;
 	height: 8vh;
 	position: sticky;
 	top: 0;
 	left: 0;
+}
+
+.Search {
+	display: flex;
+	flex-direction: column;
+	gap: 1vh;
+	width: 80vw;
+}
+
+.SongList {
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr 1fr;
+	align-items: center;
+	gap: 2vw;
 }

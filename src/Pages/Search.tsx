@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { createRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { SongDetailed } from 'ytmusic-api';
 
 import { BASEURL } from '..';
@@ -7,12 +8,12 @@ import SongList from '../Components/SongList';
 
 function Search() {
 	const [Results, setResults] = useState<Array<SongDetailed>>([]);
-	const input = createRef<HTMLInputElement>();
+	const [searchParams] = useSearchParams();
 
 	function search(query: string) {
 		return new Promise<Array<SongDetailed> | undefined>(resolve => {
 			axios
-				.get(BASEURL + 'search?q=' + query)
+				.get(BASEURL + '/search?q=' + query)
 				.then(res => {
 					resolve(res.data);
 				})
@@ -22,20 +23,24 @@ function Search() {
 		});
 	}
 
-	function click() {
-		const query = input.current?.value as string;
+	useEffect(() => {
+		const query = searchParams.get('q');
+		if (!query || query === '') {
+			return setResults([]);
+		}
+
 		search(query).then(res => {
 			if (res) {
 				setResults(res);
 			}
 		});
-	}
+	}, [searchParams]);
 
 	return (
 		<div className="Search">
-			<input ref={input} />
-			<button onClick={click} />
-			<SongList songs={Results} />
+			{Results.map((song, i) => (
+				<SongList song={song} key={i} />
+			))}
 		</div>
 	);
 }
