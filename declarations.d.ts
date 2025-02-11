@@ -12,4 +12,6 @@ type SongData = {
 	albumID: string;
 };
 
-export { JobEndStatus, SongData };
+type JobStatus = 'Queued' | 'Requested' | 'Downloading' | 'Done' | 'Errored';
+
+export { JobEndStatus, JobStatus, SongData };

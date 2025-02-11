@@ -20,10 +20,18 @@ function Navbar() {
 		}
 	}
 
+	function homeClick() {
+		if (inputRef.current?.value) {
+			inputRef.current.value = '';
+		}
+
+		navigate('/');
+	}
+
 	return (
 		<div className="Navbar">
-			<h1>PulseHub</h1>
-			<input ref={inputRef} onKeyUp={change} defaultValue={defaultValue} />
+			<h1 onClick={homeClick}>PulseHub</h1>
+			<input ref={inputRef} onKeyUp={change} defaultValue={defaultValue} placeholder="Search" />
 		</div>
 	);
 }

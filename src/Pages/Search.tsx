@@ -7,7 +7,7 @@ import { BASEURL } from '..';
 import SongList from '../Components/SongList';
 
 function Search() {
-	const [Results, setResults] = useState<Array<SongDetailed>>([]);
+	const [Results, setResults] = useState<Array<SongDetailed> | null>([]);
 	const [searchParams] = useSearchParams();
 
 	function search(query: string) {
@@ -32,15 +32,15 @@ function Search() {
 		search(query).then(res => {
 			if (res) {
 				setResults(res);
+			} else {
+				setResults(null);
 			}
 		});
 	}, [searchParams]);
 
 	return (
 		<div className="Search">
-			{Results.map((song, i) => (
-				<SongList song={song} key={i} />
-			))}
+			{Results ? Results.map((song, i) => <SongList song={song} key={i} />) : 'An error occurred'}
 		</div>
 	);
 }

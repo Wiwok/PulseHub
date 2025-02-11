@@ -12,7 +12,7 @@ import JobList from '../Classes/JobList';
 import { JobEndStatus, SongData } from '../declarations';
 import checkFile from './utils';
 
-const VIDEO_DIR = path.join(__dirname, 'output');
+const VIDEO_DIR = path.join(__dirname, '../output');
 
 function download_file(trackId: string, filename: string) {
 	return new Promise(resolve => {
@@ -54,8 +54,12 @@ class YT_API {
 		this.jobs = new JobList();
 	}
 
-	search(query: string) {
-		return this.ytm.searchSongs(query);
+	async search(query: string) {
+		try {
+			return await this.ytm.searchSongs(query);
+		} catch {
+			return undefined;
+		}
 	}
 
 	async getImage(url: string) {

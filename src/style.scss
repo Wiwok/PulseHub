@@ -8,15 +8,26 @@
 	src: url('../public/Assets/Fonts/Poppins-Regular.ttf');
 }
 
+:root {
+	--BGColor: rgb(42, 42, 49);
+	--textColor: rgb(213, 213, 206);
+}
+
 body {
 	margin: 0;
 	font-family: 'Poppins';
-	background-color: rgb(42, 42, 49);
-	color: white;
+	background-color: var(--BGColor);
+	color: var(--textColor);
 }
 
 h1 {
 	font-family: 'Poppins Black';
+	color: white;
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
 }
 
 input {
@@ -24,7 +35,7 @@ input {
 	outline: none;
 
 	background-color: rgb(17, 16, 14);
-	color: white;
+	color: var(--textColor);
 	padding: 1vh 1vw;
 	font-size: 1.5em;
 
@@ -42,6 +53,12 @@ input {
 	align-items: center;
 }
 
+.AppInner {
+	display: flex;
+	width: 100%;
+	min-height: 92vh;
+}
+
 .Navbar {
 	display: flex;
 	align-items: center;
@@ -53,13 +70,31 @@ input {
 	position: sticky;
 	top: 0;
 	left: 0;
+	background-color: rgb(34, 33, 39);
+
+	& > h1 {
+		cursor: pointer;
+	}
+}
+
+.LeftBar {
+	position: sticky;
+	top: 8vh;
+	left: 0;
+	height: 92vh;
+	width: 20vw;
+	background-color: rgb(50, 50, 59);
+
+	display: flex;
+	flex-direction: column;
 }
 
 .Search {
+	margin: 5vh;
 	display: flex;
 	flex-direction: column;
 	gap: 1vh;
-	width: 80vw;
+	width: calc(80vw - 10vh);
 }
 
 .SongList {
@@ -67,4 +102,103 @@ input {
 	grid-template-columns: 1fr 2fr 1fr 1fr;
 	align-items: center;
 	gap: 2vw;
+	height: 15vh;
+	padding: 1vh;
+	background-color: var(--BGColor);
+	transition-duration: 100ms;
+	border-radius: calc(10px + 1vh);
+
+	& > img {
+		height: 15vh;
+		border-radius: 10px;
+	}
+
+	&:hover {
+		background-color: rgb(50, 50, 59);
+	}
+}
+
+.SongTitle {
+	display: flex;
+	flex-direction: column;
+
+	& > div:nth-child(1) {
+		font-size: 1.1em;
+	}
+
+	& > div:nth-child(2) {
+		color: #bebebc;
+		font-size: 0.9em;
+	}
+}
+
+.Button {
+	font-size: 1.2em;
+	cursor: pointer;
+	background-color: rgb(41, 108, 197);
+	padding: 1vw;
+	text-align: center;
+	width: fit-content;
+	border-radius: 10px;
+	border: 1px solid rgba($color: #d5d5ce, $alpha: 0);
+	transition-duration: 100ms;
+
+	&:hover {
+		background-color: rgb(45, 119, 215);
+		border: 1px solid var(--textColor);
+	}
+}
+
+.dotLoader {
+	width: 60px;
+	height: 15px;
+	--gradient: no-repeat radial-gradient(circle closest-side, var(--textColor) 90%, #0000);
+	background: var(--gradient) 0% 50%, var(--gradient) 50% 50%, var(--gradient) 100% 50%;
+	background-size: calc(100% / 3) 100%;
+	animation: dotLoading 1.5s infinite linear;
+	--min: 50%;
+}
+
+@keyframes dotLoading {
+	0% {
+		background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) 100%;
+	}
+	15% {
+		background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) 100%;
+	}
+	30% {
+		background-size: calc(100% / 3) var(--min), calc(100% / 3) 100%, calc(100% / 3) 100%;
+	}
+	45% {
+		background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) 100%;
+	}
+	60% {
+		background-size: calc(100% / 3) 100%, calc(100% / 3) var(--min), calc(100% / 3) 100%;
+	}
+	75% {
+		background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) 100%;
+	}
+	90% {
+		background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) var(--min);
+	}
+	100% {
+		background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) 100%;
+	}
+}
+
+.ArrowCircle {
+	animation-name: ArrowCircle;
+	animation-duration: 1s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+@keyframes ArrowCircle {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
 }
