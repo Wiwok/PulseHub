@@ -8,11 +8,10 @@ import client from 'https';
 import * as id3 from 'node-id3';
 import path from 'path';
 
+import { VIDEO_DIR } from '..';
 import JobList from '../Classes/JobList';
 import { JobEndStatus, SongData } from '../declarations';
-import checkFile from './utils';
-
-const VIDEO_DIR = path.join(__dirname, '../output');
+import { checkFile } from './utils';
 
 function download_file(trackId: string, filename: string) {
 	return new Promise(resolve => {

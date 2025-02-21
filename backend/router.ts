@@ -1,5 +1,8 @@
 import { Router } from 'express';
+import fs from 'fs';
+import path from 'path';
 
+import { checkFile } from './utils';
 import YT_music_API from './ytapi';
 
 const router = Router();
@@ -11,8 +14,8 @@ router.get('/', (req, res) => {
 
 router.get('/search', async (req, res) => {
 	const query = req.query.q;
-	if (typeof query != 'string') {
-		res.status(400).json({ error: "Le paramètre 'q' est requis." });
+	if (!query || typeof query != 'string') {
+		res.status(400).json({ error: 'Parameter q required' });
 		return;
 	}
 
@@ -43,6 +46,21 @@ router.get('/download', (req, res) => {
 			res.write(`data: {"status": "Errored", "message": "${err.message}"}\n\n`);
 			res.end();
 		});
+});
+
+router.get('/audio/:id', (req, res) => {
+	const { id } = req.params;
+
+	if (!checkFile(id)) {
+		res.status(400).json({ error: 'Invalid id' });
+		return;
+	}
+
+	res.setHeader('Content-Type', 'audio/mpeg');
+	res.setHeader('Cache-Control', 'no-cache');
+
+	const stream = fs.createReadStream(path.join(__dirname, '..', 'output', id + '.mp3'));
+	stream.pipe(res);
 });
 
 export default router;

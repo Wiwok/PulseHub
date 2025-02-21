@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { SongDetailed } from 'ytmusic-api';
 
 import { BASEURL } from '..';
@@ -5,13 +6,35 @@ import { JobStatus } from '../../declarations';
 
 class Job {
 	readonly song: SongDetailed;
-	private changeCallback?: (status: JobStatus) => void;
 	private status: JobStatus = 'Queued';
-	constructor(song: SongDetailed) {
+	private update: (id: string) => void;
+
+	constructor(song: SongDetailed, update: (id: string) => void) {
 		this.song = song;
+		this.update = update;
+
+		this.main();
 	}
 
-	private startDownload() {
+	async main() {
+		this.setStatus('Queued');
+		const download = await this.requestDownload();
+		if (!download) {
+			this.setStatus('Errored');
+			return;
+		}
+
+		this.setStatus('Downloaded');
+		const audio = await this.downloadAudio();
+
+		if (!audio) {
+			this.setStatus('Errored');
+			return;
+		}
+		this.setStatus('Done');
+	}
+
+	private requestDownload() {
 		return new Promise<boolean>(resolve => {
 			const eventSource = new EventSource(BASEURL + '/download?id=' + this.song.videoId);
 
@@ -33,25 +56,42 @@ class Job {
 		});
 	}
 
-	async download() {
-		this.setStatus('Requested');
-		const song = await this.startDownload();
-		if (song) {
-			this.setStatus('Done');
-		} else {
-			this.setStatus('Errored');
-		}
-	}
+	async downloadAudio() {
+		try {
+			const blobUrl = await axios
+				.get(BASEURL + '/audio/' + this.song.videoId, { responseType: 'arraybuffer' })
+				.then(response => {
+					const blob = new Blob([response.data], { type: 'audio/mpeg' });
+					return URL.createObjectURL(blob);
+				})
+				.catch(error => console.error('Erreur :', error));
 
-	onChange(callback: (status: JobStatus) => void) {
-		this.changeCallback = callback;
+			if (!blobUrl) return;
+
+			const a = document.createElement('a');
+			a.href = blobUrl;
+			a.download = this.song.name + '.mp3';
+
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+
+			URL.revokeObjectURL(blobUrl);
+		} catch (err) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private setStatus(status: JobStatus) {
 		this.status = status;
-		if (this.changeCallback) {
-			this.changeCallback(status);
-		}
+		this.update(this.song.videoId);
+	}
+
+	retry() {
+		if (this.status != 'Errored') return;
+		this.main();
 	}
 
 	getStatus() {

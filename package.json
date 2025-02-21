@@ -2,17 +2,18 @@
 	"name": "pulsehub-backend",
 	"version": "1.0.0",
 	"dependencies": {
-		"@distube/ytdl-core": "^4.16.3",
+		"@distube/ytdl-core": "^4.16.4",
 		"@hydralerne/youtube-api": "^1.0.3",
 		"cors": "^2.8.5",
 		"express": "^4.21.2",
 		"fluent-ffmpeg": "^2.1.3",
 		"https": "^1.0.0",
 		"node-id3": "^0.2.7",
+		"react-youtube": "^10.1.0",
 		"ytmusic-api": "^5.3.0"
 	},
 	"scripts": {
-		"start": "concurrently -kn express,react \"nodemon index.ts\" \"npm run react\"",
+		"start": "concurrently -kn express,react \"tsx watch index.ts\" \"npm run react\"",
 		"react": "react-scripts start",
 		"build": "react-scripts build"
 	},
@@ -21,16 +22,15 @@
 		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
 		"@types/fluent-ffmpeg": "^2.1.27",
-		"@types/react": "^19.0.8",
-		"@types/react-dom": "^19.0.3",
+		"@types/react": "^19.0.10",
+		"@types/react-dom": "^19.0.4",
 		"axios": "^1.7.9",
 		"concurrently": "^9.1.2",
-		"nodemon": "^3.1.9",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
-		"react-router-dom": "^7.1.5",
+		"react-router-dom": "^7.2.0",
 		"react-scripts": "5.0.1",
-		"sass": "^1.84.0"
+		"sass": "^1.85.0"
 	},
 	"browserslist": {
 		"production": [
